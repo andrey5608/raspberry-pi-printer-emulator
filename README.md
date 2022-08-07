@@ -101,6 +101,8 @@ The Pi might receive the report and:
   You will find multiple lists online listing both vendorIDs and productIDs. [Here is an
   example](https://www.the-sz.com/products/usbid/).
 
+  Epson TM-T88: vendorID=0x04b8, productID=0x0202
+
   IEEE1284 / PNP string:  
   This is where it will get a little trickier. The IEEE1284 string is send
   by your printer to your PC whenever you are connecting the printer to your PC.
@@ -113,6 +115,10 @@ The Pi might receive the report and:
 
   Once you have the requiered data you can load the g_printer module:
   `modprobe g_printer idVendor=0x1234 idProduct=0x1234 pnp_string="MFG:;CMD:;CLS:PRINTER;"`
+
+  For Epson TM-T88:
+    `modprobe g_printer idVendor=0x04b8 idProduct=0x0202 pnp_string="MFG:;CMD:;CLS:PRINTER;"`
+   MFG:;CMD:;CLS:PRINTER; can be modified
   where idVendor, idProduct and pnp_string have your values. You can find all parameters
   including a great explanation [here](https://www.kernel.org/doc/Documentation/usb/gadget_printer.rst).
   If you want to, you can now add the modprobe command to run at boot time.
