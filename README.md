@@ -69,8 +69,20 @@ The Pi might receive the report and:
     - Find the device descriptor in /dev/ (`/dev/g_printer0`)
     - Unload g_printer module by running `rmmod g_printer` and `rmmod usb_f_printer`
  7. Optional: Install GhostPDL (Latest tested version: GhostPDL 9.53.3)
-    - Download source [here](https://www.ghostscript.com/download/gpdldnld.html)
+    - Download source [here](https://github.com/ArtifexSoftware/ghostpdl-downloads/releasesl)
     - Build GhostPDL
+
+    ```
+   sudo apt-get update
+   sudo apt-get install tesseract-ocr ghostscript libcups2-dev libcupsimage2-dev
+   wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9561/ghostpdl-9.56.1.tar.gz -O ghostpdl.tar.gz
+   tar zxvf ghostpdl.tar.gz  
+   cd ghostpdl-9.56.1
+   sudo sh ./autogen.sh --without-libtiff
+   sudo sh ./configure --without-libtiff
+   make
+   make install
+    ```
     - Confirm path/to/yourghostpdl/bin/gpdl at least shows the help message `gpdl -h`
     - Remember path to `gpdl`
  8. Build emulatedprinter
