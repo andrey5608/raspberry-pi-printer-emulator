@@ -1,0 +1,503 @@
+; 
+; Epson printer's INF for Windows 7
+; Copyright (c) SEIKO EPSON CORPORATION 2008-2011. All rights reserved.
+; 
+; 
+[Version]
+Signature		= "$Windows NT$"
+Provider		= EPSON
+ClassGUID		= {4D36E979-E325-11CE-BFC1-08002BE10318}
+Class			= Printer
+DriverIsolation		= 2
+DriverVer       	= 07/22/2014, 4.00.56.000
+CatalogFile		= TMT2086.cat
+
+
+[Manufacturer]
+"EPSON"			= EPSON,NTx86
+
+[EPSON]
+"EPSON TM-T20 ReceiptE4"  = EAPd3e7eW2K.DAT,USBPRINT\EPSONTM-T20D939
+"EPSON TM-T20 ReceiptJ4"  = EAPd3e7jW2K.DAT,USBPRINT\EPSONTM-T20-JPNE949
+"EPSON TM-T20-42C ReceiptE4"  = EAPd3e7eW2K.DAT,USBPRINT\EPSONTM-T20-42C54C3
+"EPSON TM-T20-42C ReceiptJ4"  = EAPd3e7jW2K.DAT,USBPRINT\EPSONTM-T20-JPN-42C9BDB
+
+[EPSON.NTx86]
+"EPSON TM-T20 ReceiptE4"  = EAPd3e7e.DAT,,USBPRINT\1284_CID_EpsonTM00001002
+"EPSON TM-T20 ReceiptE4"  = EAPd3e7e.DAT,USBPRINT\EPSONTM-T20D939
+"EPSON TM-T20 ReceiptJ4"  = EAPd3e7j.DAT,,USBPRINT\1284_CID_EpsonTM00001102
+"EPSON TM-T20 ReceiptJ4"  = EAPd3e7j.DAT,USBPRINT\EPSONTM-T20-JPNE949
+"EPSON TM-T20-42C ReceiptE4"  = EAPd3e7e.DAT,,USBPRINT\1284_CID_EpsonTM00000002
+"EPSON TM-T20-42C ReceiptE4"  = EAPd3e7e.DAT,USBPRINT\EPSONTM-T20-42C54C3
+"EPSON TM-T20-42C ReceiptJ4"  = EAPd3e7j.DAT,,USBPRINT\1284_CID_EpsonTM00000102
+"EPSON TM-T20-42C ReceiptJ4"  = EAPd3e7j.DAT,USBPRINT\EPSONTM-T20-JPN-42C9BDB
+
+;TM-T20 US W2K
+[EAPd3e7eW2K.DAT]
+CopyFiles        = TM_T20_E_W2K,TM_DRIVER_FILES_E_W2K
+DataSection      = EAP_DATA_E_W2K
+
+;TM-T20 JP W2K
+[EAPd3e7jW2K.DAT]
+CopyFiles        = TM_T20_J_W2K,TM_DRIVER_FILES_J_W2K
+DataSection      = EAP_DATA_J_W2K
+
+;TM-T20 US
+[EAPd3e7e.DAT]
+CopyFiles        = TM_T20_E,TM_DRIVER_FILES_E,EAPTMT20LM
+DataSection      = EAP_DATA_E
+LanguageMonitor  = "Epson TM-T20 Language Monitor 4,EAPTMT20LM.dll"
+
+;TM-T20 JP
+[EAPd3e7j.DAT]
+CopyFiles        = TM_T20_J,TM_DRIVER_FILES_J,EAPTMT20LM
+DataSection      = EAP_DATA_J
+LanguageMonitor  = "Epson TM-T20 Language Monitor 4,EAPTMT20LM.dll"
+
+[TM_DRIVER_FILES_E_W2K]
+EAPctled.exe
+EAPdmsg0.exe
+EAPdpc0_2K.DLL
+EAPimc0_2K.DLL
+EAPjnl7.dll
+EAPuif7_2K.dll
+EAPuir0.dll
+EAPurc0_2K.DLL
+EAPurn0_2K.dll
+EAPHT1BP.dll
+EAPHT4BP.dll
+
+;Help
+EAPCtled0e.chm
+EAPCtled0j.chm
+
+EAPHLP0.chm
+
+ ;Czech
+EAPHLP0CSYThermal.chm
+ ;Danish
+EAPHLP0DANThermal.chm
+ ;German
+EAPHLP0DEUThermal.chm
+ ;English
+EAPHLP0EThermal.chm
+ ;Spanish
+EAPHLP0ESFThermal.chm
+ ;Finnish
+EAPHLP0FINThermal.chm
+ ;French
+EAPHLP0FRAThermal.chm
+ ;Croatian
+EAPHLP0HRVThermal.chm
+ ;Hungarian
+EAPHLP0HUNThermal.chm
+ ;Italian
+EAPHLP0ITAThermal.chm
+ ;Japanese
+EAPHLP0JThermal.chm
+ ;Korean
+EAPHLP0KORThermal.chm
+ ;Dutch
+EAPHLP0NLDThermal.chm
+ ;Norwegian
+EAPHLP0NONThermal.chm
+ ;Portuguese
+EAPHLP0PTGThermal.chm
+ ;Russian
+EAPHLP0RUSThermal.chm
+ ;Simplified Chinese
+EAPHLP0SCThermal.chm
+ ;Slovenian
+EAPHLP0SLVThermal.chm
+ ;Swedish
+EAPHLP0SVEThermal.chm
+ ;Traditional Chinese
+EAPHLP0TCThermal.chm
+ ;Thai
+EAPHLP0THAThermal.chm
+ ;Turkish
+EAPHLP0TRKThermal.chm
+ ;Vietnamese
+EAPHLP0VITThermal.chm
+ ;Hongkong
+EAPHLP0ZHHThermal.chm
+
+[TM_DRIVER_FILES_J_W2K]
+EAPctled.exe
+EAPdmsg0.exe
+EAPdpc0_2K.DLL
+EAPimc0_2K.DLL
+EAPjnl7.dll
+EAPuif7_2K.dll
+EAPuir0.dll
+EAPurc0_2K.DLL
+EAPurn0_2K.dll
+EAPHT1BP.dll
+EAPHT4BP.dll
+
+;Help
+EAPCtled0e.chm
+EAPCtled0j.chm
+
+EAPHLP0.chm
+
+ ;Czech
+EAPHLP0CSYThermal.chm
+ ;Danish
+EAPHLP0DANThermal.chm
+ ;German
+EAPHLP0DEUThermal.chm
+ ;English
+EAPHLP0EThermal.chm
+ ;Spanish
+EAPHLP0ESFThermal.chm
+ ;Finnish
+EAPHLP0FINThermal.chm
+ ;French
+EAPHLP0FRAThermal.chm
+ ;Croatian
+EAPHLP0HRVThermal.chm
+ ;Hungarian
+EAPHLP0HUNThermal.chm
+ ;Italian
+EAPHLP0ITAThermal.chm
+ ;Japanese
+EAPHLP0JThermal.chm
+ ;Korean
+EAPHLP0KORThermal.chm
+ ;Dutch
+EAPHLP0NLDThermal.chm
+ ;Norwegian
+EAPHLP0NONThermal.chm
+ ;Portuguese
+EAPHLP0PTGThermal.chm
+ ;Russian
+EAPHLP0RUSThermal.chm
+ ;Simplified Chinese
+EAPHLP0SCThermal.chm
+ ;Slovenian
+EAPHLP0SLVThermal.chm
+ ;Swedish
+EAPHLP0SVEThermal.chm
+ ;Traditional Chinese
+EAPHLP0TCThermal.chm
+ ;Thai
+EAPHLP0THAThermal.chm
+ ;Turkish
+EAPHLP0TRKThermal.chm
+ ;Vietnamese
+EAPHLP0VITThermal.chm
+ ;Hongkong
+EAPHLP0ZHHThermal.chm
+
+
+[TM_DRIVER_FILES_E]
+EAPctled.exe
+EAPdmsg0.exe
+EAPdpc0.DLL
+EAPimc0.DLL
+EAPjnl7.dll
+EAPuif7.dll
+EAPuir0.dll
+EAPurc0.DLL
+EAPurn0.dll
+EAPHT1BP.dll
+EAPHT4BP.dll
+
+;Help
+EAPCtled0e.chm
+EAPCtled0j.chm
+
+EAPHLP0.chm
+
+ ;Czech
+EAPHLP0CSYThermal.chm
+ ;Danish
+EAPHLP0DANThermal.chm
+ ;German
+EAPHLP0DEUThermal.chm
+ ;English
+EAPHLP0EThermal.chm
+ ;Spanish
+EAPHLP0ESFThermal.chm
+ ;Finnish
+EAPHLP0FINThermal.chm
+ ;French
+EAPHLP0FRAThermal.chm
+ ;Croatian
+EAPHLP0HRVThermal.chm
+ ;Hungarian
+EAPHLP0HUNThermal.chm
+ ;Italian
+EAPHLP0ITAThermal.chm
+ ;Japanese
+EAPHLP0JThermal.chm
+ ;Korean
+EAPHLP0KORThermal.chm
+ ;Dutch
+EAPHLP0NLDThermal.chm
+ ;Norwegian
+EAPHLP0NONThermal.chm
+ ;Portuguese
+EAPHLP0PTGThermal.chm
+ ;Russian
+EAPHLP0RUSThermal.chm
+ ;Simplified Chinese
+EAPHLP0SCThermal.chm
+ ;Slovenian
+EAPHLP0SLVThermal.chm
+ ;Swedish
+EAPHLP0SVEThermal.chm
+ ;Traditional Chinese
+EAPHLP0TCThermal.chm
+ ;Thai
+EAPHLP0THAThermal.chm
+ ;Turkish
+EAPHLP0TRKThermal.chm
+ ;Vietnamese
+EAPHLP0VITThermal.chm
+ ;Hongkong
+EAPHLP0ZHHThermal.chm
+
+[TM_DRIVER_FILES_J]
+EAPctled.exe
+EAPdmsg0.exe
+EAPdpc0.DLL
+EAPimc0.DLL
+EAPjnl7.dll
+EAPuif7.dll
+EAPuir0.dll
+EAPurc0.DLL
+EAPurn0.dll
+EAPHT1BP.dll
+EAPHT4BP.dll
+
+;Help
+EAPCtled0e.chm
+EAPCtled0j.chm
+
+EAPHLP0.chm
+
+ ;Czech
+EAPHLP0CSYThermal.chm
+ ;Danish
+EAPHLP0DANThermal.chm
+ ;German
+EAPHLP0DEUThermal.chm
+ ;English
+EAPHLP0EThermal.chm
+ ;Spanish
+EAPHLP0ESFThermal.chm
+ ;Finnish
+EAPHLP0FINThermal.chm
+ ;French
+EAPHLP0FRAThermal.chm
+ ;Croatian
+EAPHLP0HRVThermal.chm
+ ;Hungarian
+EAPHLP0HUNThermal.chm
+ ;Italian
+EAPHLP0ITAThermal.chm
+ ;Japanese
+EAPHLP0JThermal.chm
+ ;Korean
+EAPHLP0KORThermal.chm
+ ;Dutch
+EAPHLP0NLDThermal.chm
+ ;Norwegian
+EAPHLP0NONThermal.chm
+ ;Portuguese
+EAPHLP0PTGThermal.chm
+ ;Russian
+EAPHLP0RUSThermal.chm
+ ;Simplified Chinese
+EAPHLP0SCThermal.chm
+ ;Slovenian
+EAPHLP0SLVThermal.chm
+ ;Swedish
+EAPHLP0SVEThermal.chm
+ ;Traditional Chinese
+EAPHLP0TCThermal.chm
+ ;Thai
+EAPHLP0THAThermal.chm
+ ;Turkish
+EAPHLP0TRKThermal.chm
+ ;Vietnamese
+EAPHLP0VITThermal.chm
+ ;Hongkong
+EAPHLP0ZHHThermal.chm
+
+
+[EAPTMT20LM]
+EAPTMT20LM.dll
+
+[EAP_DATA_E_W2K]
+DriverFile      = EAPjnl7.DLL
+ConfigFile      = EAPuif7_2K.DLL
+HelpFile        = EAPhlp0.CHM
+DataFile        = EAPd3e7e_2K.DAT
+
+[EAP_DATA_E]
+DriverFile      = EAPjnl7.DLL
+ConfigFile      = EAPuif7.DLL
+HelpFile        = EAPhlp0.CHM
+DataFile        = EAPd3e7e.DAT
+
+[EAP_DATA_J_W2K]
+DriverFile      = EAPjnl7.DLL
+ConfigFile      = EAPuif7_2K.DLL
+HelpFile        = EAPhlp0.CHM
+DataFile        = EAPd3e7j_2K.DAT
+
+[EAP_DATA_J]
+DriverFile      = EAPjnl7.DLL
+ConfigFile      = EAPuif7.DLL
+HelpFile        = EAPhlp0.CHM
+DataFile        = EAPd3e7j.DAT
+
+[TM_T20_E_W2K]
+EAPd3e7e_2K.DAT
+EAPr3e7e.DLL
+EAPBcd0.DLL
+EAPBcdR0.dll
+
+[TM_T20_E]
+EAPd3e7e.DAT
+EAPr3e7e.DLL
+EAPBcd0.DLL
+EAPBcdR0.dll
+
+[TM_T20_J_W2K]
+EAPd3e7j_2K.DAT
+EAPr3e7j.DLL
+EAPBcd0.DLL
+EAPBcdR0.dll
+
+[TM_T20_J]
+EAPd3e7j.DAT
+EAPr3e7j.DLL
+EAPBcd0.DLL
+EAPBcdR0.dll
+
+[DestinationDirs]
+DefaultDestDir=66000
+EAPTMT20LM=66002
+
+[SourceDisksNames]
+1 = %disk1%,,,
+
+[SourceDisksFiles]
+;Printer Driver Core
+EAPBcd0.dll            = 1
+EAPBcdR0.dll           = 1
+EAPctled.exe           = 1
+EAPdmsg0.exe           = 1
+EAPdpc0.DLL            = 1
+EAPdpc0_2K.DLL         = 1
+EAPimc0.DLL            = 1
+EAPimc0_2K.DLL         = 1
+EAPjnl7.dll            = 1
+EAPuif7.dll            = 1
+EAPuif7_2K.dll         = 1 ;Windows 2000
+EAPuir0.dll            = 1
+EAPurc0.DLL            = 1
+EAPurc0_2K.DLL         = 1
+EAPurn0.dll            = 1
+EAPurn0_2K.dll         = 1
+EAPHT1BP.dll           = 1
+EAPHT4BP.dll           = 1
+;Help
+EAPCtled0e.chm         = 1
+EAPCtled0j.chm         = 1
+
+EAPHLP0.chm              = 1
+
+ ;Czech
+EAPHLP0CSYThermal.chm    = 1
+
+ ;Danish
+EAPHLP0DANThermal.chm    = 1
+
+ ;German
+EAPHLP0DEUThermal.chm    = 1
+
+ ;English
+EAPHLP0EThermal.chm      = 1
+
+ ;Spanish
+EAPHLP0ESFThermal.chm    = 1
+
+ ;Finnish
+EAPHLP0FINThermal.chm    = 1
+
+ ;French
+EAPHLP0FRAThermal.chm    = 1
+
+ ;Croatian
+EAPHLP0HRVThermal.chm    = 1
+
+ ;Hungarian
+EAPHLP0HUNThermal.chm    = 1
+
+ ;Italian
+EAPHLP0ITAThermal.chm    = 1
+
+ ;Japanese
+EAPHLP0JThermal.chm      = 1
+
+ ;Korean
+EAPHLP0KORThermal.chm    = 1
+
+ ;Dutch
+EAPHLP0NLDThermal.chm    = 1
+
+ ;Norwegian
+EAPHLP0NONThermal.chm    = 1
+
+ ;Portuguese
+EAPHLP0PTGThermal.chm    = 1
+
+ ;Russian
+EAPHLP0RUSThermal.chm    = 1
+
+ ;Simplified Chinese
+EAPHLP0SCThermal.chm     = 1
+
+ ;Slovenian
+EAPHLP0SLVThermal.chm    = 1
+
+ ;Swedish
+EAPHLP0SVEThermal.chm    = 1
+
+ ;Traditional Chinese
+EAPHLP0TCThermal.chm     = 1
+
+ ;Thai
+EAPHLP0THAThermal.chm    = 1
+
+ ;Turkish
+EAPHLP0TRKThermal.chm    = 1
+
+ ;Vietnamese
+EAPHLP0VITThermal.chm    = 1
+
+ ;Hongkong
+EAPHLP0ZHHThermal.chm    = 1
+
+
+;Model Resource
+EAPd3e7e.DAT           = 1
+EAPR3e7e.dll           = 1
+EAPd3e7e_2K.DAT        = 1 ;Windows 2000
+
+EAPd3e7j.DAT           = 1
+EAPR3e7j.dll           = 1
+EAPd3e7j_2K.DAT        = 1 ;Windows 2000
+
+;Languege Monitor
+EAPTMT20LM.dll            = 1
+
+[Strings]
+disk1		= "EPSON TM-T20"
+
+;========================================================================;

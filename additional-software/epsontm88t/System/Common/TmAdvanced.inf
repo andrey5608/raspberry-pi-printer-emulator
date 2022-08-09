@@ -1,0 +1,38 @@
+;
+; Installation inf for the EPSON Advanced Printer Driver (Printer Port)
+;
+; Copyright(C) 2002 SEIKO EPSON Corp.
+;
+
+[Version]
+Signature=$CHICAGO$
+Provider=%EPSON%
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+DriverVer=4/30/2002,1.0.0.0
+
+; =================== Model Sections ===========================
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+"EPSON"=EPSON,NTx86.5.1
+
+[EPSON]
+%LPTENUM\EpsonPrinterPort.DeviceDesc% = , LPTENUM\EPSONTM-P2.01D897
+
+; For Windows XP
+[EPSON.NTx86.5.1]
+%LPTENUM\EpsonPrinterPort.DeviceDesc% = NO_DRV, LPTENUM\EPSONTM-P2.01D897
+
+; =================== Service Sections ===========================
+[NO_DRV]
+
+[NO_DRV.Services]
+AddService = , %SPSVCINST_ASSOCSERVICE%   ; null service install
+
+[Strings]
+EPSON = "EPSON"
+LPTENUM\EpsonPrinterPort.DeviceDesc = "EPSON Printer Port Logical Interface"
+SPSVCINST_ASSOCSERVICE = 0x00000002
+

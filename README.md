@@ -66,7 +66,7 @@ The Pi might receive the report and:
  5. Change default password, update the Pi, ..., add any stuff you might need!
  6. Find g_printer device descriptor
     - Add g_printer module by running `modprobe g_printer`
-    - Find the device descriptor in /dev/ (E.g. `/dev/g_printer` or `/dev/g_printer0`)
+    - Find the device descriptor in /dev/ (`/dev/g_printer0`)
     - Unload g_printer module by running `rmmod g_printer` and `rmmod usb_f_printer`
  7. Optional: Install GhostPDL (Latest tested version: GhostPDL 9.53.3)
     - Download source [here](https://www.ghostscript.com/download/gpdldnld.html)

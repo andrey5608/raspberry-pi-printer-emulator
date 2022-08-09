@@ -3,4 +3,3 @@ printjobs/*.pcl
 emulatedprinter
 test/*
 read
-additional-software/*

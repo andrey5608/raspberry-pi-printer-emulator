@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<dpInst>
+
+    <language code="0x411">
+        <dpinstTitle>EPSON TMUSB Driver Ver.8.00 Installer</dpinstTitle>
+        <welcomeTitle>EPSON TMUSB Driver Ver.8.00 の インストールウィザードの開始</welcomeTitle>
+        <welcomeIntro>このウィザードでは、EPSON TM/BA/EUシリーズ用のUSBデバイスドライバ(EPSON TMUSB Driver)のインストールを開始します。</welcomeIntro>
+        
+        <eulaHeaderTitle>ソフトウェア使用許諾契約</eulaHeaderTitle>
+        <eulaYesButton>使用許諾契約に同意します。(&amp;A)</eulaYesButton>
+        <eulaNoButton>使用許諾契約に同意しません。(&amp;D)</eulaNoButton>
+        <eula type="txt" path="licenseJ.txt" />
+
+        <installHeaderTitle>EPSON TMUSB Driver Ver.8.00 をインストールしています...</installHeaderTitle>
+        <finishTitle>EPSON TMUSB Driver Ver.8.00 のインストールに成功しました。</finishTitle>
+    </language>
+
+    <language code="0x409">
+        <dpinstTitle>EPSON TMUSB Driver Ver.8.00 Installer</dpinstTitle>
+        <welcomeTitle>EPSON TMUSB Driver Ver.8.00 Installation Wizard</welcomeTitle>
+        <welcomeIntro>This wizard will walk you through updating the USB device driver (EPSON TMUSB Driver) for your EPSON TM/BA/EU Series.</welcomeIntro>
+
+        <eulaHeaderTitle>Software License Agreement</eulaHeaderTitle>
+        <eulaYesButton>I &amp;accept this SLA</eulaYesButton>
+        <eulaNoButton>I do &amp;not accept this SLA</eulaNoButton>
+        <eula type="txt" path="licenseE.txt" />
+
+        <installHeaderTitle>EPSON TMUSB driver Ver.8.00 is now installing...</installHeaderTitle>
+        <finishTitle>Completing EPSON TMUSB driver Ver.8.00 Installation Wizard</finishTitle>
+    </language>
+</dpInst>

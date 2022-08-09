@@ -1,0 +1,67 @@
+Please read the following Software License Agreement ("SLA"). Use the scroll bar to view the entire SLA.
+----------------------------------------------------
+
+SOFTWARE LICENSE AGREEMENT
+
+IMPORTANT! READ THIS SOFTWARE LICENSE AGREEMENT CAREFULLY.  The computer software product and/or data, including any accompanying explanatory written materials (the "Software") should only be installed or used by the Licensee ("you") on the condition you agree with SEIKO EPSON CORPORATION ("EPSON") to the terms and conditions set forth in this SLA.  By installing or using the Software, you are representing to agree all the terms and conditions set forth in this SLA.  You should read this SLA carefully before installing or using the Software.  If you do not agree with the terms and conditions of this SLA, you are not permitted to install or use the Software.
+
+If you agree to and accept all the terms and conditions of this SLA, EPSON and its suppliers grant to you a nonexclusive license to use the Software in accordance with the following conditions:
+
+1.  Use of the Software 
+(a) You may use the Software for the purpose of development and execution of your application software which operates the EPSON hardware products designated in a text file included in the Software.  Your application software to be used with the Software shall be referred to as the "Application Software."
+(b) You may use the Software by installing to computers which you intend to use directly or via network; provided, however, that the Software shall be used only on a computer in which operating systems as designated in a text file included in the Software has been installed.
+(c) You may distribute the Software as a portion of the Application Software to a third party by the following way; provided, that you ensure that you will first obtain the agreement of the third party under your own license agreement which complies with the terms and conditions of this SLA.  You agree not to distribute the Software on a standalone.
+(i) By storage medium, including, but not limited to, CD-ROM
+(ii)    You allow a third party to download from a server which is under your control
+(iii)   You sell your hardware products pre-installed the Application Software
+
+2.  Restrictions on Usage
+(a) You may not copy the Software, except for one copy for backup purposes.  
+(b) You may not to attempt to reverse engineer, decompile, disassemble or modify the Software.
+(c) You may not share, rent, lease, encumber or lend the Software. 
+(d) You acknowledge that the Software (including manuals thereof) contains valuable, confidential information and trade secrets, that unauthorized use and copying are harmful to EPSON and its suppliers, and that you have a confidentiality obligation as to such valuable information and trade secrets.
+(e) You may not to use the Software in any manner other than expressly provided herein.
+
+3.  Prohibition on Transfer
+You agree not to assign, share, rent, lend, lease or otherwise transfer the Software itself or your right to use the Software.
+
+4.  Copyright
+ Title, ownership rights, and intellectual property rights in and to the Software and any copies thereof shall remain with EPSON or its suppliers.  There is no transfer to you of any title to or ownership of the Software and this License shall not be construed as a sale of any rights in the Software.  The Software is protected by Japanese Copyright Law and international copyright treaties, as well as other intellectual property laws and treaties.  Except as otherwise provided in this SLA, you may not copy the Software.  You also agree not to remove or alter any copyright and other proprietary notices on any copies of the Software.
+
+5.  Limited Warranty
+(a) In case of that you obtained the Software by media from EPSON or a dealer, EPSON warrants that the media on which the Software is recorded will be free from defects in workmanship and materials under normal use for a period of 90 days from the date of delivery to you.  If the media is returned to EPSON or the dealer from which the media was obtained within 90 days of the date of delivery to you, and if EPSON determines the media to be defective and provided the media was not subject to misuse, abuse, misapplication or use in defective equipment, EPSON will replace the media, upon your return to EPSON of the Software, including all copies of any portions thereof.  ALL IMPLIED WARRANTIES ON THE MEDIA, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ARE LIMITED TO THE DURATION OF THE EXPRESS WARRANTY SET FORTH ABOVE.
+(b) You acknowledge and agree that the use of the Software is at your sole risk.  THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT ANY WARRANTY OF ANY KIND.  EPSON AND ITS SUPPLIERS DO NOT AND CANNOT WARRANT THE PERFORMANCE OR RESULTS YOU MAY OBTAIN BY USING THE SOFTWARE.  THE FOREGOING STATES THE SOLE AND EXCLUSIVE REMEDIES FOR EPSON'S AND ITS SUPPLIERS' BREACH OF WARRANTY.  EXCEPT FOR THE FOREGOING LIMITED WARRANTY, EPSON AND ITS SUPPLIERS MAKE NO WARRANTIES, EXPRESS OR IMPLIED, AS TO NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE.  Some states or jurisdictions do not allow the exclusion of implied warranties or limitations on how long an implied warranty may last, so the above limitations may not apply to you.  This warranty gives you specific legal rights.  You may have other rights which vary from state to state or jurisdiction to jurisdiction.
+(c) IN NO EVENT WILL EPSON OR ITS SUPPLIERS BE LIABLE TO YOU, WHETHER ARISING UNDER CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, BREACH OR WARRANTY, MISREPRESENTATION OR OTHERWISE, FOR ANY DIRECT, CONSEQUENTIAL, INCIDENTAL OR SPECIAL DAMAGES, INCLUDING ANY LOST PROFITS OR LOST SAVINGS, EVEN IF EPSON, ITS SUPPLIERS OR ANY REPRESENTATIVE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR ANY CLAIM BY ANY THIRD PARTY.  Some states or jurisdictions, however, do not allow the exclusion or limitation of incidental, consequential or special damages, so the above limitations may not apply to you.
+(d) EPSON'S AGGREGATE LIABILITY TO YOU WITH RESPECT TO ANY SUBJECT MATTER OF THIS SLA WHETHER ARISING UNDER TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, BREACH OF WARRANTY, OR MISREPRESENTATION SHALL NOT EXCEED THE AMOUNTS PAID BY YOU TO EPSON TO USE THE SOFTWARE.
+(e) You are solely responsible for use and distribution of the Software and the Application Software and/or provision of support to your customers of such Software and Application Software.  
+
+6.  Termination
+This SLA shall automatically terminate when:
+(a) You stop to use of the Software.
+(b) You violate any of the terms or conditions set forth in this SLA.
+SLA shall automatically terminate upon failure by you to comply with its terms.  You may also terminate this SLA at any time by uninstalling and destroying the Software and all copies thereof.
+
+7.  Obligations after Termination
+Upon termination of this SLA, you agree to stop using the Software and delete the Software from the computers described in Article 1(b) above and return the original Software and all copies thereof to EPSON or destroy such Software and copies thereof so that you and a third party cannot use it, and then discard thosecopies.
+
+8.  Indemnification by You
+You agree to fully defend, indemnify and hold harmless EPSON and its suppliers against all damages, loss, costs and/or expenses (including reasonable attorney's fees, expert witness fees and other related expenses) arising out of and/or resulting from any claim, proceeding or dispute in connection with the Software, Application Software and/or your failure to comply with any provision in this SLA.
+
+9.  Others
+(a) EPSON may change the specification of the Software without notice to you.
+(b) EPSON has no obligation to provide you with any updates, new versions or releases of the Software.
+(c) You may not export the Software except as permitted by the applicable laws and/or regulations of Japan, or the laws and/or regulations of the jurisdiction in which the Software is obtained.
+(d) This SLA shall be governed and construed under by the laws of Japan (without giving effect to its conflicts of laws provisions).  The Tokyo District Court shall have exclusive jurisdiction over this SLA and the parties thereto.  If any provision in this SLA is ruled invalid by a court of competent jurisdiction, the remaining provisions shall remain in full force and effect.
+(e) If you are acquiring the Software on behalf of any unit or agency of the United States Government, the following provisions apply.  The Government agrees:
+    (i) if the Software is supplied to the Department of Defense (DoD), the Software is classified as "Commercial Computer Software" and the Government is acquiring only "restricted rights" in the Software and its documentation as that term is defined in Clause 252.227-7013(c)(1) of the DFARS; and (ii) if the Software is supplied to any unit or agency of the United States Government other than DoD, the Government's rights in the Software and its documentation will be as defined in Clause 52.227-19(c)(2) of the FAR or, in the case of NASA, in Clause 18-52.227-86(d) of the NASA supplement to the FAR.
+
+
+
+Do you agree with and accept all the terms and conditions of this Software License Agreement and wish to continue installing?
+If you do so agree and accept, choose " I accept this SLA".
+If you do not so agree and accept, choose " I do not accept this SLA". 
+
+
+Copyright (C) SEIKO EPSON CORPORATION 2000-2007.
+All rights reserved.
+

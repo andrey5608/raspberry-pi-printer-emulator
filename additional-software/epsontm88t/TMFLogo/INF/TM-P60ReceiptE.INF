@@ -1,0 +1,120 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; File Name		: TmP60RE.INF
+;; Function Outline	: APD Dependent Data File of TM-P60
+;; Comment		: POSPrinter
+;; Copyright (C) SEIKO EPSON CORP. 2008
+;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;
+;; Common
+;;;;;;;;;;;;;;;;;;;
+
+[MAIN]
+DeviceClass 		= STRING:POSPrinter				; Device Class
+DeviceName			= STRING:EPSON TM-P60 ReceiptE4		; Device Name
+SOName 				= STRING:SOEPSON.POSPrinter.1	; SO Program ID
+NumberOfDevice		= INT:2							; Number of Device
+RegFormatType		= STRING:EPSON					; Registry Format
+RegFormatVersion	= INT:2							; Registry Version
+
+[PORT]
+OutputLD		= INT:0				; Output to LineDisplay
+OutputDK		= INT:0				; Output to Drawer
+OutputMICR		= INT:0				; Enable MICR Device
+OutputMin		= INT:32			; Minimum Bytes for Output
+OutputMax		= INT:1024			; Maximum Bytes for Output
+
+[DEVINFO]
+PrinterDllName		= STRING:PP6012.Dll		; DLL File Name
+InternalVersion		= INT:002000000			; INF File Version
+CapRealtimeKick		= INT:01			; Real Time Kick Command for Drawer
+PulseUNITTime		= INT:02			; Drawer Pulse UNIT (msec)
+CapASB				= DWORD:01			; ASB Type(Normal, Ink, Extend, Custom)
+DeviceID			= DWORD:4A
+BmpFMemSize			= INT:393216
+
+StatsUnifiedPOSVersion		= DWORD:101
+StatsDeviceCategory		= DWORD:101
+StatsManufacturerName		= DWORD:1420109
+StatsModelName			= DWORD:1430109
+StatsSerialNumber		= DWORD:1440109
+StatsManufactureDate		= DWORD:101
+StatsMechanicalRevision		= DWORD:101
+StatsFirmwareRevision		= DWORD:1410109
+StatsInterface			= DWORD:101
+StatsInstallationDate		= DWORD:101
+StatsHoursPoweredCount		= DWORD:2C6010B
+StatsCommunicationErrorCount	= DWORD:107
+StatsBarcodePrintedCount	= DWORD:107
+StatsFormInsertionCount		= DWORD:111
+StatsHomeErrorCount		= DWORD:111
+StatsJournalCharacterPrintedCount	= DWORD:111
+StatsJournalLinePrintedCount	= DWORD:111
+StatsMaximumTempReachedCount	= DWORD:107
+StatsNVRAMWriteCount		= DWORD:107
+StatsPaperCutCount		= DWORD:2B2010B
+StatsFailedPaperCutCount	= DWORD:107
+StatsPrinterFaultCount		= DWORD:107
+StatsPrintSideChangeCount	= DWORD:111
+StatsFailedPrintSideChangeCount	= DWORD:111
+StatsReceiptCharacterPrintedCount	= DWORD:107
+StatsReceiptCoverOpenCount	= DWORD:107
+StatsReceiptLineFeedCount	= DWORD:294010B
+StatsReceiptLinePrintedCount	= DWORD:107
+StatsSlipCharacterPrintedCount	= DWORD:111
+StatsSlipCoverOpenCount		= DWORD:111
+StatsSlipLineFeedCount		= DWORD:111
+StatsSlipLinePrintedCount	= DWORD:111
+StatsStampFiredCount		= DWORD:111
+
+[SETTING]
+InputBuf		= INT:1024			; Input Buffer
+OutputBuf		= INT:1024			; Output Buffer
+Timeout			= INT:2500			; Output Interval Time
+IdleSleep		= INT:20			; Sleep Time(msec) in Idle Loop
+InputSleep		= INT:10			; Sleep Time(msec) in Input Loop
+OptionFirmVersion = DWORD:1				; Firm Version Check OFF
+OptionAutoPowerOff	= INT:20			; AutoPowerOffTime = 20min
+
+;;;;;;;;;;;;;;;;;;;
+;; Serial
+;;;;;;;;;;;;;;;;;;;
+
+[MAIN_1]
+DeviceName		= STRING:TM-P60			; Device Name
+DeviceDesc		= STRING:EPSON TM-P60 POS Printer	; Device Description
+GroupID			= STRING:Ptrs_S			; Device Group
+
+[PORT_1]
+BaudrateSel		= STRING:6,7,8			; 9600, 19200, 38400
+BitLengthSel	= STRING:1				; 8 bit
+ParitySel		= STRING:0,1,2			; NONE, EVEN, ODD
+StopSel			= STRING:1				; 1 bit only
+XonXoffSel		= STRING:0				; Disabled only
+HandShakeSel	= STRING:2				; DTR/DSR only
+OutputLD		= INT:0				; Output to LineDisplay
+
+[SETTING_1]
+Port			= STRING:COM1		; Default COM Port
+Baudrate		= INT:7				; 19200
+BitLength		= INT:1				; 8 bit
+Parity			= INT:0				; None
+Stop			= INT:1				; 1 bit
+XonXoff			= INT:0				; Disabled
+HandShake		= INT:2				; DTR/DSR
+
+
+;;;;;;;;;;;;;;;;;;;
+;; 802.11b
+;;;;;;;;;;;;;;;;;;;
+
+[MAIN_2]
+DeviceName		= STRING:TM-P60W		; Device Name
+DeviceDesc		= STRING:EPSON TM-P60 POS Printer	; Device Description
+GroupID			= STRING:Ptrs_W			; Device Group
+
+[SETTING_2]
+Port			= STRING:WIR0.0.0.0		; Default IP Address
+

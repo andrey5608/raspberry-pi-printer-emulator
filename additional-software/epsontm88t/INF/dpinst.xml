@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<dpInst>
+
+    <language code="0x411">
+        <dpinstTitle>EPSON Advanced Printer Driver Ver.4.09 Installer</dpinstTitle>
+        <welcomeTitle>EPSON Advanced Printer Driver Ver.4.09 の インストールウィザードの開始</welcomeTitle>
+        <welcomeIntro>このウィザードでは、EPSON TM-T88Vのプリンタードライバーのインストールを開始します。</welcomeIntro>
+         <installHeaderTitle>EPSON Advanced Printer Driver Ver.4.09 をインストールしています...</installHeaderTitle>
+        <finishTitle>EPSON Advanced Printer Driver Ver.4.09 のインストールに成功しました。</finishTitle>
+    </language>
+
+    <language code="0x409">
+        <dpinstTitle>EPSON Advanced Printer Driver Ver.4.09 Installer</dpinstTitle>
+        <welcomeTitle>EPSON Advanced Printer Driver Ver.4.09 Installation Wizard</welcomeTitle>
+        <welcomeIntro>This wizard will walk you through updating the TM-T88V printer driver.</welcomeIntro>
+
+       <installHeaderTitle>EPSON Advanced Printer Driver Ver.4.09 is now installing...</installHeaderTitle>
+        <finishTitle>Completing EPSON Advanced Printer Driver Ver.4.09 Installation Wizard</finishTitle>
+    </language>
+<legacyMode /> 
+
+</dpInst>

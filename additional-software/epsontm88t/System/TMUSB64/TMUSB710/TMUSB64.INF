@@ -1,0 +1,81 @@
+;
+; Installation inf for the EPSON USB Controller for TM/BA/EU Printers
+;
+; Copyright(C) SEIKO EPSON CORPORATION 1999-2017. All rights reserved.
+;
+
+;----------------------------------------------------------------------------
+[Version]
+Signature   = "$Windows NT$"
+Class       = USB
+ClassGUID   = {36FC9E60-C465-11CF-8056-444553540000}
+Provider    = %Mfg%
+DriverVer   = 10/11/2017, 7.1.0.0
+CatalogFile = TMUSB64.CAT
+
+;----------------------------------------------------------------------------
+[DestinationDirs]
+;   [DefaultDestDir=dirid[,subdir]] 
+;   [file-list-section=dirid[,subdir]] ... 
+DefaultDestDir = 12
+NTCopyFiles = 12
+
+;----------------------------------------------------------------------------
+;
+[NTCopyFiles]
+TMUSB64.SYS
+
+;----------------------------------------------------------------------------
+[Manufacturer]
+;   %manufacturer-name% = models-section-name
+%Mfg% = Models,NTamd64
+
+;----------------------------------------------------------------------------
+[ControlFlags]
+;   ExcludeFromSelect=device-id-str[,device-id-str]
+ExcludeFromSelect=USB\VID_04B8&PID_0201,USB\VID_04B8&PID_0202
+
+;----------------------------------------------------------------------------
+[Models.NTamd64]
+;   device-description = install-section-name, hw-id[, compatible-id...]
+%Model1% = TMUSB_Inst.NT, USB\VID_04B8&PID_0201 ; UB-UXX
+%Model2% = TMUSB_Inst.NT, USB\VID_04B8&PID_0202 ; UB-UXX
+
+;----------------------------------------------------------------------------
+; Win NT DDInstall Section
+;
+[TMUSB_Inst.NT]
+CopyFiles = NTCopyFiles
+
+[TMUSB_Inst.NT.Services]
+;   AddService=ServiceName,[flags],service-install-section[,
+;           event-log-install-section[,[EventLogType][,EventName]]]
+Addservice = TMUSB, 0x00000002, TMUSB_Service_Inst
+
+[TMUSB_Service_Inst]
+DisplayName    = %TMUSB_Inst.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\TMUSB64.SYS   ; 12 = nt/System32/Drivers
+LoadOrderGroup = Base
+
+;----------------------------------------------------------------------------
+[SourceDisksNames.amd64]
+;   diskid = disk-description[,[tag-or-cab-file],[unused,path][,flags]]
+1 = %TMUSBDisk%,,,
+
+;----------------------------------------------------------------------------
+[SourceDisksFiles.amd64]
+;   filename = diskid[,[ subdir][, size]]
+TMUSB64.SYS = 1,,
+
+;----------------------------------------------------------------------------
+[Strings]
+;   <strkey> = "<string-value>"
+Mfg                = "EPSON"
+Model1             = "EPSON USB Controller for TM/BA/EU Printers"
+Model2             = "EPSON USB Controller for TM/BA/EU Printers"
+TMUSB_Inst.SvcDesc = "EPSON USB Device Driver for TM/BA/EU Printers"
+TMUSBDisk          = "EPSON USB Device Driver for TM/BA/EU Printers Installation Disk"
+
