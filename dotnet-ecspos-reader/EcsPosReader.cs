@@ -4,8 +4,19 @@ using System.Text;
 
 public class EcsPosReader
 {
+   private static SerialPort port = new SerialPort("/dev/serial0",
+      9600, Parity.None, 8, StopBits.One); 
     static void Main(string[] args)
     {
+        Console.WriteLine("Incoming Data:");
+         // Attach a method to be called when there
+         // is data waiting in the port's buffer 
+        port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived); 
+        // Begin communications 
+        port.Open(); 
+        // Enter an application loop to keep this thread alive 
+        Console.ReadLine();
+        /*
         if (args.Length == 0)
         {
             Console.WriteLine("arduino-demo <portName> [<baudRate>=9600]");
@@ -63,5 +74,12 @@ public class EcsPosReader
             }
         };
 
+        */
     }
+
+    private static void port_DataReceived(object sender, SerialDataReceivedEventArgs e) 
+    { 
+       // Show all the incoming data in the port's buffer
+       Console.WriteLine(port.ReadExisting()); 
+    } 
 }
