@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "dgSpecHash": "qf4SaMF7484uyjSH86ZH+ACRebX4kMM4tj1bLYjuCB/vD6MkWNNlm+8DbVofnhyttzgcjPXwBt2OgMnl032meA==",
+  "success": true,
+  "projectFilePath": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-print-app\\dotnet-print-app.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\123\\.nuget\\packages\\escpos_net\\2.0.0\\escpos_net.2.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\5.0.0\\microsoft.extensions.dependencyinjection.5.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.extensions.logging\\5.0.0\\microsoft.extensions.logging.5.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.extensions.options\\5.0.0\\microsoft.extensions.options.5.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.netcore.platforms\\3.0.0\\microsoft.netcore.platforms.3.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.win32.registry\\4.6.0\\microsoft.win32.registry.4.6.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\4.6.0-rc2.19462.14\\runtime.linux-arm.runtime.native.system.io.ports.4.6.0-rc2.19462.14.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\4.6.0-rc2.19462.14\\runtime.linux-arm64.runtime.native.system.io.ports.4.6.0-rc2.19462.14.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\4.6.0-rc2.19462.14\\runtime.linux-x64.runtime.native.system.io.ports.4.6.0-rc2.19462.14.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.native.system.io.ports\\4.6.0\\runtime.native.system.io.ports.4.6.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\4.6.0-rc2.19462.14\\runtime.osx-x64.runtime.native.system.io.ports.4.6.0-rc2.19462.14.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\sixlabors.imagesharp\\1.0.0\\sixlabors.imagesharp.1.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\supersimpletcp\\2.4.0\\supersimpletcp.2.4.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\system.io.ports\\4.6.0\\system.io.ports.4.6.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\system.security.accesscontrol\\4.6.0\\system.security.accesscontrol.4.6.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\system.security.principal.windows\\4.6.0\\system.security.principal.windows.4.6.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\system.text.json\\5.0.2\\system.text.json.5.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
