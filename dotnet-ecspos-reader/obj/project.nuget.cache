@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "rJlbXb9DBzCLeXJ3Hxlafs1bWBqlgEbZ2x8hdToRQePVrjuNEDE1pVpgGEruxN24VuG0uIJSuaXUPwQj+31gCg==",
+  "success": true,
+  "projectFilePath": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-ecspos-reader\\dotnet-ecspos-reader.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\123\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\6.0.0\\runtime.linux-arm.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\6.0.0\\runtime.linux-arm64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\6.0.0\\runtime.linux-x64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.native.system.io.ports\\6.0.0\\runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\6.0.0\\runtime.osx-arm64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\6.0.0\\runtime.osx-x64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\system.io.ports\\6.0.0\\system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-arm\\7.0.0-preview.3.22175.4\\microsoft.netcore.app.runtime.linux-arm.7.0.0-preview.3.22175.4.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.netcore.app.host.linux-arm\\7.0.0-preview.3.22175.4\\microsoft.netcore.app.host.linux-arm.7.0.0-preview.3.22175.4.nupkg.sha512",
+    "C:\\Users\\123\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-arm\\7.0.0-preview.3.22178.4\\microsoft.aspnetcore.app.runtime.linux-arm.7.0.0-preview.3.22178.4.nupkg.sha512"
+  ],
+  "logs": []
+}
