@@ -40,15 +40,6 @@ public class EcsPosReader
                 if (line is object && line == "!q")
                     break;
 
-                try
-                {
-                    sp.WriteLine(line);
-                }
-                catch (TimeoutException)
-                {
-                    Console.WriteLine("ERROR: Sending command timed out");
-                }
-
                 if (finished)
                     break;
 
