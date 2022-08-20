@@ -16,59 +16,61 @@ public class EcsPosReader
         string portName = args[0];
         int baudRate = args.Length >= 2 ? int.Parse(args[1]) : 9600;
 
-        using SerialPort sp = new SerialPort(portName);
-        sp.Encoding = Encoding.UTF8;
-        sp.BaudRate = baudRate;
-        sp.ReadTimeout = 1000;
-        sp.WriteTimeout = 1000;
-        sp.Open();
-
-        bool finished = false;
-        Console.CancelKeyPress += (a, b) =>
+        using (SerialPort sp = new SerialPort(portName))
         {
-            finished = true;
-        // close port to kill pending operations
-        sp.Close();
-        };
+            sp.Encoding = Encoding.UTF8;
+            sp.BaudRate = baudRate;
+            sp.ReadTimeout = 1000;
+            sp.WriteTimeout = 1000;
+            sp.Open();
 
-        Console.WriteLine("Type '!q' or Ctrl-C to exit...");
-
-        while (!finished)
-        {
-            string? line = Console.ReadLine();
-            if (line is object && line == "!q")
-                break;
-
-            try
+            bool finished = false;
+            Console.CancelKeyPress += (a, b) =>
             {
-                sp.WriteLine(line);
-            }
-            catch (TimeoutException)
-            {
-                Console.WriteLine("ERROR: Sending command timed out");
-            }
+                finished = true;
+            // close port to kill pending operations
+            sp.Close();
+            };
 
-            if (finished)
-                break;
+            Console.WriteLine("Type '!q' or Ctrl-C to exit...");
 
-            // if RATE is set to really high Arduino may fail to respond in time
-            // then on the next command you might get an old message
-            // ReadExisting will read everything from the internal buffer
-            string existingData = sp.ReadExisting();
-            Console.Write(existingData);
-            if (!existingData.Contains('\n') && !existingData.Contains('\r'))
+            while (!finished)
             {
-                // we didn't get the response yet, let's wait for it then
+                string? line = Console.ReadLine();
+                if (line is object && line == "!q")
+                    break;
+
                 try
                 {
-                    Console.WriteLine(sp.ReadLine());
+                    sp.WriteLine(line);
                 }
                 catch (TimeoutException)
                 {
-                    Console.WriteLine($"ERROR: No response in {sp.ReadTimeout}ms.");
+                    Console.WriteLine("ERROR: Sending command timed out");
+                }
+
+                if (finished)
+                    break;
+
+                // if RATE is set to really high Arduino may fail to respond in time
+                // then on the next command you might get an old message
+                // ReadExisting will read everything from the internal buffer
+                string existingData = sp.ReadExisting();
+                Console.Write(existingData);
+                if (!existingData.Contains('\n') && !existingData.Contains('\r'))
+                {
+                    // we didn't get the response yet, let's wait for it then
+                    try
+                    {
+                        Console.WriteLine(sp.ReadLine());
+                    }
+                    catch (TimeoutException)
+                    {
+                        Console.WriteLine($"ERROR: No response in {sp.ReadTimeout}ms.");
+                    }
                 }
             }
-        }
+        };
 
     }
 }
