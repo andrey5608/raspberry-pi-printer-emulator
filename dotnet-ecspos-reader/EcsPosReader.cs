@@ -5,7 +5,7 @@ using System.Text;
 public class EcsPosReader
 {
    private static SerialPort port = new SerialPort("/dev/serial0",
-      9600, Parity.None, 8, StopBits.One); 
+      9600); 
     static void Main(string[] args)
     {
         Console.WriteLine("Incoming Data:");
