@@ -36,7 +36,7 @@ public class EcsPosReader
 
             while (!finished)
             {
-                string? line = Console.ReadLine();
+                var line = Console.ReadLine();
                 if (line is object && line == "!q")
                     break;
 
