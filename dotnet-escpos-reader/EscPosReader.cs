@@ -2,6 +2,7 @@
 using System.IO.Ports;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 public class EcsPosReader
 {
