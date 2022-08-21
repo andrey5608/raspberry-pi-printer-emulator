@@ -4,35 +4,21 @@ using System.Text;
 
 public class EcsPosReader
 {
-   private static SerialPort port = new SerialPort("/dev/serial0",
-      9600); 
     static void Main(string[] args)
     {
-        Console.WriteLine("Incoming Data:");
+        
          // Attach a method to be called when there
          // is data waiting in the port's buffer 
-        port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived); 
         // Begin communications 
-        port.Open(); 
-        // Enter an application loop to keep this thread alive 
-        Console.ReadLine();
-        /*
-        if (args.Length == 0)
+        Console.WriteLine("Incoming Data:");
+        using (SerialPort sp = new SerialPort("/dev/serial0",
+      9600))
         {
-            Console.WriteLine("arduino-demo <portName> [<baudRate>=9600]");
-            return;
-        }
-
-        // to get port name you can use SerialPort.GetPortNames()
-        string portName = args[0];
-        int baudRate = args.Length >= 2 ? int.Parse(args[1]) : 9600;
-
-        using (SerialPort sp = new SerialPort(portName))
-        {
-            sp.Encoding = Encoding.UTF8;
-            sp.BaudRate = baudRate;
-            sp.ReadTimeout = 1000;
-            sp.WriteTimeout = 1000;
+            //sp.Encoding = Encoding.UTF8;
+            sp.Encoding = Encoding.GetEncoding("ibm850");
+            sp.BaudRate = 9600;
+            //sp.ReadTimeout = 1000;
+            //sp.WriteTimeout = 1000;
             sp.Open();
 
             bool finished = false;
@@ -73,13 +59,21 @@ public class EcsPosReader
                 }
             }
         };
+        // Enter an application loop to keep this thread alive 
+        Console.ReadLine();
+        /*
+        if (args.Length == 0)
+        {
+            Console.WriteLine("arduino-demo <portName> [<baudRate>=9600]");
+            return;
+        }
+
+        // to get port name you can use SerialPort.GetPortNames()
+        string portName = args[0];
+        int baudRate = args.Length >= 2 ? int.Parse(args[1]) : 9600;
+
+        
 
         */
-    }
-
-    private static void port_DataReceived(object sender, SerialDataReceivedEventArgs e) 
-    { 
-       // Show all the incoming data in the port's buffer
-       Console.WriteLine(port.ReadExisting()); 
     } 
 }

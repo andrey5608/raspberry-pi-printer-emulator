@@ -270,11 +270,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-ecspos-reader\\dotnet-ecspos-reader.csproj",
+      "projectUniqueName": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-escpos-reader\\dotnet-ecspos-reader.csproj",
       "projectName": "dotnet-ecspos-reader",
-      "projectPath": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-ecspos-reader\\dotnet-ecspos-reader.csproj",
+      "projectPath": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-escpos-reader\\dotnet-ecspos-reader.csproj",
       "packagesPath": "C:\\Users\\123\\.nuget\\packages\\",
-      "outputPath": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-ecspos-reader\\obj\\",
+      "outputPath": "C:\\repos\\raspberry-pi-printer-emulator\\dotnet-escpos-reader\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\123\\AppData\\Roaming\\NuGet\\NuGet.Config",
