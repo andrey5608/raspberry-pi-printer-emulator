@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class EcsPosReader
             sp.Open();
 
             Console.WriteLine("Type Ctrl-C to exit...");
-            int i = 0;
+
             var receivedSymbolsAsInt = new List<int>();
             var cutPaperCommand = new List<int> { 27, 61, 0 };
 
