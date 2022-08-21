@@ -93,16 +93,11 @@ namespace kunif.EscPosDecode
             for (int i = 0; i < escposlist.Count; i++)
             {
                 EscPosCmd item = escposlist[i];
-                EscPosCmd itemMin1 = null;
-                EscPosCmd itemMin2 = null;
-                if (i >= 2)
-                {
-                    itemMin1 = escposlist[i - 1];
-                    itemMin2 = escposlist[i - 2];
-                }
+                EscPosCmd itemMin1 = i >= 2 ? escposlist[i - 1] : null;
+                EscPosCmd itemMin2 = i >= 2 ? escposlist[i - 2] : null;
 
-                if (itemMin2?.cmdtype == EscPosCmdType.EscUnknown 
-                && itemMin1?.cmdtype == EscPosCmdType.Controls 
+                if (itemMin2?.cmdtype == EscPosCmdType.EscUnknown
+                && itemMin1?.cmdtype == EscPosCmdType.Controls
                 && item.cmdtype == EscPosCmdType.PrtPrintables)
                 {
                     continue;
@@ -146,6 +141,8 @@ namespace kunif.EscPosDecode
                 }
             }
 
+            FindItems(result);
+
             if (stdout)
             {
                 Console.Write(result);
@@ -167,6 +164,25 @@ namespace kunif.EscPosDecode
                 catch { }
             }
             return 0;
+        }
+
+        private static void FindItems(string result)
+        {
+            using (StringReader reader = new StringReader(result))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (IsItem(line)){
+                        Console.WriteLine($"Found item: {line}");
+                    }
+                }
+            }
+        }
+
+        private static bool IsItem(string itemToCheck){
+            var regExp = @"^[.*]{0,}([\d]{0,1})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}([\d\.,\d]{1,}).*$";
+            return Regex.Match(itemToCheck, regExp).Success;
         }
 
         private static List<EscPosCmd> Convertstrings(List<EscPosCmd> escposlist)
