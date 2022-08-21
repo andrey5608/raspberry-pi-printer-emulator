@@ -21,30 +21,17 @@ public class EcsPosReader
             //sp.WriteTimeout = 1000;
             sp.Open();
 
-            bool finished = false;
-            Console.CancelKeyPress += (a, b) =>
+            Console.WriteLine("Type Ctrl-C to exit...");
+            int i = 0;
+
+            while (i < 100)
             {
-                finished = true;
-            // close port to kill pending operations
-            sp.Close();
-            };
-
-            Console.WriteLine("Type '!q' or Ctrl-C to exit...");
-
-            while (!finished)
-            {
-                var line = Console.ReadLine();
-                if (line is object && line == "!q")
-                    break;
-
-                if (finished)
-                    break;
-
                 // if RATE is set to really high Arduino may fail to respond in time
                 // then on the next command you might get an old message
                 // ReadExisting will read everything from the internal buffer
-                string existingData = sp.ReadExisting();
-                Console.Write(existingData);
+                var existingData = sp.ReadByte();
+                Console.WriteLine(existingData);
+                /*
                 if (!existingData.Contains('\n') && !existingData.Contains('\r'))
                 {
                     // we didn't get the response yet, let's wait for it then
@@ -56,11 +43,11 @@ public class EcsPosReader
                     {
                         Console.WriteLine($"ERROR: No response in {sp.ReadTimeout}ms.");
                     }
-                }
+                }*/
             }
         };
         // Enter an application loop to keep this thread alive 
-        Console.ReadLine();
+        //Console.ReadLine();
         /*
         if (args.Length == 0)
         {
