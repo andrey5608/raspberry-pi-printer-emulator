@@ -46,7 +46,8 @@ public class EcsPosReader
     }
 
     private static void SaveBinaryFile(List<int> inputList){
-        var filePath = @"./out.bin";
+        var datetime = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
+        var filePath = $"./{datetime}.bin";
         var binaryOutput = inputList.SelectMany(BitConverter.GetBytes).ToArray();
         using (var writer = new BinaryWriter(File.OpenWrite(filePath))){
             writer.Write(binaryOutput);
