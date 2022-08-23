@@ -88,7 +88,8 @@ namespace ThermalPrinterTestApp
             string printerPortName = "COM2";
 
             //Serial port init
-            SerialPort printerPort = new SerialPort(printerPortName, 9600);
+            //SerialPort printerPort = new SerialPort(printerPortName, 9600);
+            SerialPort printerPort = new SerialPort(printerPortName, 115200, Parity.None, 8, StopBits.One);
 
             if (printerPort != null)
             {
