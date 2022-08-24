@@ -10,11 +10,10 @@ public class EcsPosReader
     static void Main(string[] args)
     {
         Console.WriteLine("Incoming Data:");
-        using (SerialPort sp = new SerialPort("/dev/serial0",
-      9600))
+        using (SerialPort sp = new SerialPort("/dev/serial0", 115200, Parity.None, 8, StopBits.One))
         {
             sp.Encoding = Encoding.GetEncoding("ibm850");
-            sp.BaudRate = 9600;
+            //sp.BaudRate = 9600;
             //sp.ReadTimeout = 1000;
             //sp.WriteTimeout = 1000;
             sp.Open();
