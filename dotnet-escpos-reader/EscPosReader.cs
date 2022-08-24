@@ -21,13 +21,13 @@ public class EcsPosReader
             Console.WriteLine("Type Ctrl-C to exit...");
 
             var receivedSymbolsAsInt = new List<int>();
-            var cutPaperCommand = new List<int> { 27, 61, 0 };
+            var cutPaperCommand = new List<int> { 27, 109 };
 
             while (true)
             {
                 var existingData = sp.ReadByte();
                 receivedSymbolsAsInt.Add(existingData);
-                if (Enumerable.SequenceEqual(GetThreeLast(receivedSymbolsAsInt), cutPaperCommand))
+                if (Enumerable.SequenceEqual(GetTwoLast(receivedSymbolsAsInt), cutPaperCommand))
                 {
                     Console.WriteLine(String.Join(", ", receivedSymbolsAsInt.ToArray()));
                     Console.WriteLine("Paper cut");
@@ -39,9 +39,9 @@ public class EcsPosReader
             }
         };
     }
-    private static List<int> GetThreeLast(List<int> list)
+    private static List<int> GetTwoLast(List<int> list)
     {
-        return Enumerable.Reverse(list).Take(3).Reverse().ToList();
+        return Enumerable.Reverse(list).Take(2).Reverse().ToList();
     }
 
     private static void SaveBinaryFile(List<int> inputList){
