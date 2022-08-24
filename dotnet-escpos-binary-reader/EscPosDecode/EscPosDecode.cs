@@ -181,7 +181,7 @@ namespace kunif.EscPosDecode
         }
 
         private static bool IsItem(string itemToCheck){
-            var regExp = @"^[.*]{0,}([\d]{0,1})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}([\d\.,\d]{1,}).*$";
+            var regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}([\d\.,\d]{1,}).*$";
             return Regex.Match(itemToCheck, regExp).Success;
         }
 
