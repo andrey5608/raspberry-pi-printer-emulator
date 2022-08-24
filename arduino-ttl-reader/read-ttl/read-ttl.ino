@@ -103,6 +103,6 @@ void printArray() {
 void showNewData() {
   //Serial.println("Received data:");
   Serial.println(receivedChars);
-  //printArray(); // for chars debugging
+  printArray(); // for chars debugging
 
 }

@@ -26,6 +26,7 @@ public class EcsPosReader
             while (true)
             {
                 var existingData = sp.ReadByte();
+                Console.WriteLine(existingData);
                 receivedSymbolsAsInt.Add(existingData);
                 if (Enumerable.SequenceEqual(GetTwoLast(receivedSymbolsAsInt), cutPaperCommand))
                 {
