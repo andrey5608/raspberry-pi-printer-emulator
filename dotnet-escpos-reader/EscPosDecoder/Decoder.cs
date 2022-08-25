@@ -33,9 +33,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace EscPosDecode
+namespace Decoder
 {
-    internal class EscPosDecode
+    public class Decoder
     {
         private static long deviceType = EscPosTokenizer.EscPosPrinter;
         private static Boolean decode = true;
