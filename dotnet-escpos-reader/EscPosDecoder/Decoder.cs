@@ -37,25 +37,25 @@ namespace Decoder
 {
     public class Decoder
     {
-        private static long deviceType = EscPosTokenizer.EscPosPrinter;
-        private static Boolean decode = true;
-        private static Boolean stdout = true;
-        private static Boolean graphicsoutput = false;
-        private static int initialcodepage = 850;
-        private static Boolean initialkanjion = false;
-        private static byte initialICS = 0;
-        private static string inputpath = "";
-        private static string outputpath = "";
-        private static string graphicspath = "";
-        private static int sbcsfontpattern = 1;
-        private static int mbcsfontpattern = 1;
-        private static int vfdfontpattern = 1;
+        private static long _deviceType = EscPosTokenizer.EscPosPrinter;
+        private static Boolean _decode = true;
+        private static Boolean _stdout = true;
+        private static Boolean _graphicsoutput = false;
+        private static int _initialcodepage = 850;
+        private static Boolean _initialkanjion = false;
+        private static byte _initialIcs = 0;
+        private static string _inputpath = "";
+        private static string _outputpath = "";
+        private static string _graphicspath = "";
+        private static int _sbcsfontpattern = 1;
+        private static int _mbcsfontpattern = 1;
+        private static int _vfdfontpattern = 1;
 
         private static int Main(string[] args)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             // Test if input arguments were supplied.
-            int options = Options(args);
+            var options = Options(args);
             switch (options)
             {
                 case 1: HelpGeneral(); return options;
@@ -64,7 +64,7 @@ namespace Decoder
                 default: break;
             }
 
-            byte[] escposdata = ReadFile(inputpath);
+            var escposdata = ReadFile(_inputpath);
 
             if ((escposdata is null) || (escposdata.Length == 0))
             {
@@ -72,8 +72,8 @@ namespace Decoder
                 return 11;
             }
 
-            var EPToken = new EscPosTokenizer();
-            List<EscPosCmd> escposlist = EPToken.Scan(escposdata, deviceType, sbcsfontpattern, mbcsfontpattern, vfdfontpattern);
+            var epToken = new EscPosTokenizer();
+            var escposlist = epToken.Scan(escposdata, _deviceType, _sbcsfontpattern, _mbcsfontpattern, _vfdfontpattern);
 
             if ((escposlist is null) || (escposlist.Count == 0))
             {
@@ -81,20 +81,20 @@ namespace Decoder
                 return 12;
             }
 
-            if (decode)
+            if (_decode)
             {
                 escposlist = EscPosDecoder.Convert(escposlist);
                 escposlist = Convertstrings(escposlist);
             }
 
-            string result = string.Empty;
-            Boolean graphicExists = false;
+            var result = string.Empty;
+            var graphicExists = false;
 
-            for (int i = 0; i < escposlist.Count; i++)
+            for (var i = 0; i < escposlist.Count; i++)
             {
-                EscPosCmd item = escposlist[i];
-                EscPosCmd itemMin1 = i >= 2 ? escposlist[i - 1] : null;
-                EscPosCmd itemMin2 = i >= 2 ? escposlist[i - 2] : null;
+                var item = escposlist[i];
+                var itemMin1 = i >= 2 ? escposlist[i - 1] : null;
+                var itemMin2 = i >= 2 ? escposlist[i - 2] : null;
 
                 if (itemMin2?.cmdtype == EscPosCmdType.EscUnknown
                 && itemMin1?.cmdtype == EscPosCmdType.Controls
@@ -127,41 +127,44 @@ namespace Decoder
                 }
             }
 
-            FindItems(result);
+            FindItems(result); // custom items handling code
 
-            if (stdout)
+            if (_stdout)
             {
                 Console.Write(result);
             }
             else
             {
-                WritedFile(outputpath, result);
+                WritedFile(_outputpath, result);
             }
-            if (graphicsoutput && graphicExists)
+
+            if (!_graphicsoutput || !graphicExists) return 0;
+            try
             {
-                try
+                if (!Directory.Exists(_graphicspath))
                 {
-                    if (!Directory.Exists(graphicspath))
-                    {
-                        Directory.CreateDirectory(graphicspath);
-                    }
-                    Outputgraphics(escposlist);
+                    Directory.CreateDirectory(_graphicspath);
                 }
-                catch { }
+                Outputgraphics(escposlist);
             }
+            catch
+            {
+                // ignored
+            }
+
             return 0;
         }
 
         private static void FindItems(string result)
         {
-            using (StringReader reader = new StringReader(result))
+            using (var reader = new StringReader(result))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    string itemName = string.Empty;
-                    int quantity = 1;
-                    double price = 0.00;
+                    var itemName = string.Empty;
+                    var quantity = 1;
+                    var price = 0.00;
                     var itemMatch = MatchItem(line);
                     if (!itemMatch.Success) continue;
                     Console.WriteLine($"Found item: {line}");
@@ -197,39 +200,39 @@ namespace Decoder
 
         private static Match MatchItem(string itemToCheck)
         {
-            var regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}(\d{1,}[\.,]\d{1,}).*$";
+            const string regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}(\d{1,}[\.,]\d{1,}).*$";
             return Regex.Match(itemToCheck, regExp);
         }
 
         private static List<EscPosCmd> Convertstrings(List<EscPosCmd> escposlist)
         {
-            Boolean prtutf8 = false;
-            Encoding prtencoding = Encoding.Default;
-            Dictionary<byte, string> prtembedded = new Dictionary<byte, string>();
-            Dictionary<string, string> prtreplaced = new Dictionary<string, string>();
-            UTF8Encoding utf8encoding = new UTF8Encoding(); ;
-            Encoding vfdencoding = Encoding.Default;
-            Dictionary<byte, string> vfdembedded = new Dictionary<byte, string>();
-            Dictionary<string, string> vfdreplaced = new Dictionary<string, string>();
+            var prtutf8 = false;
+            var prtencoding = Encoding.Default;
+            var prtembedded = new Dictionary<byte, string>();
+            var prtreplaced = new Dictionary<string, string>();
+            var utf8Encoding = new UTF8Encoding(); ;
+            var vfdencoding = Encoding.Default;
+            var vfdembedded = new Dictionary<byte, string>();
+            var vfdreplaced = new Dictionary<string, string>();
 
             try
             {
-                if (initialcodepage < 0)
+                if (_initialcodepage < 0)
                 {
-                    initialcodepage = CultureInfo.CurrentCulture.TextInfo.OEMCodePage;
-                    initialkanjion = !Encoding.GetEncoding(initialcodepage).IsSingleByte;
+                    _initialcodepage = CultureInfo.CurrentCulture.TextInfo.OEMCodePage;
+                    _initialkanjion = !Encoding.GetEncoding(_initialcodepage).IsSingleByte;
                 }
             }
             catch
             {
                 return escposlist;
             }
-            int prtcodepage = initialcodepage;
-            int prtICS = initialICS;
-            int vfdcodepage = initialcodepage;
-            int vfdICS = initialICS;
-            Boolean prtkanjimode = initialkanjion;
-            Boolean vfdkanjimode = initialkanjion;
+            var prtcodepage = _initialcodepage;
+            int prtIcs = _initialIcs;
+            var vfdcodepage = _initialcodepage;
+            int vfdIcs = _initialIcs;
+            var prtkanjimode = _initialkanjion;
+            var vfdkanjimode = _initialkanjion;
 
             try
             {
@@ -241,9 +244,9 @@ namespace Decoder
                 {
                     prtencoding = Encoding.GetEncoding(prtcodepage);
                 }
-                if (prtICS != 0)
+                if (prtIcs != 0)
                 {
-                    prtreplaced = EscPosDecoder.s_StringESCRICS[(byte)prtICS];
+                    prtreplaced = EscPosDecoder.s_StringESCRICS[(byte)prtIcs];
                 }
                 if (vfdcodepage < 0x100)
                 {
@@ -253,13 +256,13 @@ namespace Decoder
                 {
                     prtencoding = Encoding.GetEncoding(vfdcodepage);
                 }
-                if ((vfdICS >= 1) && (vfdICS <= 17))
+                if ((vfdIcs >= 1) && (vfdIcs <= 17))
                 {
-                    vfdreplaced = EscPosDecoder.s_StringESCRICS[(byte)vfdICS];
+                    vfdreplaced = EscPosDecoder.s_StringESCRICS[(byte)vfdIcs];
                 }
                 else
                 {
-                    vfdICS = 0;
+                    vfdIcs = 0;
                 }
             }
             catch
@@ -267,14 +270,14 @@ namespace Decoder
                 return escposlist;
             }
 
-            foreach (EscPosCmd item in escposlist)
+            foreach (var item in escposlist)
             {
                 switch (item.cmdtype)
                 {
                     case EscPosCmdType.EscInitialize:
-                        prtcodepage = initialcodepage;
-                        prtICS = initialICS;
-                        prtkanjimode = initialkanjion;
+                        prtcodepage = _initialcodepage;
+                        prtIcs = _initialIcs;
+                        prtkanjimode = _initialkanjion;
                         try
                         {
                             if (prtcodepage < 0x100)
@@ -285,9 +288,9 @@ namespace Decoder
                             {
                                 prtencoding = Encoding.GetEncoding(prtcodepage);
                             }
-                            if (prtICS != 0)
+                            if (prtIcs != 0)
                             {
-                                prtreplaced = EscPosDecoder.s_StringESCRICS[(byte)prtICS];
+                                prtreplaced = EscPosDecoder.s_StringESCRICS[(byte)prtIcs];
                             }
                         }
                         catch { }
@@ -298,10 +301,10 @@ namespace Decoder
                         {
                             if (EscPosDecoder.s_StringESCRICS.ContainsKey(item.cmddata[2]))
                             {
-                                prtICS = item.cmddata[2];
-                                if (prtICS != 0)
+                                prtIcs = item.cmddata[2];
+                                if (prtIcs != 0)
                                 {
-                                    prtreplaced = EscPosDecoder.s_StringESCRICS[(byte)prtICS];
+                                    prtreplaced = EscPosDecoder.s_StringESCRICS[(byte)prtIcs];
                                 }
                             }
                         }
@@ -336,7 +339,7 @@ namespace Decoder
 
                     case EscPosCmdType.FsSelectCharacterEncodeSystem:
                         {
-                            byte m = item.cmddata[6];
+                            var m = item.cmddata[6];
                             prtutf8 = ((m == 2) || (m == 50));
                         }
                         break;
@@ -344,10 +347,10 @@ namespace Decoder
                     case EscPosCmdType.PrtPrintables:
                         try
                         {
-                            List<string> listwork = new List<string>();
+                            var listwork = new List<string>();
                             if (prtutf8)
                             {
-                                listwork.AddRange(utf8encoding.GetChars(item.cmddata).Select(c => c.ToString()));
+                                listwork.AddRange(utf8Encoding.GetChars(item.cmddata).Select(c => c.ToString()));
                             }
                             else if (prtcodepage < 0x100)
                             {
@@ -357,15 +360,15 @@ namespace Decoder
                             {
                                 listwork.AddRange(prtencoding.GetChars(item.cmddata).Select(c => c.ToString()));
                             }
-                            item.paramdetail = string.Join("", (prtICS == 0 ? listwork : listwork.Select(s => (prtreplaced.ContainsKey(s) ? prtreplaced[s] : s))));
+                            item.paramdetail = string.Join("", (prtIcs == 0 ? listwork : listwork.Select(s => (prtreplaced.ContainsKey(s) ? prtreplaced[s] : s))));
                         }
                         catch { }
                         break;
 
                     case EscPosCmdType.VfdEscInitialize:
-                        vfdcodepage = initialcodepage;
-                        vfdICS = initialICS;
-                        vfdkanjimode = initialkanjion;
+                        vfdcodepage = _initialcodepage;
+                        vfdIcs = _initialIcs;
+                        vfdkanjimode = _initialkanjion;
                         try
                         {
                             if (vfdcodepage < 0x100)
@@ -383,14 +386,14 @@ namespace Decoder
                     case EscPosCmdType.VfdEscSelectInternationalCharacterSet:
                         if (EscPosDecoder.s_StringESCRICS.ContainsKey(item.cmddata[2]))
                         {
-                            vfdICS = item.cmddata[2];
-                            if ((vfdICS >= 1) && (vfdICS <= 17))
+                            vfdIcs = item.cmddata[2];
+                            if ((vfdIcs >= 1) && (vfdIcs <= 17))
                             {
-                                vfdreplaced = EscPosDecoder.s_StringESCRICS[(byte)vfdICS];
+                                vfdreplaced = EscPosDecoder.s_StringESCRICS[(byte)vfdIcs];
                             }
                             else
                             {
-                                vfdICS = 0;
+                                vfdIcs = 0;
                             }
                         }
                         break;
@@ -429,7 +432,7 @@ namespace Decoder
                     case EscPosCmdType.VfdDisplayables:
                         try
                         {
-                            List<string> listwork = new List<string>();
+                            var listwork = new List<string>();
                             if (vfdcodepage < 0x100)
                             {
                                 listwork.AddRange(item.cmddata.Select(c => vfdembedded[c]));
@@ -438,7 +441,7 @@ namespace Decoder
                             {
                                 listwork.AddRange(vfdencoding.GetChars(item.cmddata).Select(c => c.ToString()));
                             }
-                            item.paramdetail = string.Join("", (vfdICS == 0 ? listwork : listwork.Select(s => (vfdreplaced.ContainsKey(s) ? vfdreplaced[s] : s))));
+                            item.paramdetail = string.Join("", (vfdIcs == 0 ? listwork : listwork.Select(s => (vfdreplaced.ContainsKey(s) ? vfdreplaced[s] : s))));
                         }
                         catch { }
                         break;
@@ -448,8 +451,8 @@ namespace Decoder
         }
         private static void Outputgraphics(List<EscPosCmd> escposlist)
         {
-            int serialnumber = 0;
-            foreach (EscPosCmd item in escposlist)
+            var serialnumber = 0;
+            foreach (var item in escposlist)
             {
                 if (item.somebinary != null)
                 {
@@ -466,13 +469,13 @@ namespace Decoder
                         case EscPosCmdType.VfdEscDefineUserDefinedCharacters0507:
                             try
                             {
-                                System.Drawing.Bitmap[] bmparray = (System.Drawing.Bitmap[])item.somebinary;
-                                string cmdtype = "_" + item.cmdtype.ToString();
-                                string snstring = serialnumber.ToString("D4") + "_";
-                                byte code = item.cmddata[3];
-                                foreach (System.Drawing.Bitmap bitmap in bmparray)
+                                var bmparray = (System.Drawing.Bitmap[])item.somebinary;
+                                var cmdtype = "_" + item.cmdtype.ToString();
+                                var snstring = serialnumber.ToString("D4") + "_";
+                                var code = item.cmddata[3];
+                                foreach (var bitmap in bmparray)
                                 {
-                                    string filename = graphicspath + "\\" + snstring + code.ToString("X2") + cmdtype + ".bmp";
+                                    var filename = _graphicspath + "\\" + snstring + code.ToString("X2") + cmdtype + ".bmp";
                                     bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Bmp);
                                     code++;
                                 }
@@ -484,13 +487,13 @@ namespace Decoder
                         case EscPosCmdType.GsDefineRasterFormatCharacterCodePage:
                             try
                             {
-                                System.Drawing.Bitmap[] bmparray = (System.Drawing.Bitmap[])item.somebinary;
-                                string cmdtype = "_" + item.cmdtype.ToString();
-                                string snstring = serialnumber.ToString("D4") + "_";
-                                byte code = item.cmddata[7];
-                                foreach (System.Drawing.Bitmap bitmap in bmparray)
+                                var bmparray = (System.Drawing.Bitmap[])item.somebinary;
+                                var cmdtype = "_" + item.cmdtype.ToString();
+                                var snstring = serialnumber.ToString("D4") + "_";
+                                var code = item.cmddata[7];
+                                foreach (var bitmap in bmparray)
                                 {
-                                    string filename = graphicspath + "\\" + snstring + code.ToString("X2") + cmdtype + ".bmp";
+                                    var filename = _graphicspath + "\\" + snstring + code.ToString("X2") + cmdtype + ".bmp";
                                     bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Bmp);
                                     code++;
                                 }
@@ -508,13 +511,13 @@ namespace Decoder
                         case EscPosCmdType.GsDefineDownloadGraphicsDataColumnDW:
                             try
                             {
-                                System.Drawing.Bitmap[] bmparray = (System.Drawing.Bitmap[])item.somebinary;
-                                string cmdtype = "_" + item.cmdtype.ToString();
-                                string snstring = serialnumber.ToString("D4") + "_";
-                                int indexnumber = 0;
-                                foreach (System.Drawing.Bitmap bitmap in bmparray)
+                                var bmparray = (System.Drawing.Bitmap[])item.somebinary;
+                                var cmdtype = "_" + item.cmdtype.ToString();
+                                var snstring = serialnumber.ToString("D4") + "_";
+                                var indexnumber = 0;
+                                foreach (var bitmap in bmparray)
                                 {
-                                    string filename = graphicspath + "\\" + snstring + indexnumber.ToString("D3") + cmdtype + ".bmp";
+                                    var filename = _graphicspath + "\\" + snstring + indexnumber.ToString("D3") + cmdtype + ".bmp";
                                     bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Bmp);
                                     indexnumber++;
                                 }
@@ -527,9 +530,9 @@ namespace Decoder
                         case EscPosCmdType.FsDefineUserDefinedKanjiCharacters1616:
                             try
                             {
-                                int code = (item.cmddata[2] * 0x100) + item.cmddata[3];
-                                System.Drawing.Bitmap bitmap = (System.Drawing.Bitmap)item.somebinary;
-                                string filename = graphicspath + "\\" + serialnumber.ToString("D4") + "_" + code.ToString("X4") + "_" + item.cmdtype.ToString() + ".bmp";
+                                var code = (item.cmddata[2] * 0x100) + item.cmddata[3];
+                                var bitmap = (System.Drawing.Bitmap)item.somebinary;
+                                var filename = _graphicspath + "\\" + serialnumber.ToString("D4") + "_" + code.ToString("X4") + "_" + item.cmdtype.ToString() + ".bmp";
                                 bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Bmp);
                                 serialnumber++;
                             }
@@ -548,8 +551,8 @@ namespace Decoder
                         case EscPosCmdType.GsObsoletePrintRasterBitimage:
                             try
                             {
-                                System.Drawing.Bitmap bitmap = (System.Drawing.Bitmap)item.somebinary;
-                                string filename = graphicspath + "\\" + serialnumber.ToString("D4") + "_" + item.cmdtype.ToString() + ".bmp";
+                                var bitmap = (System.Drawing.Bitmap)item.somebinary;
+                                var filename = _graphicspath + "\\" + serialnumber.ToString("D4") + "_" + item.cmdtype.ToString() + ".bmp";
                                 bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Bmp);
                                 serialnumber++;
                             }
@@ -561,7 +564,7 @@ namespace Decoder
         }
         private static byte[] ReadFile(string filePath)
         {
-            byte[] buffer = Array.Empty<byte>();
+            var buffer = Array.Empty<byte>();
             try
             {
                 using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -578,8 +581,8 @@ namespace Decoder
         {
             try
             {
-                FileMode mode = File.Exists(filePath) ? FileMode.Truncate : FileMode.Create;
-                FileStream ostrm = new FileStream(filePath, mode, FileAccess.Write);
+                var mode = File.Exists(filePath) ? FileMode.Truncate : FileMode.Create;
+                var ostrm = new FileStream(filePath, mode, FileAccess.Write);
                 using (var fs = new StreamWriter(ostrm))
                 {
                     fs.Write(data);
@@ -674,13 +677,13 @@ namespace Decoder
         }
         private static int Options(string[] args)
         {
-            int result = 0;
+            var result = 0;
 
             if (args.Length == 0)
             {
                 return 1;
             }
-            for (int i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Length; i++)
             {
                 switch (args[i].ToUpper())
                 {
@@ -693,14 +696,14 @@ namespace Decoder
                                 result = 1;
                                 break;
                             }
-                            string device = args[i].ToLower();
+                            var device = args[i].ToLower();
                             if (device.Equals("printer"))
                             {
-                                deviceType = EscPosTokenizer.EscPosPrinter;
+                                _deviceType = EscPosTokenizer.EscPosPrinter;
                             }
                             else if (device.Equals("linedisplay"))
                             {
-                                deviceType = EscPosTokenizer.EscPosLineDisplay;
+                                _deviceType = EscPosTokenizer.EscPosLineDisplay;
                             }
                             else
                             {
@@ -720,8 +723,8 @@ namespace Decoder
                             }
                             if (!args[i].StartsWith("-"))
                             {
-                                outputpath = args[i];
-                                stdout = false;
+                                _outputpath = args[i];
+                                _stdout = false;
                             }
                             else
                             {
@@ -732,8 +735,8 @@ namespace Decoder
                         break;
                     // specify Tokenize only
                     case "-T":
-                        decode = false;
-                        graphicsoutput = false;
+                        _decode = false;
+                        _graphicsoutput = false;
                         break;
                     // specify Codepage with next parameter
                     case "-C":
@@ -746,23 +749,23 @@ namespace Decoder
                             }
                             try
                             {
-                                int iwork = Convert.ToInt32(args[i]);
+                                var iwork = Convert.ToInt32(args[i]);
                                 if (EscPosDecoder.PrtESCtCodePage.ContainsValue(iwork) && (iwork < 0x100))
                                 {
-                                    initialcodepage = iwork;
-                                    initialkanjion = false;
+                                    _initialcodepage = iwork;
+                                    _initialkanjion = false;
                                 }
                                 else
                                 {
                                     try
                                     {
-                                        Encoding ework = Encoding.GetEncoding((iwork >= 0 ? iwork : 20127));
-                                        initialcodepage = ework.CodePage;
-                                        if (!EscPosDecoder.PrtESCtCodePage.ContainsValue(initialcodepage) && ework.IsSingleByte)
+                                        var ework = Encoding.GetEncoding((iwork >= 0 ? iwork : 20127));
+                                        _initialcodepage = ework.CodePage;
+                                        if (!EscPosDecoder.PrtESCtCodePage.ContainsValue(_initialcodepage) && ework.IsSingleByte)
                                         {
-                                            initialcodepage = 20127;
+                                            _initialcodepage = 20127;
                                         }
-                                        initialkanjion = !ework.IsSingleByte;
+                                        _initialkanjion = !ework.IsSingleByte;
                                     }
                                     catch
                                     {
@@ -789,10 +792,10 @@ namespace Decoder
                             }
                             try
                             {
-                                byte bwork = Convert.ToByte(args[i]);
+                                var bwork = Convert.ToByte(args[i]);
                                 if (EscPosDecoder.s_StringESCRICS.ContainsKey(bwork))
                                 {
-                                    initialICS = bwork;
+                                    _initialIcs = bwork;
                                 }
                                 else
                                 {
@@ -821,8 +824,8 @@ namespace Decoder
                                 switch (args[i].ToUpper())
                                 {
                                     case "ON":
-                                        initialkanjion = true; break;
-                                    case "OFF": initialkanjion = false; break;
+                                        _initialkanjion = true; break;
+                                    case "OFF": _initialkanjion = false; break;
                                     default:
                                         break;
                                 };
@@ -845,8 +848,8 @@ namespace Decoder
                             }
                             if (!args[i].StartsWith("-"))
                             {
-                                graphicspath = args[i];
-                                graphicsoutput = true;
+                                _graphicspath = args[i];
+                                _graphicsoutput = true;
                             }
                             else
                             {
@@ -866,11 +869,11 @@ namespace Decoder
                             }
                             if (!args[i].StartsWith("-"))
                             {
-                                if (int.TryParse(args[i], out int number))
+                                if (int.TryParse(args[i], out var number))
                                 {
                                     if ((number >= 1) && (number <= 9))
                                     {
-                                        sbcsfontpattern = number;
+                                        _sbcsfontpattern = number;
                                     }
                                     else
                                     {
@@ -902,11 +905,11 @@ namespace Decoder
                             }
                             if (!args[i].StartsWith("-"))
                             {
-                                if (int.TryParse(args[i], out int number))
+                                if (int.TryParse(args[i], out var number))
                                 {
                                     if ((number >= 1) && (number <= 5))
                                     {
-                                        mbcsfontpattern = number;
+                                        _mbcsfontpattern = number;
                                     }
                                     else
                                     {
@@ -938,11 +941,11 @@ namespace Decoder
                             }
                             if (!args[i].StartsWith("-"))
                             {
-                                if (int.TryParse(args[i], out int number))
+                                if (int.TryParse(args[i], out var number))
                                 {
                                     if ((number >= 1) && (number <= 2))
                                     {
-                                        vfdfontpattern = number;
+                                        _vfdfontpattern = number;
                                     }
                                     else
                                     {
@@ -977,7 +980,7 @@ namespace Decoder
                         break;
                     // specify input file path
                     default:
-                        inputpath = args[i];
+                        _inputpath = args[i];
                         break;
                 }
                 if (result != 0)
@@ -985,7 +988,7 @@ namespace Decoder
                     break;
                 }
             }
-            if ((result == 0) && (string.IsNullOrEmpty(inputpath)))
+            if ((result == 0) && (string.IsNullOrEmpty(_inputpath)))
             {
                 result = 1;
             }
