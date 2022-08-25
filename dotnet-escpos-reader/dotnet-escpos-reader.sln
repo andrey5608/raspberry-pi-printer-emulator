@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscPosDecoder", "EscPosDecoder\EscPosDecoder.csproj", "{F236178E-C58E-4081-B182-784522C810E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decoder", "EscPosDecoder\Decoder.csproj", "{F236178E-C58E-4081-B182-784522C810E1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{9844AC48-62C6-434D-9A0B-F61987436DA3} = {9844AC48-62C6-434D-9A0B-F61987436DA3}
 	EndProjectSection

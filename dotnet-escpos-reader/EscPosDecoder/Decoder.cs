@@ -160,6 +160,7 @@ namespace Decoder
             using (var reader = new StringReader(result))
             {
                 string line;
+                var items = new List<Item>();
                 while ((line = reader.ReadLine()) != null)
                 {
                     var itemName = string.Empty;
@@ -193,6 +194,7 @@ namespace Decoder
 
                     Console.WriteLine($"Quantity: {quantity}; Item: {itemName}; Price: {price}");
                     // here we can add to the list
+                    items.Add(new Item(quantity, itemName, price));
                 }
                 // here we can send the request
             }
