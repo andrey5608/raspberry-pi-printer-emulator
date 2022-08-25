@@ -3,7 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-escpos-reader", "EscPosDecode\EscPosDecode.csproj", "{7D3EDD62-847D-4BC0-8CA1-78F1D676E7A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscPosDecoder", "EscPosDecoder\EscPosDecoder.csproj", "{F236178E-C58E-4081-B182-784522C810E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9844AC48-62C6-434D-9A0B-F61987436DA3} = {9844AC48-62C6-434D-9A0B-F61987436DA3}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscPosUtils", "EscPosUtils\EscPosUtils.csproj", "{9844AC48-62C6-434D-9A0B-F61987436DA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscPosReader", "EscPosReader\EscPosReader.csproj", "{3075E075-FB25-44B8-BBCB-8E7760C1D414}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9844AC48-62C6-434D-9A0B-F61987436DA3} = {9844AC48-62C6-434D-9A0B-F61987436DA3}
+		{F236178E-C58E-4081-B182-784522C810E1} = {F236178E-C58E-4081-B182-784522C810E1}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +22,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7D3EDD62-847D-4BC0-8CA1-78F1D676E7A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D3EDD62-847D-4BC0-8CA1-78F1D676E7A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D3EDD62-847D-4BC0-8CA1-78F1D676E7A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D3EDD62-847D-4BC0-8CA1-78F1D676E7A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F236178E-C58E-4081-B182-784522C810E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F236178E-C58E-4081-B182-784522C810E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F236178E-C58E-4081-B182-784522C810E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F236178E-C58E-4081-B182-784522C810E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9844AC48-62C6-434D-9A0B-F61987436DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9844AC48-62C6-434D-9A0B-F61987436DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9844AC48-62C6-434D-9A0B-F61987436DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9844AC48-62C6-434D-9A0B-F61987436DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3075E075-FB25-44B8-BBCB-8E7760C1D414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3075E075-FB25-44B8-BBCB-8E7760C1D414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3075E075-FB25-44B8-BBCB-8E7760C1D414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3075E075-FB25-44B8-BBCB-8E7760C1D414}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

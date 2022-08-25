@@ -24,7 +24,7 @@
 
  */
 
-namespace kunif.EscPosUtils
+namespace EscPosUtils
 {
     using System.Collections.Generic;
 

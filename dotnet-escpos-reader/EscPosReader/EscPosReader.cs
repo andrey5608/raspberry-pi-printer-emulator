@@ -7,15 +7,12 @@ using System.Linq;
 
 public class EcsPosReader
 {
-    static void Main(string[] args)
+    static void Main()
     {
         Console.WriteLine("Incoming Data:");
         using (SerialPort sp = new SerialPort("/dev/serial0", 115200, Parity.None, 8, StopBits.One))
         {
             sp.Encoding = Encoding.GetEncoding("ibm850");
-            //sp.BaudRate = 9600;
-            //sp.ReadTimeout = 1000;
-            //sp.WriteTimeout = 1000;
             sp.Open();
 
             Console.WriteLine("Type Ctrl-C to exit...");

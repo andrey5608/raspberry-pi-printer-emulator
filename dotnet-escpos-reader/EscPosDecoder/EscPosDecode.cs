@@ -24,17 +24,17 @@
 
  */
 
-namespace kunif.EscPosDecode
-{
-    using kunif.EscPosUtils;
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Text.RegularExpressions;
+using EscPosUtils;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
+namespace EscPosDecode
+{
     internal class EscPosDecode
     {
         private static long deviceType = EscPosTokenizer.EscPosPrinter;
@@ -398,13 +398,14 @@ namespace kunif.EscPosDecode
                         break;
 
                     case EscPosCmdType.VfdUsKanjiCharacterModeOnOff:
-                        vfdkanjimode = item.cmddata[6] switch
+                        
+                        switch(item.cmddata[6])
                         {
-                            0 => false,
-                            48 => false,
-                            1 => true,
-                            49 => true,
-                            _ => vfdkanjimode,
+                            case 0: vfdkanjimode = false; break;
+                            case 48: vfdkanjimode = false; break;
+                            case 1: vfdkanjimode = true; break;
+                            case 49: vfdkanjimode = true; break;
+                            default: vfdkanjimode = vfdkanjimode; break;
                         };
                         break;
 
@@ -796,11 +797,12 @@ namespace kunif.EscPosDecode
                             }
                             try
                             {
-                                initialkanjion = args[i].ToUpper() switch
+                                switch(args[i].ToUpper())
                                 {
-                                    "ON" => true,
-                                    "OFF" => false,
-                                    _ => initialkanjion,
+                                    case "ON":
+                                        initialkanjion = true; break;
+                                    case "OFF": initialkanjion = false;break;
+                                    default: initialkanjion = initialkanjion; break;
                                 };
                             }
                             catch

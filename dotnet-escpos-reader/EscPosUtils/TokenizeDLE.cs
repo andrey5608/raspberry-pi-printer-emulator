@@ -24,7 +24,7 @@
 
  */
 
-namespace kunif.EscPosUtils
+namespace EscPosUtils
 {
     public partial class EscPosTokenizer
     {
