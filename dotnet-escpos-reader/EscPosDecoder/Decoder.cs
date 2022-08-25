@@ -88,7 +88,7 @@ namespace Decoder
             }
 
             string result = string.Empty;
-            Boolean graphicsexist = false;
+            Boolean graphicExists = false;
 
             for (int i = 0; i < escposlist.Count; i++)
             {
@@ -116,28 +116,14 @@ namespace Decoder
                     continue;
                 }
 
-                if (string.IsNullOrEmpty(item.paramdetail))
-                {
-                    //result += string.Empty;
-                }
-                else
+                if (!string.IsNullOrEmpty(item.paramdetail))
                 {
                     result += item.paramdetail;
                 }
-                /*
-                
-                if (string.IsNullOrEmpty(item.paramdetail))
-                {
-                    result += string.Format(CultureInfo.InvariantCulture, "<! {0}\n  | {1} !>\n", item.cmdtype.ToString(), BitConverter.ToString(item.cmddata));
-                }
-                else
-                {
-                    result += string.Format(CultureInfo.InvariantCulture, "<! {0}\n  | {1}\n  # {2} !>\n", item.cmdtype.ToString(), BitConverter.ToString(item.cmddata), item.paramdetail);
-                }
-                */
+
                 if (item.somebinary != null)
                 {
-                    graphicsexist = true;
+                    graphicExists = true;
                 }
             }
 
@@ -151,7 +137,7 @@ namespace Decoder
             {
                 WritedFile(outputpath, result);
             }
-            if (graphicsoutput && graphicsexist)
+            if (graphicsoutput && graphicExists)
             {
                 try
                 {
@@ -173,18 +159,46 @@ namespace Decoder
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (IsItem(line))
+                    string itemName = string.Empty;
+                    int quantity = 1;
+                    double price = 0.00;
+                    var itemMatch = MatchItem(line);
+                    if (!itemMatch.Success) continue;
+                    Console.WriteLine($"Found item: {line}");
+
+                    for (var i = 0; i < itemMatch.Groups.Count; i++)
                     {
-                        Console.WriteLine($"Found item: {line}");
+                        var itemMatchGroup = itemMatch.Groups[i];
+                        var value = itemMatchGroup.Value.Trim();
+                        
+
+                        switch (i)
+                        {
+                            case 1 when int.TryParse(value, out quantity):
+                                value = quantity.ToString(CultureInfo.InvariantCulture);
+                                break;
+                            case 2 when value.StartsWith("x", true, CultureInfo.InvariantCulture):
+                                value = itemName = value.Substring(1).Trim(); // remove x from the item name - TODO fix regexp
+                                break;
+                            case 3 when double.TryParse(value, out price):
+                                value = price.ToString(CultureInfo.InvariantCulture); // price
+                                break;
+                        }
+
+                        Console.WriteLine("Value: " + value);
                     }
+
+                    Console.WriteLine($"Quantity: {quantity}; Item: {itemName}; Price: {price}");
+                    // here we can add to the list
                 }
+                // here we can send the request
             }
         }
 
-        private static bool IsItem(string itemToCheck)
+        private static Match MatchItem(string itemToCheck)
         {
-            var regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}([\d\.,\d]{1,}).*$";
-            return Regex.Match(itemToCheck, regExp).Success;
+            var regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}(\d{1,}[\.,]\d{1,}).*$";
+            return Regex.Match(itemToCheck, regExp);
         }
 
         private static List<EscPosCmd> Convertstrings(List<EscPosCmd> escposlist)
