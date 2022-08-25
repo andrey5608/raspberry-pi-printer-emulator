@@ -116,21 +116,46 @@ namespace EscPosUtils
             byte cycles = record.cmddata[index + 1];
             byte duration = record.cmddata[index + 2];
             string result = $"Cycles:{cycles}, Duration:{duration} x 100ms, Pattern:{pattern} is ";
-            result += pattern switch
+            switch (pattern)
             {
-                48 => "doesn't beep",
-                49 => "1320 Hz: 1000 ms beeping",
-                50 => "2490 Hz: 1000 ms beeping",
-                51 => "1320 Hz: 200 ms beeping",
-                52 => "2490 Hz: 200 ms beeping",
-                53 => "1320 Hz: 200 ms beeping → 200 ms off → 200 ms beeping",
-                54 => "2490 Hz: 200 ms beeping → 200 ms off → 200 ms beeping",
-                55 => "1320 Hz: 500 ms beeping",
-                56 => "2490 Hz: 500 ms beeping",
-                57 => "1320 Hz: 200 ms beeping → 200 ms off → 200 ms beeping → 200 ms off → 200 ms beeping",
-                58 => "2490 Hz: 200 ms beeping → 200 ms off → 200 ms beeping → 200 ms off → 200 ms beeping",
-                _ => "Undefined",
-            };
+                case 48:
+                    result += "doesn't beep";
+                    break;
+                case 49:
+                    result += "1320 Hz: 1000 ms beeping";
+                    break;
+                case 50:
+                    result += "2490 Hz: 1000 ms beeping";
+                    break;
+                case 51:
+                    result += "1320 Hz: 200 ms beeping";
+                    break;
+                case 52:
+                    result += "2490 Hz: 200 ms beeping";
+                    break;
+                case 53:
+                    result += "1320 Hz: 200 ms beeping → 200 ms off → 200 ms beeping";
+                    break;
+                case 54:
+                    result += "2490 Hz: 200 ms beeping → 200 ms off → 200 ms beeping";
+                    break;
+                case 55:
+                    result += "1320 Hz: 500 ms beeping";
+                    break;
+                case 56:
+                    result += "2490 Hz: 500 ms beeping";
+                    break;
+                case 57:
+                    result += "1320 Hz: 200 ms beeping → 200 ms off → 200 ms beeping → 200 ms off → 200 ms beeping";
+                    break;
+                case 58:
+                    result += "2490 Hz: 200 ms beeping → 200 ms off → 200 ms beeping → 200 ms off → 200 ms beeping";
+                    break;
+                default:
+                    result += "Undefined";
+                    break;
+            }
+
             return result;
         }
 
@@ -140,17 +165,34 @@ namespace EscPosUtils
             byte pattern = record.cmddata[index];
             byte cycles = record.cmddata[index + 1];
             string result = $"Cycles:{cycles}, Pattern:{pattern} is ";
-            result += pattern switch
+            switch (pattern)
             {
-                1 => "A",
-                2 => "B",
-                3 => "C",
-                4 => "D",
-                5 => "E",
-                6 => "Error",
-                7 => "Paper-End",
-                _ => "Undefined",
-            };
+                case 1:
+                    result += "A";
+                    break;
+                case 2:
+                    result += "B";
+                    break;
+                case 3:
+                    result += "C";
+                    break;
+                case 4:
+                    result += "D";
+                    break;
+                case 5:
+                    result += "E";
+                    break;
+                case 6:
+                    result += "Error";
+                    break;
+                case 7:
+                    result += "Paper-End";
+                    break;
+                default:
+                    result += "Undefined";
+                    break;
+            }
+
             return result;
         }
 
@@ -166,20 +208,40 @@ namespace EscPosUtils
         //  ESC ( A 1B 28 41 07 00 62 30-33 01 64 00/FF 01-32/FF 01-32
         internal static string DecodeEscBeeperBuzzerOffline(EscPosCmd record, int index)
         {
-            string factor = record.cmddata[index] switch
+            string factor;
+            switch (record.cmddata[index])
             {
-                48 => "Cover open",
-                49 => "Paper end",
-                50 => "Recoverable error",
-                51 => "Unrecoverable error",
-                _ => "Undefined",
-            };
-            string beeptype = record.cmddata[index + 3] switch
+                case 48:
+                    factor = "Cover open";
+                    break;
+                case 49:
+                    factor = "Paper end";
+                    break;
+                case 50:
+                    factor = "Recoverable error";
+                    break;
+                case 51:
+                    factor = "Unrecoverable error";
+                    break;
+                default:
+                    factor = "Undefined";
+                    break;
+            }
+
+            string beeptype;
+            switch (record.cmddata[index + 3])
             {
-                0 => "OFF",
-                255 => "Infinite",
-                _ => "Undefined",
-            };
+                case 0:
+                    beeptype = "OFF";
+                    break;
+                case 255:
+                    beeptype = "Infinite";
+                    break;
+                default:
+                    beeptype = "Undefined";
+                    break;
+            }
+
             byte onduration = record.cmddata[index + 4];
             byte offduration = record.cmddata[index + 5];
             return $"Factor:{factor}, Type:{beeptype}, On-Duration:{onduration} x 100ms, Off-Duration:{offduration} x 100ms";
@@ -188,12 +250,20 @@ namespace EscPosUtils
         //  ESC ( A 1B 28 41 07 00 63 30 01 64 00/FF 01-32/FF 01-32
         internal static string DecodeEscBeeperBuzzerNearEnd(EscPosCmd record, int index)
         {
-            string beeptype = record.cmddata[index] switch
+            string beeptype;
+            switch (record.cmddata[index])
             {
-                0 => "OFF",
-                255 => "Infinite",
-                _ => "Undefined",
-            };
+                case 0:
+                    beeptype = "OFF";
+                    break;
+                case 255:
+                    beeptype = "Infinite";
+                    break;
+                default:
+                    beeptype = "Undefined";
+                    break;
+            }
+
             byte onduration = record.cmddata[index + 1];
             string t1;
             if (onduration == 255)
@@ -224,44 +294,80 @@ namespace EscPosUtils
         //  ESC ( Y 1B 28 59 02 00 00/01/30/31 00/01/30/31
         internal static string DecodeEscSpecifyBatchPrint(EscPosCmd record, int index)
         {
-            string fanc = record.cmddata[index] switch
+            string fanc;
+            switch (record.cmddata[index])
             {
-                0 => "Print bufferd batch data",
-                48 => "Print bufferd batch data",
-                1 => "Start batch buffering",
-                49 => "Start batch buffering",
-                _ => "Undefined",
-            };
-            string direction = record.cmddata[index + 1] switch
+                case 0:
+                case 48:
+                    fanc = "Print bufferd batch data";
+                    break;
+                case 1:
+                case 49:
+                    fanc = "Start batch buffering";
+                    break;
+                default:
+                    fanc = "Undefined";
+                    break;
+            }
+
+            string direction;
+            switch (record.cmddata[index + 1])
             {
-                0 => "Normal direction",
-                48 => "Normal direction",
-                1 => "Reverse direction",
-                49 => "Reverse direction",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    direction = "Normal direction";
+                    break;
+                case 1:
+                case 49:
+                    direction = "Reverse direction";
+                    break;
+                default:
+                    direction = "Undefined";
+                    break;
+            }
+
             return $"{fanc}, {direction}";
         }
 
         //  ESC *   1B 2A 00/01/20/21 0001-0960 00-FF...
         internal static string DecodeEscSelectBitImageMode(EscPosCmd record, int index)
         {
-            int height = record.cmddata[index] switch
+            int height;
+            switch (record.cmddata[index])
             {
-                0 => 8,
-                1 => 8,
-                32 => 24,
-                33 => 24,
-                _ => -1,
-            };
-            string modestr = record.cmddata[index] switch
+                case 0:
+                case 1:
+                    height = 8;
+                    break;
+                case 32:
+                case 33:
+                    height = 24;
+                    break;
+                default:
+                    height = -1;
+                    break;
+            }
+
+            string modestr;
+            switch (record.cmddata[index])
             {
-                0 => "8 dot Single(low) density ",
-                1 => "8 dot Double(high) density",
-                32 => "24 dot Single(low) density",
-                33 => "24 dot Double(high) density",
-                _ => "Undefined",
-            };
+                case 0:
+                    modestr = "8 dot Single(low) density ";
+                    break;
+                case 1:
+                    modestr = "8 dot Double(high) density";
+                    break;
+                case 32:
+                    modestr = "24 dot Single(low) density";
+                    break;
+                case 33:
+                    modestr = "24 dot Double(high) density";
+                    break;
+                default:
+                    modestr = "Undefined";
+                    break;
+            }
+
             int width = BitConverter.ToUInt16(record.cmddata, index + 1);
             string widthstr = width.ToString("D", invariantculture);
             if ((height > 0) && ((width > 0)&&(width <= 0x960)))
@@ -274,28 +380,36 @@ namespace EscPosUtils
         //  ESC -   1B 2D 00-02/30-32
         internal static string DecodeEscUnderlineMode(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "OFF",
-                48 => "OFF",
-                1 => "ON 1 dot",
-                49 => "ON 1 dot",
-                2 => "ON 2 dot",
-                50 => "ON 2 dot",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "OFF";
+                case 1:
+                case 49:
+                    return "ON 1 dot";
+                case 2:
+                case 50:
+                    return "ON 2 dot";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC =   1B 3D 01-03 or 00-FF
         internal static string DecodeEscSelectPeripheralDevice(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Printer",
-                2 => "LineDisplay",
-                3 => "Printer and LineDisplay",
-                _ => "Undefined",
-            };
+                case 1:
+                    return "Printer";
+                case 2:
+                    return "LineDisplay";
+                case 3:
+                    return "Printer and LineDisplay";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC ?   1B 3F 20-7E
@@ -323,92 +437,139 @@ namespace EscPosUtils
         //  ESC M   1B 4D 00-04/30-34/61/62
         internal static string DecodeEscSelectCharacterFont(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "A",
-                48 => "A",
-                1 => "B",
-                49 => "B",
-                2 => "C",
-                50 => "C",
-                3 => "D",
-                51 => "D",
-                4 => "E",
-                52 => "E",
-                97 => "Special A",
-                98 => "Special B",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "A";
+                case 1:
+                case 49:
+                    return "B";
+                case 2:
+                case 50:
+                    return "C";
+                case 3:
+                case 51:
+                    return "D";
+                case 4:
+                case 52:
+                    return "E";
+                case 97:
+                    return "Special A";
+                case 98:
+                    return "Special B";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC R   1B 52 00-11/42-4B/52
         internal static string DecodeEscSelectInternationalCharacterSet(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "U.S.A.",
-                1 => "France",
-                2 => "Germany",
-                3 => "U.K.",
-                4 => "Denmark I",
-                5 => "Sweden",
-                6 => "Italy",
-                7 => "Spain I",
-                8 => "Japan",
-                9 => "Norway",
-                10 => "Denmark II",
-                11 => "Spain II",
-                12 => "Latin America",
-                13 => "Korea",
-                14 => "Slovenia / Croatia",
-                15 => "China",
-                16 => "Vietnam",
-                17 => "Arabia",
-                66 => "India (Devanagari)",
-                67 => "India (Bengali)",
-                68 => "India (Tamil)",
-                69 => "India (Telugu)",
-                70 => "India (Assamese)",
-                71 => "India (Oriya)",
-                72 => "India (Kannada)",
-                73 => "India (Malayalam)",
-                74 => "India (Gujarati)",
-                75 => "India (Punjabi)",
-                82 => "India (Marathi)",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "U.S.A.";
+                case 1:
+                    return "France";
+                case 2:
+                    return "Germany";
+                case 3:
+                    return "U.K.";
+                case 4:
+                    return "Denmark I";
+                case 5:
+                    return "Sweden";
+                case 6:
+                    return "Italy";
+                case 7:
+                    return "Spain I";
+                case 8:
+                    return "Japan";
+                case 9:
+                    return "Norway";
+                case 10:
+                    return "Denmark II";
+                case 11:
+                    return "Spain II";
+                case 12:
+                    return "Latin America";
+                case 13:
+                    return "Korea";
+                case 14:
+                    return "Slovenia / Croatia";
+                case 15:
+                    return "China";
+                case 16:
+                    return "Vietnam";
+                case 17:
+                    return "Arabia";
+                case 66:
+                    return "India (Devanagari)";
+                case 67:
+                    return "India (Bengali)";
+                case 68:
+                    return "India (Tamil)";
+                case 69:
+                    return "India (Telugu)";
+                case 70:
+                    return "India (Assamese)";
+                case 71:
+                    return "India (Oriya)";
+                case 72:
+                    return "India (Kannada)";
+                case 73:
+                    return "India (Malayalam)";
+                case 74:
+                    return "India (Gujarati)";
+                case 75:
+                    return "India (Punjabi)";
+                case 82:
+                    return "India (Marathi)";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC T   1B 54 00-03/30-33
         internal static string DecodeEscSelectPrintDirection(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Left to Right : Normal",
-                48 => "Left to Right : Normal",
-                1 => "Bottom to Top : Left90",
-                49 => "Bottom to Top : Left90",
-                2 => "Right to Left : Rotate180",
-                50 => "Right to Left : Rotate180",
-                3 => "Top to Bottom : Right90",
-                51 => "Top to Bottom : Right90",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Left to Right : Normal";
+                case 1:
+                case 49:
+                    return "Bottom to Top : Left90";
+                case 2:
+                case 50:
+                    return "Right to Left : Rotate180";
+                case 3:
+                case 51:
+                    return "Top to Bottom : Right90";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC V   1B 56 00-02/30-32
         internal static string DecodeEscTurn90digreeClockwiseRotationMode(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Turns OFF 90 digree Clockwise Rotation",
-                48 => "Turns OFF 90 digree Clockwise Rotation",
-                1 => "Turns ON 90 digree Clockwise Rotation : 1 dot Character spacing",
-                49 => "Turns ON 90 digree Clockwise Rotation : 1 dot Character spacing",
-                2 => "Turns ON 90 digree Clockwise Rotation : 5 dot Character spacing",
-                50 => "Turns ON 90 digree Clockwise Rotation : 5 dot Character spacing",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Turns OFF 90 digree Clockwise Rotation";
+                case 1:
+                case 49:
+                    return "Turns ON 90 digree Clockwise Rotation : 1 dot Character spacing";
+                case 2:
+                case 50:
+                    return "Turns ON 90 digree Clockwise Rotation : 5 dot Character spacing";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC W   1B 57 0000-FFFF 0000-FFFF 0001-FFFF 0001-FFFF
@@ -424,16 +585,20 @@ namespace EscPosUtils
         //  ESC a   1B 61 00-02/30-32
         internal static string DecodeEscSelectJustification(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Left",
-                48 => "Left",
-                1 => "Centered",
-                49 => "Centered",
-                2 => "Right",
-                50 => "Right",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Left";
+                case 1:
+                case 49:
+                    return "Centered";
+                case 2:
+                case 50:
+                    return "Right";
+                default:
+                    return "Undefined";
+            }
         }
 
         //c ESC c 0 1B 63 30 b0000xxxx
@@ -442,14 +607,24 @@ namespace EscPosUtils
             byte mode = record.cmddata[index];
             string validation = (mode & 0x08) == 0x08 ? "Enable" : "Disable";
             string slip = (mode & 0x04) == 0x04 ? "Enable" : "Disable";
-            string roll = (mode & 0x03) switch
+            string roll;
+            switch ((mode & 0x03))
             {
-                0 => "Disable",
-                1 => "Active Sheet",
-                2 => "Active Sheet",
-                3 => "Enable",
-                _ => "",
-            };
+                case 0:
+                    roll = "Disable";
+                    break;
+                case 1:
+                case 2:
+                    roll = "Active Sheet";
+                    break;
+                case 3:
+                    roll = "Enable";
+                    break;
+                default:
+                    roll = "";
+                    break;
+            }
+
             return $"Validation paper:{validation}, Slip paper:{slip}, Roll paper:{roll}";
         }
 
@@ -460,14 +635,24 @@ namespace EscPosUtils
             string slipback = (mode & 0x20) == 0x20 ? "Enable" : "Disable";
             string validation = (mode & 0x08) == 0x08 ? "Enable" : "Disable";
             string slipface = (mode & 0x04) == 0x04 ? "Enable" : "Disable";
-            string roll = (mode & 0x03) switch
+            string roll;
+            switch ((mode & 0x03))
             {
-                0 => "Disable",
-                1 => "Active Sheet",
-                2 => "Active Sheet",
-                3 => "Enable",
-                _ => "",
-            };
+                case 0:
+                    roll = "Disable";
+                    break;
+                case 1:
+                case 2:
+                    roll = "Active Sheet";
+                    break;
+                case 3:
+                    roll = "Enable";
+                    break;
+                default:
+                    roll = "";
+                    break;
+            }
+
             return $"Validation paper:{validation}, Face of Slip paper:{slipface}, Back of Slip paper:{slipback}, Roll paper:{roll}";
         }
 
@@ -508,14 +693,22 @@ namespace EscPosUtils
         //  ESC p   1B 70 00/01/30/31 00-FF 00-FF
         internal static string DecodeEscGeneratePulse(EscPosCmd record, int index)
         {
-            string pin = record.cmddata[index] switch
+            string pin;
+            switch (record.cmddata[index])
             {
-                0 => "2",
-                48 => "2",
-                1 => "5",
-                49 => "5",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    pin = "2";
+                    break;
+                case 1:
+                case 49:
+                    pin = "5";
+                    break;
+                default:
+                    pin = "Undefined";
+                    break;
+            }
+
             byte onduration = record.cmddata[index + 1];
             byte offduration = record.cmddata[index + 2];
             return $"Pin:{pin}, On-Duration:{onduration} x 100ms, Off-Duration:{offduration} x 100ms";
@@ -524,43 +717,66 @@ namespace EscPosUtils
         //  ESC r   1B 72 00/01/30/31
         internal static string DecodeEscSelectPrinterColor(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Black",
-                48 => "Black",
-                1 => "Red",
-                49 => "Red",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Black";
+                case 1:
+                case 49:
+                    return "Red";
+                default:
+                    return "Undefined";
+            }
         }
 
         public static Dictionary<byte, string> GetEmbeddedESCtCodePage(int embeddedcodepage)
         {
-            return embeddedcodepage switch
+            switch (embeddedcodepage)
             {
-                6 => s_cp06_hiragana, // Page 6: Hiragana Not suitable code page but alternative definition
-                7 => s_cp07_Kanji01,  // Page 7:One-pass printing Kanji characters
-                8 => s_cp08_Kanji02,  // Page 8:One-pass printing Kanji characters
-                11 => s_cp851,  // PC851: Greek
-                12 => s_cp853,  // PC853: Turkish
-                20 => s_cp20_Thai_CC_42, // Page 20 Thai Character Code 42 Not suitable code page but alternative definition
-                21 => s_cp21_Thai_CC_11, // Page 21 Thai Character Code 11 Not suitable code page but alternative definition
-                22 => s_cp22_Thai_CC_13, // Page 22 Thai Character Code 13 Not suitable code page but alternative definition
-                23 => s_cp23_Thai_CC_14, // Page 23 Thai Character Code 14 Not suitable code page but alternative definition
-                24 => s_cp24_Thai_CC_16, // Page 24 Thai Character Code 16 Not suitable code page but alternative definition
-                25 => s_cp25_Thai_CC_17, // Page 25 Thai Character Code 17 Not suitable code page but alternative definition
-                26 => s_cp26_Thai_CC_18, // Page 26 Thai Character Code 18 Not suitable code page but alternative definition
-                30 => s_cp30_TCVN_3,  // Page 30 TCVN-3: Vietnamese Not suitable code page but alternative definition
-                31 => s_cp31_TCVN_3,  // Page 31 TCVN-3: Vietnamese Not suitable code page but alternative definition
-                41 => s_cp1098,  // PC1098: Farsi
-                42 => s_cp1118,  // PC1118: Lithuanian
-                43 => s_cp1119,  // PC1119: Lithuanian
-                44 => s_cp1125,  // PC1125: Ukrainian
-                53 => s_kz1048,  // KZ-1048: Kazakhstan Not suitable code page but alternative definition
-                254 => s_cpASCII,  // Page254
-                255 => s_cpASCII,  // Page255
-                _ => s_cpASCII,
-            };
+                case 6:
+                    return s_cp06_hiragana; // Page 6: Hiragana Not suitable code page but alternative definition
+                case 7:
+                    return s_cp07_Kanji01; // Page 7:One-pass printing Kanji characters
+                case 8:
+                    return s_cp08_Kanji02; // Page 8:One-pass printing Kanji characters
+                case 11:
+                    return s_cp851; // PC851: Greek
+                case 12:
+                    return s_cp853; // PC853: Turkish
+                case 20:
+                    return s_cp20_Thai_CC_42; // Page 20 Thai Character Code 42 Not suitable code page but alternative definition
+                case 21:
+                    return s_cp21_Thai_CC_11; // Page 21 Thai Character Code 11 Not suitable code page but alternative definition
+                case 22:
+                    return s_cp22_Thai_CC_13; // Page 22 Thai Character Code 13 Not suitable code page but alternative definition
+                case 23:
+                    return s_cp23_Thai_CC_14; // Page 23 Thai Character Code 14 Not suitable code page but alternative definition
+                case 24:
+                    return s_cp24_Thai_CC_16; // Page 24 Thai Character Code 16 Not suitable code page but alternative definition
+                case 25:
+                    return s_cp25_Thai_CC_17; // Page 25 Thai Character Code 17 Not suitable code page but alternative definition
+                case 26:
+                    return s_cp26_Thai_CC_18; // Page 26 Thai Character Code 18 Not suitable code page but alternative definition
+                case 30:
+                    return s_cp30_TCVN_3; // Page 30 TCVN-3: Vietnamese Not suitable code page but alternative definition
+                case 31:
+                    return s_cp31_TCVN_3; // Page 31 TCVN-3: Vietnamese Not suitable code page but alternative definition
+                case 41:
+                    return s_cp1098; // PC1098: Farsi
+                case 42:
+                    return s_cp1118; // PC1118: Lithuanian
+                case 43:
+                    return s_cp1119; // PC1119: Lithuanian
+                case 44:
+                    return s_cp1125; // PC1125: Ukrainian
+                case 53:
+                    return s_kz1048; // KZ-1048: Kazakhstan Not suitable code page but alternative definition
+                case 254:
+                case 255: // Page255
+                default:
+                    return s_cpASCII; // Page254
+            }
         }
 
         public static readonly Dictionary<byte, int> PrtESCtCodePage = new Dictionary<byte, int>()
@@ -632,83 +848,148 @@ namespace EscPosUtils
         //  ESC t   1B 74 00-08/0B-1A/1E-35/42-4B/52/FE/FF
         internal static string DecodeEscSelectCharacterCodeTable(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "PC437: USA, Standard Europe",
-                1 => "PC932: Katakana",
-                2 => "PC850: Multilingual",
-                3 => "PC860: Portuguese",
-                4 => "PC863: Canadian-French",
-                5 => "PC865: Nordic",
-                6 => "Page 6: Hiragana",
-                7 => "Page 7: One-pass printing Kanji characters",
-                8 => "Page 8: One-pass printing Kanji characters",
-                11 => "PC851: Greek",
-                12 => "PC853: Turkish",
-                13 => "PC857: Turkish",
-                14 => "PC737: Greek",
-                15 => "ISO8859-7: Greek",
-                16 => "WPC1252",
-                17 => "PC866: Cyrillic #2",
-                18 => "PC852: Latin 2",
-                19 => "PC858: Euro",
-                20 => "Page 20 Thai Character Code 42",
-                21 => "Page 21 Thai Character Code 11",
-                22 => "Page 22 Thai Character Code 13",
-                23 => "Page 23 Thai Character Code 14",
-                24 => "Page 24 Thai Character Code 16",
-                25 => "Page 25 Thai Character Code 17",
-                26 => "Page 26 Thai Character Code 18",
-                30 => "Page 30 TCVN-3: Vietnamese",
-                31 => "Page 31 TCVN-3: Vietnamese",
-                32 => "PC720: Arabic",
-                33 => "WPC775: Baltic Rim",
-                34 => "PC855: Cyrillic",
-                35 => "PC861: Icelandic",
-                36 => "PC862: Hebrew",
-                37 => "PC864: Arabic",
-                38 => "PC869: Greek",
-                39 => "ISO8859-2: Latin 2",
-                40 => "ISO8859-15: Latin 9",
-                41 => "PC1098: Farsi",
-                42 => "PC1118: Lithuanian",
-                43 => "PC1119: Lithuanian",
-                44 => "PC1125: Ukrainian",
-                45 => "WPC1250: Latin 2",
-                46 => "WPC1251: Cyrillic",
-                47 => "WPC1253: Greek",
-                48 => "WPC1254: Turkish",
-                49 => "WPC1255: Hebrew",
-                50 => "WPC1256: Arabic",
-                51 => "WPC1257: Baltic Rim",
-                52 => "WPC1258: Vietnamese",
-                53 => "Page 53 KZ-1048: Kazakhstan",
-                66 => "Devanagari",
-                67 => "Bengali",
-                68 => "Tamil",
-                69 => "Telugu",
-                70 => "Assamese",
-                71 => "Oriya",
-                72 => "Kannada",
-                73 => "Malayalam",
-                74 => "Gujarati",
-                75 => "Punjabi",
-                82 => "Marathi",
-                254 => "Page 254",
-                255 => "Page 255",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "PC437: USA, Standard Europe";
+                case 1:
+                    return "PC932: Katakana";
+                case 2:
+                    return "PC850: Multilingual";
+                case 3:
+                    return "PC860: Portuguese";
+                case 4:
+                    return "PC863: Canadian-French";
+                case 5:
+                    return "PC865: Nordic";
+                case 6:
+                    return "Page 6: Hiragana";
+                case 7:
+                    return "Page 7: One-pass printing Kanji characters";
+                case 8:
+                    return "Page 8: One-pass printing Kanji characters";
+                case 11:
+                    return "PC851: Greek";
+                case 12:
+                    return "PC853: Turkish";
+                case 13:
+                    return "PC857: Turkish";
+                case 14:
+                    return "PC737: Greek";
+                case 15:
+                    return "ISO8859-7: Greek";
+                case 16:
+                    return "WPC1252";
+                case 17:
+                    return "PC866: Cyrillic #2";
+                case 18:
+                    return "PC852: Latin 2";
+                case 19:
+                    return "PC858: Euro";
+                case 20:
+                    return "Page 20 Thai Character Code 42";
+                case 21:
+                    return "Page 21 Thai Character Code 11";
+                case 22:
+                    return "Page 22 Thai Character Code 13";
+                case 23:
+                    return "Page 23 Thai Character Code 14";
+                case 24:
+                    return "Page 24 Thai Character Code 16";
+                case 25:
+                    return "Page 25 Thai Character Code 17";
+                case 26:
+                    return "Page 26 Thai Character Code 18";
+                case 30:
+                    return "Page 30 TCVN-3: Vietnamese";
+                case 31:
+                    return "Page 31 TCVN-3: Vietnamese";
+                case 32:
+                    return "PC720: Arabic";
+                case 33:
+                    return "WPC775: Baltic Rim";
+                case 34:
+                    return "PC855: Cyrillic";
+                case 35:
+                    return "PC861: Icelandic";
+                case 36:
+                    return "PC862: Hebrew";
+                case 37:
+                    return "PC864: Arabic";
+                case 38:
+                    return "PC869: Greek";
+                case 39:
+                    return "ISO8859-2: Latin 2";
+                case 40:
+                    return "ISO8859-15: Latin 9";
+                case 41:
+                    return "PC1098: Farsi";
+                case 42:
+                    return "PC1118: Lithuanian";
+                case 43:
+                    return "PC1119: Lithuanian";
+                case 44:
+                    return "PC1125: Ukrainian";
+                case 45:
+                    return "WPC1250: Latin 2";
+                case 46:
+                    return "WPC1251: Cyrillic";
+                case 47:
+                    return "WPC1253: Greek";
+                case 48:
+                    return "WPC1254: Turkish";
+                case 49:
+                    return "WPC1255: Hebrew";
+                case 50:
+                    return "WPC1256: Arabic";
+                case 51:
+                    return "WPC1257: Baltic Rim";
+                case 52:
+                    return "WPC1258: Vietnamese";
+                case 53:
+                    return "Page 53 KZ-1048: Kazakhstan";
+                case 66:
+                    return "Devanagari";
+                case 67:
+                    return "Bengali";
+                case 68:
+                    return "Tamil";
+                case 69:
+                    return "Telugu";
+                case 70:
+                    return "Assamese";
+                case 71:
+                    return "Oriya";
+                case 72:
+                    return "Kannada";
+                case 73:
+                    return "Malayalam";
+                case 74:
+                    return "Gujarati";
+                case 75:
+                    return "Punjabi";
+                case 82:
+                    return "Marathi";
+                case 254:
+                    return "Page 254";
+                case 255:
+                    return "Page 255";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC u   1B 75 00/30
         internal static string DecodeEscObsoleteTransmitPeripheralDeviceStatus(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "DrawerKickConnector Pin 3",
-                48 => "DrawerKickConnector Pin 3",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "DrawerKickConnector Pin 3";
+                default:
+                    return "Undefined";
+            }
         }
 
         //--------//
@@ -726,13 +1007,17 @@ namespace EscPosUtils
         //  ESC =   1B 3D 01/02/03
         internal static string DecodeVfdEscSelectPeripheralDevice(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Printer",
-                3 => "Printer and LineDisplay",
-                2 => "LineDisplay",
-                _ => "Undefined",
-            };
+                case 1:
+                    return "Printer";
+                case 3:
+                    return "Printer and LineDisplay";
+                case 2:
+                    return "LineDisplay";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC ?   1B 3F 20-7E
@@ -744,28 +1029,47 @@ namespace EscPosUtils
         //  ESC R   1B 52 00-11
         internal static string DecodeVfdEscSelectInternationalCharacterSet(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "U.S.A.",
-                1 => "France",
-                2 => "Germany",
-                3 => "U.K.",
-                4 => "Denmark I",
-                5 => "Sweden",
-                6 => "Italy",
-                7 => "Spain I",
-                8 => "Japan",
-                9 => "Norway",
-                10 => "Denmark II",
-                11 => "Spain II",
-                12 => "Latin America",
-                13 => "Korea",
-                14 => "Slovenia / Croatia",
-                15 => "China",
-                16 => "Vietnam",
-                17 => "Arabia",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "U.S.A.";
+                case 1:
+                    return "France";
+                case 2:
+                    return "Germany";
+                case 3:
+                    return "U.K.";
+                case 4:
+                    return "Denmark I";
+                case 5:
+                    return "Sweden";
+                case 6:
+                    return "Italy";
+                case 7:
+                    return "Spain I";
+                case 8:
+                    return "Japan";
+                case 9:
+                    return "Norway";
+                case 10:
+                    return "Denmark II";
+                case 11:
+                    return "Spain II";
+                case 12:
+                    return "Latin America";
+                case 13:
+                    return "Korea";
+                case 14:
+                    return "Slovenia / Croatia";
+                case 15:
+                    return "China";
+                case 16:
+                    return "Vietnam";
+                case 17:
+                    return "Arabia";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  ESC W   1B 57 01-04 00/30
@@ -781,12 +1085,18 @@ namespace EscPosUtils
             {
                 winno = "Out of range";
             }
-            string mode = record.cmddata[index + 1] switch
+            string mode;
+            switch (record.cmddata[index + 1])
             {
-                0 => "Release",
-                48 => "Release",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    mode = "Release";
+                    break;
+                default:
+                    mode = "Undefined";
+                    break;
+            }
+
             return $"Window number:{winno}, Action:{mode}";
         }
 
@@ -795,12 +1105,18 @@ namespace EscPosUtils
         {
             byte win = record.cmddata[index];
             string winno = ((win >= 1) && (win <= 4)) ? win.ToString("D", invariantculture) : "Out of range";
-            string mode = record.cmddata[index + 1] switch
+            string mode;
+            switch (record.cmddata[index + 1])
             {
-                1 => "Specify",
-                49 => "Specify",
-                _ => "Undefined",
-            };
+                case 1:
+                case 49:
+                    mode = "Specify";
+                    break;
+                default:
+                    mode = "Undefined";
+                    break;
+            }
+
             byte x1 = record.cmddata[index + 2];
             string left = ((x1 >= 1) && (x1 <= 20)) ? x1.ToString("D", invariantculture) : "Out of range";
             byte y1 = record.cmddata[index + 3];
@@ -860,51 +1176,93 @@ namespace EscPosUtils
         //  ESC t   1B 74 00-13/1E-35/FE/FF
         internal static string DecodeVfdEscSelectCharacterCodeTable(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "PC437: USA, Standard Europe",
-                1 => "PC932: Katakana",
-                2 => "PC850: Multilingual",
-                3 => "PC860: Portuguese",
-                4 => "PC863: Canadian-French",
-                5 => "PC865: Nordic",
-                11 => "PC851: Greek",
-                12 => "PC853: Turkish",
-                13 => "PC857: Turkish",
-                14 => "PC737: Greek",
-                15 => "ISO8859-7: Greek",
-                16 => "WPC1252",
-                17 => "PC866: Cyrillic #2",
-                18 => "PC852: Latin 2",
-                19 => "PC858: Euro",
-                30 => "Page 30 TCVN-3: Vietnamese",
-                31 => "Page 31 TCVN-3: Vietnamese",
-                32 => "PC720: Arabic",
-                33 => "WPC775: Baltic Rim",
-                34 => "PC855: Cyrillic",
-                35 => "PC861: Icelandic",
-                36 => "PC862: Hebrew",
-                37 => "PC864: Arabic",
-                38 => "PC869: Greek",
-                39 => "ISO8859-2: Latin 2",
-                40 => "ISO8859-15: Latin 9",
-                41 => "PC1098: Farsi",
-                42 => "PC1118: Lithuanian",
-                43 => "PC1119: Lithuanian",
-                44 => "PC1125: Ukrainian",
-                45 => "WPC1250: Latin 2",
-                46 => "WPC1251: Cyrillic",
-                47 => "WPC1253: Greek",
-                48 => "WPC1254: Turkish",
-                49 => "WPC1255: Hebrew",
-                50 => "WPC1256: Arabic",
-                51 => "WPC1257: Baltic Rim",
-                52 => "WPC1258: Vietnamese",
-                53 => "KZ-1048: Kazakhstan",
-                254 => "Page 254",
-                255 => "Page 255",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "PC437: USA, Standard Europe";
+                case 1:
+                    return "PC932: Katakana";
+                case 2:
+                    return "PC850: Multilingual";
+                case 3:
+                    return "PC860: Portuguese";
+                case 4:
+                    return "PC863: Canadian-French";
+                case 5:
+                    return "PC865: Nordic";
+                case 11:
+                    return "PC851: Greek";
+                case 12:
+                    return "PC853: Turkish";
+                case 13:
+                    return "PC857: Turkish";
+                case 14:
+                    return "PC737: Greek";
+                case 15:
+                    return "ISO8859-7: Greek";
+                case 16:
+                    return "WPC1252";
+                case 17:
+                    return "PC866: Cyrillic #2";
+                case 18:
+                    return "PC852: Latin 2";
+                case 19:
+                    return "PC858: Euro";
+                case 30:
+                    return "Page 30 TCVN-3: Vietnamese";
+                case 31:
+                    return "Page 31 TCVN-3: Vietnamese";
+                case 32:
+                    return "PC720: Arabic";
+                case 33:
+                    return "WPC775: Baltic Rim";
+                case 34:
+                    return "PC855: Cyrillic";
+                case 35:
+                    return "PC861: Icelandic";
+                case 36:
+                    return "PC862: Hebrew";
+                case 37:
+                    return "PC864: Arabic";
+                case 38:
+                    return "PC869: Greek";
+                case 39:
+                    return "ISO8859-2: Latin 2";
+                case 40:
+                    return "ISO8859-15: Latin 9";
+                case 41:
+                    return "PC1098: Farsi";
+                case 42:
+                    return "PC1118: Lithuanian";
+                case 43:
+                    return "PC1119: Lithuanian";
+                case 44:
+                    return "PC1125: Ukrainian";
+                case 45:
+                    return "WPC1250: Latin 2";
+                case 46:
+                    return "WPC1251: Cyrillic";
+                case 47:
+                    return "WPC1253: Greek";
+                case 48:
+                    return "WPC1254: Turkish";
+                case 49:
+                    return "WPC1255: Hebrew";
+                case 50:
+                    return "WPC1256: Arabic";
+                case 51:
+                    return "WPC1257: Baltic Rim";
+                case 52:
+                    return "WPC1258: Vietnamese";
+                case 53:
+                    return "KZ-1048: Kazakhstan";
+                case 254:
+                    return "Page 254";
+                case 255:
+                    return "Page 255";
+                default:
+                    return "Undefined";
+            }
         }
     }
 }

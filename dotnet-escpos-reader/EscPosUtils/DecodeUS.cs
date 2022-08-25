@@ -34,14 +34,22 @@ namespace EscPosUtils
         //  US  #   1F 23 00/01/30/31 00-14
         internal static string DecodeVfdUsTurnAnnounciatorOnOff(EscPosCmd record, int index)
         {
-            string mode = record.cmddata[index] switch
+            string mode;
+            switch (record.cmddata[index])
             {
-                0 => "OFF",
-                48 => "OFF",
-                1 => "ON",
-                49 => "ON",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    mode = "OFF";
+                    break;
+                case 1:
+                case 49:
+                    mode = "ON";
+                    break;
+                default:
+                    mode = "Undefined";
+                    break;
+            }
+
             byte number = record.cmddata[index + 1];
             string announciator = number <= 20 ? number.ToString("D", invariantculture) : "Out of range";
             return $"Mode:{mode}, Number:{announciator}";
@@ -52,12 +60,20 @@ namespace EscPosUtils
         {
             byte x = record.cmddata[index];
             string column = ((x >= 1) && (x <= 20)) ? x.ToString("D", invariantculture) : "Out of range";
-            string row = record.cmddata[index + 1] switch
+            string row;
+            switch (record.cmddata[index + 1])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Out of range",
-            };
+                case 1:
+                    row = "1";
+                    break;
+                case 2:
+                    row = "2";
+                    break;
+                default:
+                    row = "Out of range";
+                    break;
+            }
+
             return $"Column:{column}, Row:{row}";
         }
 
@@ -77,12 +93,20 @@ namespace EscPosUtils
             List<string> displays = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
-                string enable = record.cmddata[currindex] switch
+                string enable;
+                switch (record.cmddata[currindex])
                 {
-                    48 => "Disabled",
-                    49 => "Enabled",
-                    _ => "Undefined",
-                };
+                    case 48:
+                        enable = "Disabled";
+                        break;
+                    case 49:
+                        enable = "Enabled";
+                        break;
+                    default:
+                        enable = "Undefined";
+                        break;
+                }
+
                 displays.Add($"Setting:{enable} Display No.:{record.cmddata[currindex + 1]}");
             }
             return string.Join<string>(", ", displays);
@@ -104,17 +128,35 @@ namespace EscPosUtils
             List<string> memorys = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
-                string msw = record.cmddata[currindex] switch
+                string msw;
+                switch (record.cmddata[currindex])
                 {
-                    9 => "Backlight OFF setting",
-                    10 => "Character code table",
-                    11 => "International character set",
-                    12 => "Brightness adjustment",
-                    13 => "Specification of the peripheral device",
-                    14 => "Display of the cursor",
-                    15 => "Number of display",
-                    _ => "Undefined",
-                };
+                    case 9:
+                        msw = "Backlight OFF setting";
+                        break;
+                    case 10:
+                        msw = "Character code table";
+                        break;
+                    case 11:
+                        msw = "International character set";
+                        break;
+                    case 12:
+                        msw = "Brightness adjustment";
+                        break;
+                    case 13:
+                        msw = "Specification of the peripheral device";
+                        break;
+                    case 14:
+                        msw = "Display of the cursor";
+                        break;
+                    case 15:
+                        msw = "Number of display";
+                        break;
+                    default:
+                        msw = "Undefined";
+                        break;
+                }
+
                 string setting = ascii.GetString(record.cmddata, (currindex + 1), 8).Replace('2', '_');
                 memorys.Add($"MemorySwitch:{msw} Setting:{setting}");
             }
@@ -138,14 +180,17 @@ namespace EscPosUtils
         //  US  ( G 1F 28 47 02 00 61 00/01/30/31
         internal static string DecodeVfdUsSelectKanjiCharacterCodeSystem(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "JIS",
-                48 => "JIS",
-                1 => "ShiftJIS",
-                49 => "ShiftJIS",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "JIS";
+                case 1:
+                case 49:
+                    return "ShiftJIS";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  US  T   1F 54 00-17 00-3B
@@ -159,14 +204,19 @@ namespace EscPosUtils
         //  US  X   1F 58 01-04
         internal static string DecodeVfdUsBrightnessAdjustment(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "20%",
-                2 => "40%",
-                3 => "60%",
-                4 => "100%",
-                _ => "Undefined",
-            };
+                case 1:
+                    return "20%";
+                case 2:
+                    return "40%";
+                case 3:
+                    return "60%";
+                case 4:
+                    return "100%";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  US  ^   1F 5E 00-FF 00-FF
@@ -178,14 +228,17 @@ namespace EscPosUtils
         //  US  v   1F 76 00/01/30/31
         internal static string DecodeVfdUsStatusConfirmationByDTRSignal(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "DTR Space",
-                48 => "DTR Space",
-                1 => "DTR Mark",
-                49 => "DTR Mark",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "DTR Space";
+                case 1:
+                case 49:
+                    return "DTR Mark";
+                default:
+                    return "Undefined";
+            }
         }
     }
 }

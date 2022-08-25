@@ -157,14 +157,25 @@ namespace EscPosUtils
                                     break;
 
                                 case 0x43: // FS ( C
-                                    ctlType = ctlByte5 switch
+                                    switch (ctlByte5)
                                     {
                                         // FS ( C 02 00 '0' xx
-                                        0x30 => (blockLength == 7) ? EscPosCmdType.FsSelectCharacterEncodeSystem : EscPosCmdType.FsUnknown,
+                                        case 0x30:
+                                            ctlType = (blockLength == 7)
+                                                ? EscPosCmdType.FsSelectCharacterEncodeSystem
+                                                : EscPosCmdType.FsUnknown;
+                                            break;
                                         // FS ( C 03 00 '<' xx xx
-                                        0x3C => (blockLength == 8) ? EscPosCmdType.FsSetFontPriority : EscPosCmdType.FsUnknown,
-                                        _ => EscPosCmdType.FsUnknown,
-                                    };
+                                        case 0x3C:
+                                            ctlType = (blockLength == 8)
+                                                ? EscPosCmdType.FsSetFontPriority
+                                                : EscPosCmdType.FsUnknown;
+                                            break;
+                                        default:
+                                            ctlType = EscPosCmdType.FsUnknown;
+                                            break;
+                                    }
+
                                     break;
 
                                 case 0x45: // FS ( E
@@ -230,17 +241,26 @@ namespace EscPosUtils
                         break;
 
                     case 0x61: // FS a
-                        ctlType = ctlByte2 switch
+                        switch (ctlByte2)
                         {
                             // FS a 0
-                            0x30 => EscPosCmdType.FsObsoleteReadCheckPaper,
+                            case 0x30:
+                                ctlType = EscPosCmdType.FsObsoleteReadCheckPaper;
+                                break;
                             // FS a 1
-                            0x31 => EscPosCmdType.FsObsoleteLoadCheckPaperToPrintStartingPosition,
+                            case 0x31:
+                                ctlType = EscPosCmdType.FsObsoleteLoadCheckPaperToPrintStartingPosition;
+                                break;
                             // FS a 2
-                            0x32 => EscPosCmdType.FsObsoleteEjectCheckPaper,
-                            // FS ( ??
-                            _ => EscPosCmdType.FsUnknown,
-                        };
+                            case 0x32:
+                                ctlType = EscPosCmdType.FsObsoleteEjectCheckPaper;
+                                break;
+                            default:
+                                // FS ( ??
+                                ctlType = EscPosCmdType.FsUnknown;
+                                break;
+                        }
+
                         blockLength = ctlType == EscPosCmdType.FsObsoleteReadCheckPaper ? 4 : 3;
                         break;
 

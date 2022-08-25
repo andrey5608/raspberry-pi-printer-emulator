@@ -342,19 +342,30 @@ namespace EscPosUtils
                                     break;
 
                                 case 0x4B: // GS ( K
-                                    ctlType = ctlByte5 switch
+                                    switch (ctlByte5)
                                     {
                                         // GS ( K dL dH 0
-                                        0x30 => EscPosCmdType.GsSelectPrintControlMode,
+                                        case 0x30:
+                                            ctlType = EscPosCmdType.GsSelectPrintControlMode;
+                                            break;
                                         // GS ( K dL dH 1
-                                        0x31 => EscPosCmdType.GsSelectPrintDensity,
+                                        case 0x31:
+                                            ctlType = EscPosCmdType.GsSelectPrintDensity;
+                                            break;
                                         // GS ( K dL dH 2
-                                        0x32 => EscPosCmdType.GsSelectPrintSpeed,
+                                        case 0x32:
+                                            ctlType = EscPosCmdType.GsSelectPrintSpeed;
+                                            break;
                                         // GS ( K dL dH a
-                                        0x61 => EscPosCmdType.GsSelectNumberOfPartsThermalHeadEnergizing,
-                                        // GS ( K dL dH ??
-                                        _ => EscPosCmdType.GsUnknown,
-                                    };
+                                        case 0x61:
+                                            ctlType = EscPosCmdType.GsSelectNumberOfPartsThermalHeadEnergizing;
+                                            break;
+                                        default:
+                                            // GS ( K dL dH ??
+                                            ctlType = EscPosCmdType.GsUnknown;
+                                            break;
+                                    }
+
                                     break;
 
                                 case 0x4C: // GS ( L
@@ -376,26 +387,44 @@ namespace EscPosUtils
                                     break;
 
                                 case 0x4D: // GS ( M
-                                    ctlType = ctlByte5 switch
+                                    switch (ctlByte5)
                                     {
-                                        0x01 => EscPosCmdType.GsSaveSettingsValuesFromWorkToStorage,
-                                        0x31 => EscPosCmdType.GsSaveSettingsValuesFromWorkToStorage,
-                                        0x02 => EscPosCmdType.GsLoadSettingsValuesFromStorageToWork,
-                                        0x32 => EscPosCmdType.GsLoadSettingsValuesFromStorageToWork,
-                                        0x03 => EscPosCmdType.GsSelectSettingsValuesToWorkAfterInitialize,
-                                        0x33 => EscPosCmdType.GsSelectSettingsValuesToWorkAfterInitialize,
-                                        _ => EscPosCmdType.GsUnknown,
-                                    };
+                                        case 0x01:
+                                        case 0x31:
+                                            ctlType = EscPosCmdType.GsSaveSettingsValuesFromWorkToStorage;
+                                            break;
+                                        case 0x02:
+                                        case 0x32:
+                                            ctlType = EscPosCmdType.GsLoadSettingsValuesFromStorageToWork;
+                                            break;
+                                        case 0x03:
+                                        case 0x33:
+                                            ctlType = EscPosCmdType.GsSelectSettingsValuesToWorkAfterInitialize;
+                                            break;
+                                        default:
+                                            ctlType = EscPosCmdType.GsUnknown;
+                                            break;
+                                    }
+
                                     break;
 
                                 case 0x4E: // GS ( N
-                                    ctlType = ctlByte5 switch
+                                    switch (ctlByte5)
                                     {
-                                        0x30 => EscPosCmdType.GsSetCharacterColor,
-                                        0x31 => EscPosCmdType.GsSetBackgroundColor,
-                                        0x32 => EscPosCmdType.GsTurnShadingMode,
-                                        _ => EscPosCmdType.GsUnknown,
-                                    };
+                                        case 0x30:
+                                            ctlType = EscPosCmdType.GsSetCharacterColor;
+                                            break;
+                                        case 0x31:
+                                            ctlType = EscPosCmdType.GsSetBackgroundColor;
+                                            break;
+                                        case 0x32:
+                                            ctlType = EscPosCmdType.GsTurnShadingMode;
+                                            break;
+                                        default:
+                                            ctlType = EscPosCmdType.GsUnknown;
+                                            break;
+                                    }
+
                                     break;
 
                                 case 0x50: // GS ( P
@@ -453,20 +482,41 @@ namespace EscPosUtils
                                     break;
 
                                 case 0x7A: // GS ( z
-                                    ctlType = ctlByte5 switch
+                                    switch (ctlByte5)
                                     {
-                                        0x2A => EscPosCmdType.GsSetReadOperationsOfCheckPaper,
-                                        0x30 => EscPosCmdType.GsSetsCancelsOperationToFeedCutSheetsToPrintStartingPosition,
-                                        0x3E => ctlByte6 switch
-                                        {
-                                            0x30 => EscPosCmdType.GsStartSavingReverseSidePrintData,
-                                            0x31 => EscPosCmdType.GsFinishSavingReverseSidePrintData,
-                                            0x33 => EscPosCmdType.GsSetCounterForReverseSidePrint,
-                                            _ => EscPosCmdType.GsUnknown,
-                                        },
-                                        0x3F => EscPosCmdType.GsReadCheckDataContinuouslyAndTransmitDataRead,
-                                        _ => EscPosCmdType.GsUnknown,
-                                    };
+                                        case 0x2A:
+                                            ctlType = EscPosCmdType.GsSetReadOperationsOfCheckPaper;
+                                            break;
+                                        case 0x30:
+                                            ctlType = EscPosCmdType
+                                                .GsSetsCancelsOperationToFeedCutSheetsToPrintStartingPosition;
+                                            break;
+                                        case 0x3E:
+                                            switch (ctlByte6)
+                                            {
+                                                case 0x30:
+                                                    ctlType = EscPosCmdType.GsStartSavingReverseSidePrintData;
+                                                    break;
+                                                case 0x31:
+                                                    ctlType = EscPosCmdType.GsFinishSavingReverseSidePrintData;
+                                                    break;
+                                                case 0x33:
+                                                    ctlType = EscPosCmdType.GsSetCounterForReverseSidePrint;
+                                                    break;
+                                                default:
+                                                    ctlType = EscPosCmdType.GsUnknown;
+                                                    break;
+                                            }
+
+                                            break;
+                                        case 0x3F:
+                                            ctlType = EscPosCmdType.GsReadCheckDataContinuouslyAndTransmitDataRead;
+                                            break;
+                                        default:
+                                            ctlType = EscPosCmdType.GsUnknown;
+                                            break;
+                                    }
+
                                     break;
                             }
                         }
@@ -480,16 +530,30 @@ namespace EscPosUtils
                         else if (ctlByte2 == 0x4C) // GS 8 L
                         {
                             blockLength = 7 + BitConverter.ToUInt32(baData, (int)(curIndex + 3));
-                            ctlType = (baData[curIndex + 8]) switch
+                            switch ((baData[curIndex + 8]))
                             {
-                                0x43 => EscPosCmdType.GsDefineNVGraphicsDataRasterDW,
-                                0x44 => EscPosCmdType.GsDefineNVGraphicsDataColumnDW,
-                                0x53 => EscPosCmdType.GsDefineDownloadGraphicsDataRasterDW,
-                                0x54 => EscPosCmdType.GsDefineDownloadGraphicsDataColumnDW,
-                                0x70 => EscPosCmdType.GsStoreGraphicsDataToPrintBufferRasterDW,
-                                0x71 => EscPosCmdType.GsStoreGraphicsDataToPrintBufferColumnDW,
-                                _ => EscPosCmdType.GsUnknown,
-                            };
+                                case 0x43:
+                                    ctlType = EscPosCmdType.GsDefineNVGraphicsDataRasterDW;
+                                    break;
+                                case 0x44:
+                                    ctlType = EscPosCmdType.GsDefineNVGraphicsDataColumnDW;
+                                    break;
+                                case 0x53:
+                                    ctlType = EscPosCmdType.GsDefineDownloadGraphicsDataRasterDW;
+                                    break;
+                                case 0x54:
+                                    ctlType = EscPosCmdType.GsDefineDownloadGraphicsDataColumnDW;
+                                    break;
+                                case 0x70:
+                                    ctlType = EscPosCmdType.GsStoreGraphicsDataToPrintBufferRasterDW;
+                                    break;
+                                case 0x71:
+                                    ctlType = EscPosCmdType.GsStoreGraphicsDataToPrintBufferColumnDW;
+                                    break;
+                                default:
+                                    ctlType = EscPosCmdType.GsUnknown;
+                                    break;
+                            }
                         }
                         else
                         {
@@ -567,22 +631,27 @@ namespace EscPosUtils
                         }
                         else if ((ctlByte2 == 0x30) && ((ctlByte3 == 0x43) || (ctlByte3 == 0x53)) && (ctlByte4 == 0x30) && (baData[curIndex + 8] == 0x31))
                         {
-                            using Stream stream = new MemoryStream(baData, (int)(curIndex + 9), (int)(remainLength - 9), false);
-                            using System.Drawing.Image img = System.Drawing.Image.FromStream(stream);
-                            //if (img.RawFormat.Equals(ImageFormat.Bmp) ||
-                            //    img.RawFormat.Equals(ImageFormat.Gif) ||
-                            //    img.RawFormat.Equals(ImageFormat.Jpeg) ||
-                            //    img.RawFormat.Equals(ImageFormat.Png))
-                            //{ }
-                            if (img.RawFormat.Equals(ImageFormat.Bmp))
+                            using (Stream stream = new MemoryStream(baData, (int)(curIndex + 9), (int)(remainLength - 9), false))
                             {
-                                blockLength = 9 + BitConverter.ToUInt32(baData, (int)(curIndex + 11));
-                                ctlType = ctlByte3 switch
+                                using (System.Drawing.Image img = System.Drawing.Image.FromStream(stream))
                                 {
-                                    0x43 => EscPosCmdType.GsDefineWindowsBMPNVGraphicsData,
-                                    0x53 => EscPosCmdType.GsDefineWindowsBMPDownloadGraphicsData,
-                                    _ => EscPosCmdType.GsUnknown,
-                                };
+                                    if (img.RawFormat.Equals(ImageFormat.Bmp))
+                                    {
+                                        blockLength = 9 + BitConverter.ToUInt32(baData, (int)(curIndex + 11));
+                                        switch (ctlByte3)
+                                        {
+                                            case 0x43:
+                                                ctlType = EscPosCmdType.GsDefineWindowsBMPNVGraphicsData;
+                                                break;
+                                            case 0x53:
+                                                ctlType = EscPosCmdType.GsDefineWindowsBMPDownloadGraphicsData;
+                                                break;
+                                            default:
+                                                ctlType = EscPosCmdType.GsUnknown;
+                                                break;
+                                        }
+                                    }
+                                }  
                             }
                         }
                         else
@@ -613,48 +682,79 @@ namespace EscPosUtils
                         break;
 
                     case 0x56: // GS V
-                        ctlType = ctlByte2 switch
+                        switch (ctlByte2)
                         {
                             // GS V 00
-                            0x00 => EscPosCmdType.GsPaperFullCut,
+                            case 0x00:
                             // GS V 0
-                            0x30 => EscPosCmdType.GsPaperFullCut,
+                            case 0x30:
+                                ctlType = EscPosCmdType.GsPaperFullCut;
+                                break;
                             // GS V 01
-                            0x01 => EscPosCmdType.GsPaperPartialCut,
+                            case 0x01:
                             // GS V 1
-                            0x31 => EscPosCmdType.GsPaperPartialCut,
+                            case 0x31:
+                                ctlType = EscPosCmdType.GsPaperPartialCut;
+                                break;
                             // GS V A
-                            0x41 => EscPosCmdType.GsPaperFeedAndFullCut,
+                            case 0x41:
+                                ctlType = EscPosCmdType.GsPaperFeedAndFullCut;
+                                break;
                             // GS V B
-                            0x42 => EscPosCmdType.GsPaperFeedAndPartialCut,
+                            case 0x42:
+                                ctlType = EscPosCmdType.GsPaperFeedAndPartialCut;
+                                break;
                             // GS V a
-                            0x61 => EscPosCmdType.GsPaperReservedFeedAndFullCut,
+                            case 0x61:
+                                ctlType = EscPosCmdType.GsPaperReservedFeedAndFullCut;
+                                break;
                             // GS V b
-                            0x62 => EscPosCmdType.GsPaperReservedFeedAndPartialCut,
+                            case 0x62:
+                                ctlType = EscPosCmdType.GsPaperReservedFeedAndPartialCut;
+                                break;
                             // GS V g
-                            0x67 => EscPosCmdType.GsPaperFeedAndFullCutAndTopOfForm,
+                            case 0x67:
+                                ctlType = EscPosCmdType.GsPaperFeedAndFullCutAndTopOfForm;
+                                break;
                             // GS V h
-                            0x68 => EscPosCmdType.GsPaperFeedAndPartialCutAndTopOfForm,
-                            _ => EscPosCmdType.GsUnknown,
-                        };
-                        blockLength = ctlType switch
+                            case 0x68:
+                                ctlType = EscPosCmdType.GsPaperFeedAndPartialCutAndTopOfForm;
+                                break;
+                            default:
+                                ctlType = EscPosCmdType.GsUnknown;
+                                break;
+                        }
+
+                        switch (ctlType)
                         {
-                            EscPosCmdType.GsPaperFullCut => 3,
-                            EscPosCmdType.GsPaperPartialCut => 3,
-                            EscPosCmdType.GsUnknown => 3,
-                            _ => 4,
-                        };
+                            case EscPosCmdType.GsPaperFullCut:
+                            case EscPosCmdType.GsPaperPartialCut:
+                            case EscPosCmdType.GsUnknown:
+                                blockLength = 3;
+                                break;
+                            default:
+                                blockLength = 4;
+                                break;
+                        }
+
                         break;
 
                     case 0x67: // GS g
-                        ctlType = ctlByte2 switch
+                        switch (ctlByte2)
                         {
                             // GS g 0
-                            0x30 => EscPosCmdType.GsInitializeMaintenanceCounter,
+                            case 0x30:
+                                ctlType = EscPosCmdType.GsInitializeMaintenanceCounter;
+                                break;
                             // GS g 2
-                            0x32 => EscPosCmdType.GsTransmitMaintenanceCounter,
-                            _ => EscPosCmdType.GsUnknown,
-                        };
+                            case 0x32:
+                                ctlType = EscPosCmdType.GsTransmitMaintenanceCounter;
+                                break;
+                            default:
+                                ctlType = EscPosCmdType.GsUnknown;
+                                break;
+                        }
+
                         blockLength = ctlType != EscPosCmdType.GsUnknown ? 6 : 3;
                         break;
 

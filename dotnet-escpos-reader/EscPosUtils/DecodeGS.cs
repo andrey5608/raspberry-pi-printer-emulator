@@ -50,33 +50,59 @@ namespace EscPosUtils
         //  GS  ( A 1D 28 41 02 00 00-02/30-32 01-03/31-33/40
         internal static string DecodeGsExecuteTestPrint(EscPosCmd record, int index)
         {
-            string paper = record.cmddata[index] switch
+            string paper;
+            switch (record.cmddata[index])
             {
-                0 => "Basic sheet",
-                48 => "Basic sheet",
-                1 => "Roll paper",
-                49 => "Roll paper",
-                2 => "Roll paper",
-                50 => "Roll paper",
-                3 => "Slip(face)",
-                51 => "Slip(face)",
-                4 => "Validation",
-                52 => "Validation",
-                5 => "Slip(back)",
-                53 => "Slip(back)",
-                _ => "Undefined",
-            };
-            string pattern = record.cmddata[index + 1] switch
+                case 0:
+                case 48:
+                    paper = "Basic sheet";
+                    break;
+                case 1:
+                case 49:
+                case 2:
+                case 50:
+                    paper = "Roll paper";
+                    break;
+                case 3:
+                case 51:
+                    paper = "Slip(face)";
+                    break;
+                case 4:
+                case 52:
+                    paper = "Validation";
+                    break;
+                case 5:
+                case 53:
+                    paper = "Slip(back)";
+                    break;
+                default:
+                    paper = "Undefined";
+                    break;
+            }
+
+            string pattern;
+            switch (record.cmddata[index + 1])
             {
-                1 => "Hexadecimal dump",
-                49 => "Hexadecimal dump",
-                2 => "Printer status",
-                50 => "Printer status",
-                3 => "Rolling pattern",
-                51 => "Rolling pattern",
-                64 => "Automatic setting of paper layout",
-                _ => "Undefined",
-            };
+                case 1:
+                case 49:
+                    pattern = "Hexadecimal dump";
+                    break;
+                case 2:
+                case 50:
+                    pattern = "Printer status";
+                    break;
+                case 3:
+                case 51:
+                    pattern = "Rolling pattern";
+                    break;
+                case 64:
+                    pattern = "Automatic setting of paper layout";
+                    break;
+                default:
+                    pattern = "Undefined";
+                    break;
+            }
+
             return $"Print to:{paper}, Test pattern:{pattern}";
         }
 
@@ -97,15 +123,27 @@ namespace EscPosUtils
             List<string> status = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
-                string entry = ascii.GetString(record.cmddata, currindex, 2) switch
+                string entry;
+                switch (ascii.GetString(record.cmddata, currindex, 2))
                 {
-                    "1," => "cut sheet insertion waiting status",
-                    "3-" => "cut sheet removal waiting status",
-                    "E8" => "card sensor status",
-                    "F7" => "slip paper ejection sensor status",
-                    //"?6" => "paper width sensor status",
-                    _ => "Undefined",
-                };
+                    case "1,":
+                        entry = "cut sheet insertion waiting status";
+                        break;
+                    case "3-":
+                        entry = "cut sheet removal waiting status";
+                        break;
+                    case "E8":
+                        entry = "card sensor status";
+                        break;
+                    case "F7":
+                        entry = "slip paper ejection sensor status";
+                        break;
+                    default:
+                        //"?6" => "paper width sensor status",
+                        entry = "Undefined";
+                        break;
+                }
+
                 status.Add(entry);
             }
             return string.Join<string>(", ", status);
@@ -147,20 +185,36 @@ namespace EscPosUtils
             List<string> cmds = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
-                string cmdtype = record.cmddata[currindex] switch
+                string cmdtype;
+                switch (record.cmddata[currindex])
                 {
-                    1 => "Generate pulse in real-time",
-                    2 => "Execute power-off sequence",
-                    _ => "Undefined",
-                };
-                string enable = record.cmddata[currindex + 1] switch
+                    case 1:
+                        cmdtype = "Generate pulse in real-time";
+                        break;
+                    case 2:
+                        cmdtype = "Execute power-off sequence";
+                        break;
+                    default:
+                        cmdtype = "Undefined";
+                        break;
+                }
+
+                string enable;
+                switch (record.cmddata[currindex + 1])
                 {
-                    0 => "Disable",
-                    48 => "Disable",
-                    1 => "Enable",
-                    49 => "Enable",
-                    _ => "Undefined",
-                };
+                    case 0:
+                    case 48:
+                        enable = "Disable";
+                        break;
+                    case 1:
+                    case 49:
+                        enable = "Enable";
+                        break;
+                    default:
+                        enable = "Undefined";
+                        break;
+                }
+
                 cmds.Add($"Type:{cmdtype}, {enable}");
             }
             return string.Join<string>(", ", cmds);
@@ -182,18 +236,38 @@ namespace EscPosUtils
             List<string> memorys = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 9)
             {
-                string msw = record.cmddata[currindex] switch
+                string msw;
+                switch (record.cmddata[currindex])
                 {
-                    1 => "Msw1",
-                    2 => "Msw2",
-                    3 => "Msw3",
-                    4 => "Msw4",
-                    5 => "Msw5",
-                    6 => "Msw6",
-                    7 => "Msw7",
-                    8 => "Msw8",
-                    _ => "Undefined",
-                };
+                    case 1:
+                        msw = "Msw1";
+                        break;
+                    case 2:
+                        msw = "Msw2";
+                        break;
+                    case 3:
+                        msw = "Msw3";
+                        break;
+                    case 4:
+                        msw = "Msw4";
+                        break;
+                    case 5:
+                        msw = "Msw5";
+                        break;
+                    case 6:
+                        msw = "Msw6";
+                        break;
+                    case 7:
+                        msw = "Msw7";
+                        break;
+                    case 8:
+                        msw = "Msw8";
+                        break;
+                    default:
+                        msw = "Undefined";
+                        break;
+                }
+
                 string setting = ascii.GetString(record.cmddata, (currindex + 1), 8).Replace('2', '_');
                 memorys.Add($"MemorySwitch:{msw} Setting:{setting}");
             }
@@ -275,20 +349,40 @@ namespace EscPosUtils
         //  GS  ( E 1D 28 45 04 00 07 0A/0C/11/12 1D/1E 1E/1D
         internal static string DecodeGsCopyUserDefinedPage(EscPosCmd record, int index)
         {
-            string font = record.cmddata[index] switch
+            string font;
+            switch (record.cmddata[index])
             {
-                10 => "Width 9 dot, Hwight 17 dot",
-                12 => "Width 12 dot, Hwight 24 dot",
-                17 => "Width 8 dot, Hwight 16 dot",
-                18 => "Width 10 dot, Hwight 24 dot",
-                _ => "Undefined",
-            };
-            string direction = ascii.GetString(record.cmddata, (index + 1), 2) switch
+                case 10:
+                    font = "Width 9 dot, Hwight 17 dot";
+                    break;
+                case 12:
+                    font = "Width 12 dot, Hwight 24 dot";
+                    break;
+                case 17:
+                    font = "Width 8 dot, Hwight 16 dot";
+                    break;
+                case 18:
+                    font = "Width 10 dot, Hwight 24 dot";
+                    break;
+                default:
+                    font = "Undefined";
+                    break;
+            }
+
+            string direction;
+            switch (ascii.GetString(record.cmddata, (index + 1), 2))
             {
-                "\x1E\x1D" => "FromStorage ToWork",
-                "\x1D\x1E" => "FromWork ToStorage",
-                _ => "Undefined",
-            };
+                case "\x1E\x1D":
+                    direction = "FromStorage ToWork";
+                    break;
+                case "\x1D\x1E":
+                    direction = "FromWork ToStorage";
+                    break;
+                default:
+                    direction = "Undefined";
+                    break;
+            }
+
             return $"Font size:{font}, Direction:{direction}";
         }
 
@@ -301,12 +395,20 @@ namespace EscPosUtils
                 return "Length out of range";
             }
             int y = record.cmddata[index + 3];
-            string ysize = y switch
+            string ysize;
+            switch (y)
             {
-                2 => "2",
-                3 => "3",
-                _ => "Undefined",
-            };
+                case 2:
+                    ysize = "2";
+                    break;
+                case 3:
+                    ysize = "3";
+                    break;
+                default:
+                    ysize = "Undefined";
+                    break;
+            }
+
             byte c1 = record.cmddata[index + 4];
             byte c2 = record.cmddata[index + 5];
             int count = c2 - c1 + 1;
@@ -315,14 +417,26 @@ namespace EscPosUtils
             for (int i = 0, currindex = 9; (i < count) && (currindex < record.cmdlength); i++)
             {
                 int x = record.cmddata[currindex];
-                string xsize = x switch
+                string xsize;
+                switch (x)
                 {
-                    8 => "8",
-                    9 => "9",
-                    10 => "10",
-                    12 => "12",
-                    _ => "Undefined",
-                };
+                    case 8:
+                        xsize = "8";
+                        break;
+                    case 9:
+                        xsize = "9";
+                        break;
+                    case 10:
+                        xsize = "10";
+                        break;
+                    case 12:
+                        xsize = "12";
+                        break;
+                    default:
+                        xsize = "Undefined";
+                        break;
+                }
+
                 int fdsize = (x * y);
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
@@ -356,12 +470,20 @@ namespace EscPosUtils
                 return "Length out of range";
             }
             int x = record.cmddata[index + 3];
-            string xsize = x switch
+            string xsize;
+            switch (x)
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
+                case 1:
+                    xsize = "1";
+                    break;
+                case 2:
+                    xsize = "2";
+                    break;
+                default:
+                    xsize = "Undefined";
+                    break;
+            }
+
             byte c1 = record.cmddata[index + 4];
             byte c2 = record.cmddata[index + 5];
             int count = c2 - c1 + 1;
@@ -370,13 +492,23 @@ namespace EscPosUtils
             for (int i = 0, currindex = 9; (i < count) && (currindex < record.cmdlength); i++)
             {
                 int y = record.cmddata[currindex];
-                string ysize = y switch
+                string ysize;
+                switch (y)
                 {
-                    16 => "16",
-                    17 => "17",
-                    24 => "24",
-                    _ => "Undefined",
-                };
+                    case 16:
+                        ysize = "16";
+                        break;
+                    case 17:
+                        ysize = "17";
+                        break;
+                    case 24:
+                        ysize = "24";
+                        break;
+                    default:
+                        ysize = "Undefined";
+                        break;
+                }
+
                 int fdsize = (x * y);
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((x * 8), y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
@@ -411,66 +543,130 @@ namespace EscPosUtils
             int length = BitConverter.ToUInt16(record.cmddata, index);
             int mode = record.cmddata[index + 3];
             int data = record.cmddata[index + 4];
-            string config = mode switch
+            string config;
+            switch (mode)
             {
-                1 => "Transmission speed",
-                2 => "Parity",
-                3 => "Flow control",
-                4 => "Data bits length",
-                _ => "Undefined",
-            };
-            string value = mode switch
+                case 1:
+                    config = "Transmission speed";
+                    break;
+                case 2:
+                    config = "Parity";
+                    break;
+                case 3:
+                    config = "Flow control";
+                    break;
+                case 4:
+                    config = "Data bits length";
+                    break;
+                default:
+                    config = "Undefined";
+                    break;
+            }
+
+            string value;
+            switch (mode)
             {
-                1 => ascii.GetString(record.cmddata, 4, (length - 2)),
-                2 => data switch
-                {
-                    48 => "None parity",
-                    49 => "Odd parity",
-                    50 => "Even parity",
-                    _ => "Undefined parity",
-                },
-                3 => data switch
-                {
-                    48 => "Flow control of DTR/DSR",
-                    49 => "Flow control of XON/XOFF",
-                    _ => "Undefined flow control",
-                },
-                4 => data switch
-                {
-                    55 => "7 bits length",
-                    56 => "8 bits length",
-                    _ => "Undefined bits length",
-                },
-                _ => "Undefined",
-            };
+                case 1:
+                    value = ascii.GetString(record.cmddata, 4, (length - 2));
+                    break;
+                case 2:
+                    switch (data)
+                    {
+                        case 48:
+                            value = "None parity";
+                            break;
+                        case 49:
+                            value = "Odd parity";
+                            break;
+                        case 50:
+                            value = "Even parity";
+                            break;
+                        default:
+                            value = "Undefined parity";
+                            break;
+                    }
+
+                    break;
+                case 3:
+                    switch (data)
+                    {
+                        case 48:
+                            value = "Flow control of DTR/DSR";
+                            break;
+                        case 49:
+                            value = "Flow control of XON/XOFF";
+                            break;
+                        default:
+                            value = "Undefined flow control";
+                            break;
+                    }
+
+                    break;
+                case 4:
+                    switch (data)
+                    {
+                        case 55:
+                            value = "7 bits length";
+                            break;
+                        case 56:
+                            value = "8 bits length";
+                            break;
+                        default:
+                            value = "Undefined bits length";
+                            break;
+                    }
+
+                    break;
+                default:
+                    value = "Undefined";
+                    break;
+            }
+
             return $"Setting:{config}, Value:{value}";
         }
 
         //  GS  ( E 1D 28 45 02 00 0C 01-04
         internal static string DecodeGsTransmitSerialInterface(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Transmission speed",
-                2 => "Parity",
-                3 => "Flow control",
-                4 => "Data bits length",
-                _ => "Undefined",
-            };
+                case 1:
+                    return "Transmission speed";
+                case 2:
+                    return "Parity";
+                case 3:
+                    return "Flow control";
+                case 4:
+                    return "Data bits length";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( E 1D 28 45 0003-0021 0D [31/41/46/49 20-7E...]...
         internal static string DecodeGsSetBluetoothInterface(EscPosCmd record, int index)
         {
             int length = BitConverter.ToUInt16(record.cmddata, index);
-            string config = record.cmddata[index + 3] switch
+            string config;
+            switch (record.cmddata[index + 3])
             {
-                49 => "Passkey",
-                65 => "Device name",
-                70 => "Bundle Seed ID",
-                73 => "Automatic reconnection with iOS device",
-                _ => "Undefined",
-            };
+                case 49:
+                    config = "Passkey";
+                    break;
+                case 65:
+                    config = "Device name";
+                    break;
+                case 70:
+                    config = "Bundle Seed ID";
+                    break;
+                case 73:
+                    config = "Automatic reconnection with iOS device";
+                    break;
+                default:
+                    config = "Undefined";
+                    break;
+            }
+
             string value = ascii.GetString(record.cmddata, 4, (length - 2));
             return $"Setting:{config}, Value:{value}";
         }
@@ -478,61 +674,89 @@ namespace EscPosUtils
         //  GS  ( E 1D 28 45 02 00 0E 30/31/41/46/49
         internal static string DecodeGsTransmitBluetoothInterface(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Device address",
-                49 => "Passkey",
-                65 => "Device name",
-                70 => "Bundle Seed ID",
-                73 => "Automatic reconnection with iOS device",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "Device address";
+                case 49:
+                    return "Passkey";
+                case 65:
+                    return "Device name";
+                case 70:
+                    return "Bundle Seed ID";
+                case 73:
+                    return "Automatic reconnection with iOS device";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( E 1D 28 45 03 00 0F 01/20 30/31
         internal static string DecodeGsSetUSBInterface(EscPosCmd record, int index)
         {
             int value = record.cmddata[index + 1];
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => value switch
-                {
-                    48 => "Class settings: Vendor-defined class",
-                    49 => "Class settings: Printer class",
-                    _ => "Undefined class settings",
-                },
-                32 => value switch
-                {
-                    48 => "IEEE1284 DeviceID settings: Do not transmit",
-                    49 => "IEEE1284 DeviceID settings: Transmits",
-                    _ => "Undefined IEEE1284 DeviceID settings",
-                },
-                _ => "Undefined",
-            };
+                case 1:
+                    switch (value)
+                    {
+                        case 48:
+                            return "Class settings: Vendor-defined class";
+                        case 49:
+                            return "Class settings: Printer class";
+                        default:
+                            return "Undefined class settings";
+                    }
+                case 32:
+                    switch (value)
+                    {
+                        case 48:
+                            return "IEEE1284 DeviceID settings: Do not transmit";
+                        case 49:
+                            return "IEEE1284 DeviceID settings: Transmits";
+                        default:
+                            return "Undefined IEEE1284 DeviceID settings";
+                    }
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( E 1D 28 45 02 00 10 01/20
         internal static string DecodeGsTransmitUSBInterface(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Class settings",
-                32 => "IEEE1284 DeviceID settings",
-                _ => "Undefined",
-            };
+                case 1:
+                    return "Class settings";
+                case 32:
+                    return "IEEE1284 DeviceID settings";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( E 1D 28 45 0009-0024 31 {34 38/34 39/36 34} 3B [30-39...] 3B [30-39...] 3B [30-39...] 3B [30-39...] 3B [30-39...] 3B [30-39...] 3B [30-39...] 3B
         internal static string DecodeGsSetPaperLayout(EscPosCmd record, int index)
         {
             int length = BitConverter.ToUInt16(record.cmddata, index);
-            string mode = record.cmddata[index + 3] switch
+            string mode;
+            switch (record.cmddata[index + 3])
             {
-                48 => "None(does not use layout)",
-                49 => "Top of black mark",
-                64 => "Bottom of label",
-                _ => "Undefined",
-            };
+                case 48:
+                    mode = "None(does not use layout)";
+                    break;
+                case 49:
+                    mode = "Top of black mark";
+                    break;
+                case 64:
+                    mode = "Bottom of label";
+                    break;
+                default:
+                    mode = "Undefined";
+                    break;
+            }
+
             string value = ascii.GetString(record.cmddata, 8, (length - 3));
             return $"Setting:{mode}, Value:{value}";
         }
@@ -540,12 +764,15 @@ namespace EscPosUtils
         //  GS  ( E 1D 28 45 02 00 32 40/50
         internal static string DecodeGsTransmitPaperLayout(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                64 => "Setting value of the paper layout (unit: 0.1 mm {0.004\"})",
-                80 => "Actual value of the paper layout (unit: dot)",
-                _ => "Undefined",
-            };
+                case 64:
+                    return "Setting value of the paper layout (unit: 0.1 mm {0.004\"})";
+                case 80:
+                    return "Actual value of the paper layout (unit: dot)";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( E 1D 28 45 002D-0048 33 20-7E...
@@ -572,25 +799,47 @@ namespace EscPosUtils
             List<string> beeps = new List<string>();
             for (int i = 0, currindex = 6; (i < count) && (currindex < record.cmdlength); i++)
             {
-                string n = record.cmddata[currindex] switch
+                string n;
+                switch (record.cmddata[currindex])
                 {
-                    1 => "A",
-                    2 => "B",
-                    3 => "C",
-                    4 => "D",
-                    5 => "E",
-                    _ => "Undefined",
-                };
+                    case 1:
+                        n = "A";
+                        break;
+                    case 2:
+                        n = "B";
+                        break;
+                    case 3:
+                        n = "C";
+                        break;
+                    case 4:
+                        n = "D";
+                        break;
+                    case 5:
+                        n = "E";
+                        break;
+                    default:
+                        n = "Undefined";
+                        break;
+                }
+
                 List<string> onoff = new List<string>();
                 currindex++;
                 for (int j = 0; j < 6; j++, currindex += 2)
                 {
-                    string sound = record.cmddata[currindex] switch
+                    string sound;
+                    switch (record.cmddata[currindex])
                     {
-                        0 => "Off",
-                        1 => "On",
-                        _ => "Undefined",
-                    };
+                        case 0:
+                            sound = "Off";
+                            break;
+                        case 1:
+                            sound = "On";
+                            break;
+                        default:
+                            sound = "Undefined";
+                            break;
+                    }
+
                     string duration = record.cmddata[currindex + 1] <= 100 ? record.cmddata[currindex + 1].ToString("D", invariantculture) : "Out of range";
                     onoff.Add($"Sound:{sound}, Duration:{duration} x 100ms");
                 }
@@ -603,37 +852,49 @@ namespace EscPosUtils
         //  GS  ( E 1D 28 45 02 00 64 01-05
         internal static string DecodeGsTransmitInternalBuzzerPatterns(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "A",
-                2 => "B",
-                3 => "C",
-                4 => "D",
-                5 => "E",
-                _ => "Undefined",
-            };
+                case 1:
+                    return "A";
+                case 2:
+                    return "B";
+                case 3:
+                    return "C";
+                case 4:
+                    return "D";
+                case 5:
+                    return "E";
+                default:
+                    return "Undefined";
+            }
         }
 
         //c GS  ( G 1D 28 47 02 00 30 04/44
         internal static string DecodeGsSelectSideOfSlipFaceOrBack(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                4 => "Face of slip",
-                68 => "Back of slip",
-                _ => "Undefined",
-            };
+                case 4:
+                    return "Face of slip";
+                case 68:
+                    return "Back of slip";
+                default:
+                    return "Undefined";
+            }
         }
 
         //c GS  ( G 1D 28 47 04 00 3C 01 00 00/01
         internal static string DecodeGsReadMagneticInkCharacterAndTransmitReadingResult(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "E13B.",
-                1 => "CMC7.",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "E13B.";
+                case 1:
+                    return "CMC7.";
+                default:
+                    return "Undefined";
+            }
         }
 
         //c GS  ( G 1D 28 47 0005-0405 40 0000-FFFF 30 01-03 00/01 30 0000 00-FF...
@@ -645,19 +906,37 @@ namespace EscPosUtils
                 return "Length out of range";
             }
             int dataid = BitConverter.ToUInt16(record.cmddata, (index + 3));
-            string scanning = record.cmddata[index + 6] switch
+            string scanning;
+            switch (record.cmddata[index + 6])
             {
-                1 => "Magnetic ink character",
-                2 => "Image data",
-                3 => "Magnetic ink character and Image data",
-                _ => "Undefined",
-            };
-            string font = record.cmddata[index] switch
+                case 1:
+                    scanning = "Magnetic ink character";
+                    break;
+                case 2:
+                    scanning = "Image data";
+                    break;
+                case 3:
+                    scanning = "Magnetic ink character and Image data";
+                    break;
+                default:
+                    scanning = "Undefined";
+                    break;
+            }
+
+            string font;
+            switch (record.cmddata[index])
             {
-                0 => "E13B.",
-                1 => "CMC7.",
-                _ => "Undefined",
-            };
+                case 0:
+                    font = "E13B.";
+                    break;
+                case 1:
+                    font = "CMC7.";
+                    break;
+                default:
+                    font = "Undefined";
+                    break;
+            }
+
             return $"Length:{length}, Data ID:{dataid}, Scanning:{scanning}, Font:{font}";
         }
 
@@ -670,12 +949,20 @@ namespace EscPosUtils
                 return "Length out of range";
             }
             int dataid = BitConverter.ToUInt16(record.cmddata, (index + 3));
-            string store = record.cmddata[index + 5] switch
+            string store;
+            switch (record.cmddata[index + 5])
             {
-                48 => "To Work area temporarily",
-                49 => "To NV Memory Image data storage",
-                _ => "Undefined",
-            };
+                case 48:
+                    store = "To Work area temporarily";
+                    break;
+                case 49:
+                    store = "To NV Memory Image data storage";
+                    break;
+                default:
+                    store = "Undefined";
+                    break;
+            }
+
             return $"Length:{length}, Data ID:{dataid}, Store:{store}";
         }
 
@@ -688,17 +975,32 @@ namespace EscPosUtils
                 return "Length out of range";
             }
             int dataid = BitConverter.ToUInt16(record.cmddata, (index + 3));
-            string side = length switch
+            string side;
+            switch (length)
             {
-                3 => "No specified side",
-                4 => record.cmddata[index + 5] switch
-                {
-                    48 => "Face side",
-                    49 => "Back side",
-                    _ => "Undefined",
-                },
-                _ => "Undefined",
-            };
+                case 3:
+                    side = "No specified side";
+                    break;
+                case 4:
+                    switch (record.cmddata[index + 5])
+                    {
+                        case 48:
+                            side = "Face side";
+                            break;
+                        case 49:
+                            side = "Back side";
+                            break;
+                        default:
+                            side = "Undefined";
+                            break;
+                    }
+
+                    break;
+                default:
+                    side = "Undefined";
+                    break;
+            }
+
             return $"Length:{length}, Data ID:{dataid}, Side:{side}";
         }
 
@@ -717,26 +1019,39 @@ namespace EscPosUtils
             string card = (mode & 0x10) == 0x10 ? "Select" : "Do not Select";
             string validation = (mode & 0x08) == 0x08 ? "Select" : "Do not Select";
             string slip = (mode & 0x04) == 0x04 ? "Select" : "Do not Select";
-            string roll = (mode & 0x03) switch
+            string roll;
+            switch ((mode & 0x03))
             {
-                0 => "Disable",
-                1 => "Active Sheet",
-                2 => "Active Sheet",
-                3 => "Enable",
-                _ => "",
-            };
+                case 0:
+                    roll = "Disable";
+                    break;
+                case 1:
+                case 2:
+                    roll = "Active Sheet";
+                    break;
+                case 3:
+                    roll = "Enable";
+                    break;
+                default:
+                    roll = "";
+                    break;
+            }
+
             return $"Check:{check}, Card:{card}, Validation:{validation}, Slip:{slip}, Roll paper:{roll}";
         }
 
         //c GS  ( G 1D 28 47 02 00 55 30/31
         internal static string DecodeGsFinishProcessingOfCutSheet(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Ejecting operation",
-                49 => "Releasing operation",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "Ejecting operation";
+                case 49:
+                    return "Releasing operation";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( H 1D 28 48 06 00 30 30 20-7E 20-7E 20-7E 20-7E
@@ -748,115 +1063,132 @@ namespace EscPosUtils
         //  GS  ( H 1D 28 48 03 00 31 30 00-02/30-32
         internal static string DecodeGsSpecifiesOfflineResponse(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Turns off the offline response transmission.",
-                48 => "Turns off the offline response transmission.",
-                1 => "Specifies the offline response transmission (not including the offline cause).",
-                49 => "Specifies the offline response transmission (not including the offline cause).",
-                2 => "Specifies the offline response transmission (including the offline cause).",
-                50 => "Specifies the offline response transmission (including the offline cause).",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Turns off the offline response transmission.";
+                case 1:
+                case 49:
+                    return "Specifies the offline response transmission (not including the offline cause).";
+                case 2:
+                case 50:
+                    return "Specifies the offline response transmission (including the offline cause).";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( K 1D 28 4B 02 00 30 00-04/30-34
         internal static string DecodeGsSelectPrintControlMode(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Print mode when power is turned on",
-                48 => "Print mode when power is turned on",
-                1 => "Print control mode 1",
-                49 => "Print control mode 1",
-                2 => "Print control mode 2",
-                50 => "Print control mode 2",
-                3 => "Print control mode 3",
-                51 => "Print control mode 3",
-                4 => "Print control mode 4",
-                52 => "Print control mode 4",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Print mode when power is turned on";
+                case 1:
+                case 49:
+                    return "Print control mode 1";
+                case 2:
+                case 50:
+                    return "Print control mode 2";
+                case 3:
+                case 51:
+                    return "Print control mode 3";
+                case 4:
+                case 52:
+                    return "Print control mode 4";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( K 1D 28 4B 02 00 31 80-7F
         internal static string DecodeGsSelectPrintDensity(EscPosCmd record, int index)
         {
-            return "Criterion density" + record.cmddata[index] switch
+            string value;
+            switch(record.cmddata[index])
             {
-                250 => " x 70%",
-                251 => " x 75%",
-                252 => " x 80%",
-                253 => " x 85%",
-                254 => " x 90%",
-                255 => " x 95%",
-                0 => "",
-                1 => " x 105%",
-                2 => " x 110%",
-                3 => " x 115%",
-                4 => " x 120%",
-                5 => " x 125%",
-                6 => " x 130%",
-                7 => " x 135%",
-                8 => " x 140%",
-                _ => " Undefined",
+                case 250: value = " x 70%"; break;
+                case 251: value = " x 75%"; break;
+                case 252: value = " x 80%"; break;
+                case 253: value = " x 85%"; break;
+                case 254: value = " x 90%"; break;
+                case 255: value = " x 95%"; break;
+                case 0: value = ""; break;
+                case 1: value = " x 105%"; break;
+                case 2: value = " x 110%"; break;
+                case 3: value = " x 115%"; break;
+                case 4: value = " x 120%"; break;
+                case 5: value = " x 125%"; break;
+                case 6: value = " x 130%"; break;
+                case 7: value = " x 135%"; break;
+                case 8: value = " x 140%"; break;
+                default: value = " Undefined"; break;
             };
+            return "Criterion density" + value;
         }
 
         //  GS  ( K 1D 28 4B 02 00 32 00-0D/30-39
         internal static string DecodeGsSelectPrintSpeed(EscPosCmd record, int index)
         {
-            return "Print speed level " + record.cmddata[index] switch
+            string value = string.Empty;
+            switch(record.cmddata[index])
             {
-                0 => "Customized value",
-                48 => "Customized value",
-                1 => "1",
-                49 => "1",
-                2 => "2",
-                50 => "2",
-                3 => "3",
-                51 => "3",
-                4 => "4",
-                52 => "4",
-                5 => "5",
-                53 => "5",
-                6 => "6",
-                54 => "6",
-                7 => "7",
-                55 => "7",
-                8 => "8",
-                56 => "8",
-                9 => "9",
-                57 => "9",
-                10 => "10",
-                58 => "10",
-                11 => "11",
-                59 => "11",
-                12 => "12",
-                13 => "13",
-                14 => "14",
-                _ => "Undefined",
+                case 0: value = "Customized value"; break;
+                case 48: value = "Customized value"; break;
+                case 1: value = "1"; break;
+                case 49: value = "1"; break;
+                case 2: value = "2"; break;
+                case 50: value = "2"; break;
+                case 3: value = "3"; break;
+                case 51: value = "3"; break;
+                case 4: value = "4"; break;
+                case 52: value = "4"; break;
+                case 5: value = "5"; break;
+                case 53: value = "5"; break;
+                case 6: value = "6"; break;
+                case 54: value = "6"; break;
+                case 7: value = "7"; break;
+                case 55: value = "7"; break;
+                case 8: value = "8"; break;
+                case 56: value = "8"; break;
+                case 9: value = "9"; break;
+                case 57: value = "9"; break;
+                case 10: value = "10"; break;
+                case 58: value = "10"; break;
+                case 11: value = "11"; break;
+                case 59: value = "11"; break;
+                case 12: value = "12"; break;
+                case 13: value = "13"; break;
+                case 14: value = "14"; break;
+                default: value = "Undefined"; break;
             };
+            return "Print speed level " + value;
         }
 
         //  GS  ( K 1D 28 4B 02 00 61 00-04/30-34/80
         internal static string DecodeGsSelectNumberOfPartsThermalHeadEnergizing(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            string value;
+            switch(record.cmddata[index])
             {
-                0 => "Customized value",
-                48 => "Customized value",
-                1 => "One-part",
-                49 => "One-part",
-                2 => "Two-part",
-                50 => "Two-part",
-                3 => "Three-part",
-                51 => "Three-part",
-                4 => "Four-part",
-                52 => "Four-part",
-                14 => "Automatic control",
-                _ => "Undefined",
-            } + " energizing";
+                case 0: value = "Customized value"; break;
+                case 48: value = "Customized value"; break;
+                case 1: value = "One-part"; break;
+                case 49: value = "One-part"; break;
+                case 2: value = "Two-part"; break;
+                case 50: value = "Two-part"; break;
+                case 3: value = "Three-part"; break;
+                case 51: value = "Three-part"; break;
+                case 4: value = "Four-part"; break;
+                case 52: value = "Four-part"; break;
+                case 14: value = "Automatic control"; break;
+                default: value = "Undefined"; break;
+            }
+
+            return value + " energizing";
         }
 
         //  GS  ( L 1D 28 4C 000C-FFFF 30 43 30/34 20-7E 20-7E 01-04 0001-2000 0001-0900 [31-34 00-FF...]...
@@ -867,12 +1199,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 4] switch
+            string tone;
+            switch (record.cmddata[index + 4])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
@@ -882,25 +1222,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -924,12 +1287,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 6] switch
+            string tone;
+            switch (record.cmddata[index + 6])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
@@ -939,25 +1310,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -981,12 +1375,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 4] switch
+            string tone;
+            switch (record.cmddata[index + 4])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
@@ -996,25 +1398,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -1039,12 +1464,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 6] switch
+            string tone;
+            switch (record.cmddata[index + 6])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
@@ -1054,25 +1487,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -1097,12 +1553,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 4] switch
+            string tone;
+            switch (record.cmddata[index + 4])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
@@ -1112,25 +1576,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -1154,12 +1641,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 6] switch
+            string tone;
+            switch (record.cmddata[index + 6])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
@@ -1169,25 +1664,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -1211,12 +1729,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 4] switch
+            string tone;
+            switch (record.cmddata[index + 4])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
@@ -1226,25 +1752,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -1269,12 +1818,20 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 6] switch
+            string tone;
+            switch (record.cmddata[index + 6])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
             string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
@@ -1284,25 +1841,48 @@ namespace EscPosUtils
             List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
-                string c = record.cmddata[currindex] switch
+                string c;
+                switch (record.cmddata[currindex])
                 {
-                    49 => "1",
-                    50 => "2",
-                    51 => "3",
-                    52 => "4",
-                    _ => "Undefined",
-                };
+                    case 49:
+                        c = "1";
+                        break;
+                    case 50:
+                        c = "2";
+                        break;
+                    case 51:
+                        c = "3";
+                        break;
+                    case 52:
+                        c = "4";
+                        break;
+                    default:
+                        c = "Undefined";
+                        break;
+                }
+
                 System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 ColorPalette palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
-                palette.Entries[1] = c switch
+                switch (c)
                 {
-                    "1" => Color.Black,
-                    "2" => Color.Red,
-                    "3" => Color.Green,
-                    "4" => Color.Blue,
-                    _ => Color.Yellow,
-                };
+                    case "1":
+                        palette.Entries[1] = Color.Black;
+                        break;
+                    case "2":
+                        palette.Entries[1] = Color.Red;
+                        break;
+                    case "3":
+                        palette.Entries[1] = Color.Green;
+                        break;
+                    case "4":
+                        palette.Entries[1] = Color.Blue;
+                        break;
+                    default:
+                        palette.Entries[1] = Color.Yellow;
+                        break;
+                }
+
                 bitmap.Palette = palette;
                 System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                 IntPtr ptr = bmpData.Scan0;
@@ -1327,32 +1907,68 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 4] switch
+            string tone;
+            switch (record.cmddata[index + 4])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
-            string bx = record.cmddata[index + 5] switch
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
+            string bx;
+            switch (record.cmddata[index + 5])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string by = record.cmddata[index + 6] switch
+                case 1:
+                    bx = "1";
+                    break;
+                case 2:
+                    bx = "2";
+                    break;
+                default:
+                    bx = "Undefined";
+                    break;
+            }
+
+            string by;
+            switch (record.cmddata[index + 6])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string color = record.cmddata[index + 7] switch
+                case 1:
+                    by = "1";
+                    break;
+                case 2:
+                    by = "2";
+                    break;
+                default:
+                    by = "Undefined";
+                    break;
+            }
+
+            string color;
+            switch (record.cmddata[index + 7])
             {
-                49 => "1",
-                50 => "2",
-                51 => "3",
-                52 => "4",
-                _ => "Undefined",
-            };
+                case 49:
+                    color = "1";
+                    break;
+                case 50:
+                    color = "2";
+                    break;
+                case 51:
+                    color = "3";
+                    break;
+                case 52:
+                    color = "4";
+                    break;
+                default:
+                    color = "Undefined";
+                    break;
+            }
+
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int size = ((width + 7) / 8) * height;
@@ -1368,32 +1984,68 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 6] switch
+            string tone;
+            switch (record.cmddata[index + 6])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
-            string bx = record.cmddata[index + 7] switch
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
+            string bx;
+            switch (record.cmddata[index + 7])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string by = record.cmddata[index + 8] switch
+                case 1:
+                    bx = "1";
+                    break;
+                case 2:
+                    bx = "2";
+                    break;
+                default:
+                    bx = "Undefined";
+                    break;
+            }
+
+            string by;
+            switch (record.cmddata[index + 8])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string color = record.cmddata[index + 9] switch
+                case 1:
+                    by = "1";
+                    break;
+                case 2:
+                    by = "2";
+                    break;
+                default:
+                    by = "Undefined";
+                    break;
+            }
+
+            string color;
+            switch (record.cmddata[index + 9])
             {
-                49 => "1",
-                50 => "2",
-                51 => "3",
-                52 => "4",
-                _ => "Undefined",
-            };
+                case 49:
+                    color = "1";
+                    break;
+                case 50:
+                    color = "2";
+                    break;
+                case 51:
+                    color = "3";
+                    break;
+                case 52:
+                    color = "4";
+                    break;
+                default:
+                    color = "Undefined";
+                    break;
+            }
+
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
             int size = ((width + 7) / 8) * height;
@@ -1409,32 +2061,68 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 4] switch
+            string tone;
+            switch (record.cmddata[index + 4])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
-            string bx = record.cmddata[index + 5] switch
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
+            string bx;
+            switch (record.cmddata[index + 5])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string by = record.cmddata[index + 6] switch
+                case 1:
+                    bx = "1";
+                    break;
+                case 2:
+                    bx = "2";
+                    break;
+                default:
+                    bx = "Undefined";
+                    break;
+            }
+
+            string by;
+            switch (record.cmddata[index + 6])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string color = record.cmddata[index + 7] switch
+                case 1:
+                    by = "1";
+                    break;
+                case 2:
+                    by = "2";
+                    break;
+                default:
+                    by = "Undefined";
+                    break;
+            }
+
+            string color;
+            switch (record.cmddata[index + 7])
             {
-                49 => "1",
-                50 => "2",
-                51 => "3",
-                52 => "4",
-                _ => "Undefined",
-            };
+                case 49:
+                    color = "1";
+                    break;
+                case 50:
+                    color = "2";
+                    break;
+                case 51:
+                    color = "3";
+                    break;
+                case 52:
+                    color = "4";
+                    break;
+                default:
+                    color = "Undefined";
+                    break;
+            }
+
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int size = width * ((height + 7) / 8);
@@ -1450,32 +2138,68 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string tone = record.cmddata[index + 6] switch
+            string tone;
+            switch (record.cmddata[index + 6])
             {
-                48 => "Monochrome",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
-            string bx = record.cmddata[index + 7] switch
+                case 48:
+                    tone = "Monochrome";
+                    break;
+                case 52:
+                    tone = "Multiple tone";
+                    break;
+                default:
+                    tone = "Undefined";
+                    break;
+            }
+
+            string bx;
+            switch (record.cmddata[index + 7])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string by = record.cmddata[index + 8] switch
+                case 1:
+                    bx = "1";
+                    break;
+                case 2:
+                    bx = "2";
+                    break;
+                default:
+                    bx = "Undefined";
+                    break;
+            }
+
+            string by;
+            switch (record.cmddata[index + 8])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string color = record.cmddata[index + 9] switch
+                case 1:
+                    by = "1";
+                    break;
+                case 2:
+                    by = "2";
+                    break;
+                default:
+                    by = "Undefined";
+                    break;
+            }
+
+            string color;
+            switch (record.cmddata[index + 9])
             {
-                49 => "1",
-                50 => "2",
-                51 => "3",
-                52 => "4",
-                _ => "Undefined",
-            };
+                case 49:
+                    color = "1";
+                    break;
+                case 50:
+                    color = "2";
+                    break;
+                case 51:
+                    color = "3";
+                    break;
+                case 52:
+                    color = "4";
+                    break;
+                default:
+                    color = "Undefined";
+                    break;
+            }
+
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
             int size = width * ((height + 7) / 8);
@@ -1489,12 +2213,18 @@ namespace EscPosUtils
             string dpi = "Undefined";
             if ((record.cmddata[7]) == (record.cmddata[8]))
             {
-                dpi = record.cmddata[7] switch
+                switch (record.cmddata[7])
                 {
-                    50 => "180",
-                    51 => "360",
-                    _ => "Undefined",
-                };
+                    case 50:
+                        dpi = "180";
+                        break;
+                    case 51:
+                        dpi = "360";
+                        break;
+                    default:
+                        dpi = "Undefined";
+                        break;
+                }
             }
             return dpi;
         }
@@ -1509,18 +2239,34 @@ namespace EscPosUtils
         internal static string DecodeGsPrintSpecifiedNVGraphicsData(EscPosCmd record, int index)
         {
             string keycode = ascii.GetString(record.cmddata, index, 2);
-            string x = record.cmddata[index + 2] switch
+            string x;
+            switch (record.cmddata[index + 2])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string y = record.cmddata[index + 3] switch
+                case 1:
+                    x = "1";
+                    break;
+                case 2:
+                    x = "2";
+                    break;
+                default:
+                    x = "Undefined";
+                    break;
+            }
+
+            string y;
+            switch (record.cmddata[index + 3])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
+                case 1:
+                    y = "1";
+                    break;
+                case 2:
+                    y = "2";
+                    break;
+                default:
+                    y = "Undefined";
+                    break;
+            }
+
             return $"Keycode:{keycode}, X times:{x}, Y times:{y}";
         }
 
@@ -1534,18 +2280,34 @@ namespace EscPosUtils
         internal static string DecodeGsPrintSpecifiedDownloadGraphicsData(EscPosCmd record, int index)
         {
             string keycode = ascii.GetString(record.cmddata, index, 2);
-            string x = record.cmddata[index + 2] switch
+            string x;
+            switch (record.cmddata[index + 2])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
-            string y = record.cmddata[index + 3] switch
+                case 1:
+                    x = "1";
+                    break;
+                case 2:
+                    x = "2";
+                    break;
+                default:
+                    x = "Undefined";
+                    break;
+            }
+
+            string y;
+            switch (record.cmddata[index + 3])
             {
-                1 => "1",
-                2 => "2",
-                _ => "Undefined",
-            };
+                case 1:
+                    y = "1";
+                    break;
+                case 2:
+                    y = "2";
+                    break;
+                default:
+                    y = "Undefined";
+                    break;
+            }
+
             return $"Keycode:{keycode}, X times:{x}, Y times:{y}";
         }
 
@@ -1558,74 +2320,110 @@ namespace EscPosUtils
         //  GS  ( M 1D 28 4D 02 00 02/32 00/01/30/31
         internal static string DecodeGsLoadSettingsValuesFromStorageToWork(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Initial value loaded",
-                48 => "Initial value loaded",
-                1 => "1st saved value loaded",
-                49 => "1st saved value loaded",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Initial value loaded";
+                case 1:
+                case 49:
+                    return "1st saved value loaded";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( M 1D 28 4D 02 00 03/33 00/01/30/31
         internal static string DecodeGsSelectSettingsValuesToWorkAfterInitialize(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Select initial value",
-                48 => "Select initial value",
-                1 => "Select 1st saved value",
-                49 => "Select 1st saved value",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Select initial value";
+                case 1:
+                case 49:
+                    return "Select 1st saved value";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( N 1D 28 4E 02 00 30 30-33
         internal static string DecodeGsSetCharacterColor(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "None(not print)",
-                49 => "Color 1",
-                50 => "Color 2",
-                51 => "Color 3",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "None(not print)";
+                case 49:
+                    return "Color 1";
+                case 50:
+                    return "Color 2";
+                case 51:
+                    return "Color 3";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( N 1D 28 4E 02 00 31 30-33
         internal static string DecodeGsSetBackgroundColor(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "None(not print)",
-                49 => "Color 1",
-                50 => "Color 2",
-                51 => "Color 3",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "None(not print)";
+                case 49:
+                    return "Color 1";
+                case 50:
+                    return "Color 2";
+                case 51:
+                    return "Color 3";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( N 1D 28 4E 03 00 32 00/01/30/31 30-33
         internal static string DecodeGsTurnShadingMode(EscPosCmd record, int index)
         {
-            string onoff = record.cmddata[index] switch
+            string onoff;
+            switch (record.cmddata[index])
             {
-                0 => "OFF",
-                48 => "OFF",
-                1 => "ON",
-                49 => "ON",
-                _ => "Undefined",
-            };
-            string color = record.cmddata[index] switch
+                case 0:
+                case 48:
+                    onoff = "OFF";
+                    break;
+                case 1:
+                case 49:
+                    onoff = "ON";
+                    break;
+                default:
+                    onoff = "Undefined";
+                    break;
+            }
+
+            string color;
+            switch (record.cmddata[index])
             {
-                48 => "None(not print)",
-                49 => "1",
-                50 => "2",
-                51 => "3",
-                _ => "Undefined",
-            };
+                case 48:
+                    color = "None(not print)";
+                    break;
+                case 49:
+                    color = "1";
+                    break;
+                case 50:
+                    color = "2";
+                    break;
+                case 51:
+                    color = "3";
+                    break;
+                default:
+                    color = "Undefined";
+                    break;
+            }
+
             return $"Shadow mode:{onoff}, Color:{color}";
         }
 
@@ -1635,11 +2433,17 @@ namespace EscPosUtils
             int wx = BitConverter.ToUInt16(record.cmddata, index);
             int wy = BitConverter.ToUInt16(record.cmddata, index + 2);
             int ox = BitConverter.ToUInt16(record.cmddata, index + 4);
-            string c = record.cmddata[6] switch
+            string c;
+            switch (record.cmddata[6])
             {
-                1 => "1",
-                _ => "Undefined",
-            };
+                case 1:
+                    c = "1";
+                    break;
+                default:
+                    c = "Undefined";
+                    break;
+            }
+
             return $"Horizontal size:{wx}, Vertical size:{wy}, Horizontal offset:{ox}, c:{c}";
         }
 
@@ -1650,26 +2454,54 @@ namespace EscPosUtils
             int y1 = BitConverter.ToUInt16(record.cmddata, index + 2);
             int x2 = BitConverter.ToUInt16(record.cmddata, index + 4);
             int y2 = BitConverter.ToUInt16(record.cmddata, index + 6);
-            string c = record.cmddata[8] switch
+            string c;
+            switch (record.cmddata[8])
             {
-                1 => "1",
-                _ => "Undefined",
-            };
-            string m1 = record.cmddata[9] switch
+                case 1:
+                    c = "1";
+                    break;
+                default:
+                    c = "Undefined";
+                    break;
+            }
+
+            string m1;
+            switch (record.cmddata[9])
             {
-                1 => "Single line : Thin",
-                2 => "Single line : Moderately Thick",
-                3 => "Single line : Thick",
-                4 => "Double line : Thin",
-                5 => "Double line : Moderately Thick",
-                6 => "Double line : Thick",
-                _ => "Undefined",
-            };
-            string m2 = record.cmddata[10] switch
+                case 1:
+                    m1 = "Single line : Thin";
+                    break;
+                case 2:
+                    m1 = "Single line : Moderately Thick";
+                    break;
+                case 3:
+                    m1 = "Single line : Thick";
+                    break;
+                case 4:
+                    m1 = "Double line : Thin";
+                    break;
+                case 5:
+                    m1 = "Double line : Moderately Thick";
+                    break;
+                case 6:
+                    m1 = "Double line : Thick";
+                    break;
+                default:
+                    m1 = "Undefined";
+                    break;
+            }
+
+            string m2;
+            switch (record.cmddata[10])
             {
-                48 => "0",
-                _ => "Undefined",
-            };
+                case 48:
+                    m2 = "0";
+                    break;
+                default:
+                    m2 = "Undefined";
+                    break;
+            }
+
             return $"X start:{x1}, Y start:{y1}, X end:{x2}, Y end:{y2}, c:{c}, Line style:{m1}, m2:{m2}";
         }
 
@@ -1680,36 +2512,76 @@ namespace EscPosUtils
             int y1 = BitConverter.ToUInt16(record.cmddata, index + 2);
             int x2 = BitConverter.ToUInt16(record.cmddata, index + 4);
             int y2 = BitConverter.ToUInt16(record.cmddata, index + 6);
-            string c = record.cmddata[8] switch
+            string c;
+            switch (record.cmddata[8])
             {
-                1 => "1",
-                _ => "Undefined",
-            };
-            string m1 = record.cmddata[9] switch
+                case 1:
+                    c = "1";
+                    break;
+                default:
+                    c = "Undefined";
+                    break;
+            }
+
+            string m1;
+            switch (record.cmddata[9])
             {
-                1 => "Single line : Thin",
-                2 => "Single line : Moderately Thick",
-                3 => "Single line : Thick",
-                4 => "Double line : Thin",
-                5 => "Double line : Moderately Thick",
-                6 => "Double line : Thick",
-                _ => "Undefined",
-            };
-            string m2 = record.cmddata[10] switch
+                case 1:
+                    m1 = "Single line : Thin";
+                    break;
+                case 2:
+                    m1 = "Single line : Moderately Thick";
+                    break;
+                case 3:
+                    m1 = "Single line : Thick";
+                    break;
+                case 4:
+                    m1 = "Double line : Thin";
+                    break;
+                case 5:
+                    m1 = "Double line : Moderately Thick";
+                    break;
+                case 6:
+                    m1 = "Double line : Thick";
+                    break;
+                default:
+                    m1 = "Undefined";
+                    break;
+            }
+
+            string m2;
+            switch (record.cmddata[10])
             {
-                48 => "0",
-                _ => "Undefined",
-            };
-            string m3 = record.cmddata[11] switch
+                case 48:
+                    m2 = "0";
+                    break;
+                default:
+                    m2 = "Undefined";
+                    break;
+            }
+
+            string m3;
+            switch (record.cmddata[11])
             {
-                48 => "0",
-                _ => "Undefined",
-            };
-            string m4 = record.cmddata[12] switch
+                case 48:
+                    m3 = "0";
+                    break;
+                default:
+                    m3 = "Undefined";
+                    break;
+            }
+
+            string m4;
+            switch (record.cmddata[12])
             {
-                1 => "1",
-                _ => "Undefined",
-            };
+                case 1:
+                    m4 = "1";
+                    break;
+                default:
+                    m4 = "Undefined";
+                    break;
+            }
+
             return $"X start:{x1}, Y start:{y1}, X end:{x2}, Y end:{y2}, c:{c}, Line style:{m1}, m2:{m2}, m3:{m3}, m4:{m4}";
         }
 
@@ -1719,26 +2591,54 @@ namespace EscPosUtils
             int x1 = BitConverter.ToUInt16(record.cmddata, index);
             int x2 = BitConverter.ToUInt16(record.cmddata, index + 2);
             byte n = record.cmddata[4];
-            string c = record.cmddata[5] switch
+            string c;
+            switch (record.cmddata[5])
             {
-                1 => "1",
-                _ => "Undefined",
-            };
-            string m1 = record.cmddata[6] switch
+                case 1:
+                    c = "1";
+                    break;
+                default:
+                    c = "Undefined";
+                    break;
+            }
+
+            string m1;
+            switch (record.cmddata[6])
             {
-                1 => "Single line : Thin",
-                2 => "Single line : Moderately Thick",
-                3 => "Single line : Thick",
-                4 => "Double line : Thin",
-                5 => "Double line : Moderately Thick",
-                6 => "Double line : Thick",
-                _ => "Undefined",
-            };
-            string m2 = record.cmddata[7] switch
+                case 1:
+                    m1 = "Single line : Thin";
+                    break;
+                case 2:
+                    m1 = "Single line : Moderately Thick";
+                    break;
+                case 3:
+                    m1 = "Single line : Thick";
+                    break;
+                case 4:
+                    m1 = "Double line : Thin";
+                    break;
+                case 5:
+                    m1 = "Double line : Moderately Thick";
+                    break;
+                case 6:
+                    m1 = "Double line : Thick";
+                    break;
+                default:
+                    m1 = "Undefined";
+                    break;
+            }
+
+            string m2;
+            switch (record.cmddata[7])
             {
-                48 => "0",
-                _ => "Undefined",
-            };
+                case 48:
+                    m2 = "0";
+                    break;
+                default:
+                    m2 = "Undefined";
+                    break;
+            }
+
             return $"X start:{x1}, X end:{x2}, Feed:{n}, c:{c}, Line style:{m1}, m2:{m2}";
         }
 
@@ -1746,32 +2646,68 @@ namespace EscPosUtils
         internal static string DecodeGsDrawVerticalLineInStandardMode(EscPosCmd record, int index)
         {
             int x = BitConverter.ToUInt16(record.cmddata, index);
-            string a = record.cmddata[2] switch
+            string a;
+            switch (record.cmddata[2])
             {
-                0 => "Draw stop",
-                1 => "Draw start",
-                _ => "Undefined",
-            };
-            string c = record.cmddata[3] switch
+                case 0:
+                    a = "Draw stop";
+                    break;
+                case 1:
+                    a = "Draw start";
+                    break;
+                default:
+                    a = "Undefined";
+                    break;
+            }
+
+            string c;
+            switch (record.cmddata[3])
             {
-                1 => "1",
-                _ => "Undefined",
-            };
-            string m1 = record.cmddata[4] switch
+                case 1:
+                    c = "1";
+                    break;
+                default:
+                    c = "Undefined";
+                    break;
+            }
+
+            string m1;
+            switch (record.cmddata[4])
             {
-                1 => "Single line : Thin",
-                2 => "Single line : Moderately Thick",
-                3 => "Single line : Thick",
-                4 => "Double line : Thin",
-                5 => "Double line : Moderately Thick",
-                6 => "Double line : Thick",
-                _ => "Undefined",
-            };
-            string m2 = record.cmddata[5] switch
+                case 1:
+                    m1 = "Single line : Thin";
+                    break;
+                case 2:
+                    m1 = "Single line : Moderately Thick";
+                    break;
+                case 3:
+                    m1 = "Single line : Thick";
+                    break;
+                case 4:
+                    m1 = "Double line : Thin";
+                    break;
+                case 5:
+                    m1 = "Double line : Moderately Thick";
+                    break;
+                case 6:
+                    m1 = "Double line : Thick";
+                    break;
+                default:
+                    m1 = "Undefined";
+                    break;
+            }
+
+            string m2;
+            switch (record.cmddata[5])
             {
-                48 => "0",
-                _ => "Undefined",
-            };
+                case 48:
+                    m2 = "0";
+                    break;
+                default:
+                    m2 = "Undefined";
+                    break;
+            }
+
             return $"X position:{x}, Action:{a}, c:{c}, Line style:{m1}, m2:{m2}";
         }
 
@@ -1852,12 +2788,15 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 30 46 00/01
         internal static string DecodeGsPDF417SelectOptions(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Standard PDF417",
-                1 => "Truncated PDF417",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "Standard PDF417";
+                case 1:
+                    return "Truncated PDF417";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( k 1D 28 6B 0004-FFFF 30 50 30 00-FF...
@@ -1874,13 +2813,17 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 04 00 31 41 31-33 00
         internal static string DecodeGsQRCodeSelectModel(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Model 1",
-                49 => "Model 2",
-                50 => "Micro QR Code",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "Model 1";
+                case 49:
+                    return "Model 2";
+                case 50:
+                    return "Micro QR Code";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( k 1D 28 6B 03 00 31 43 01-10
@@ -1900,14 +2843,19 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 31 45 30-33
         internal static string DecodeGsQRCodeSetErrorCollectionLevel(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "L",
-                49 => "M",
-                50 => "Q",
-                51 => "H",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "L";
+                case 49:
+                    return "M";
+                case 50:
+                    return "Q";
+                case 51:
+                    return "H";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( k 1D 28 6B 0004-1BB4 31 50 30 00-FF...
@@ -1924,15 +2872,21 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 32 41 32-36
         internal static string DecodeGsMaxiCodeSelectMode(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                50 => "2",
-                51 => "3",
-                52 => "4",
-                53 => "5",
-                54 => "6",
-                _ => "Undefined",
-            };
+                case 50:
+                    return "2";
+                case 51:
+                    return "3";
+                case 52:
+                    return "4";
+                case 53:
+                    return "5";
+                case 54:
+                    return "6";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( k 1D 28 6B 0004-008D 32 50 30 00-FF...
@@ -1975,13 +2929,23 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string symbol = record.cmddata[index + 5] switch
+            string symbol;
+            switch (record.cmddata[index + 5])
             {
-                72 => "GS1 DataBar Stacked",
-                73 => "GS1 DataBar Stacked Onmidirectional",
-                76 => "GS1 DataBar Expanded Stacked",
-                _ => "Undefined",
-            };
+                case 72:
+                    symbol = "GS1 DataBar Stacked";
+                    break;
+                case 73:
+                    symbol = "GS1 DataBar Stacked Onmidirectional";
+                    break;
+                case 76:
+                    symbol = "GS1 DataBar Expanded Stacked";
+                    break;
+                default:
+                    symbol = "Undefined";
+                    break;
+            }
+
             length -= 4;
             return $"Type:{symbol}, Length:{length}";
         }
@@ -2010,24 +2974,33 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 34 48 00-05/30-35/61/62
         internal static string DecodeGsCompositeSelectHRICharacterFont(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "No HRI",
-                48 => "No HRI",
-                1 => "With Font A HRI",
-                49 => "With Font A HRI",
-                2 => "With Font B HRI",
-                50 => "With Font B HRI",
-                3 => "With Font C HRI",
-                51 => "With Font C HRI",
-                4 => "With Font D HRI",
-                52 => "With Font D HRI",
-                5 => "With Font E HRI",
-                53 => "With Font E HRI",
-                97 => "With Special Font A HRI",
-                98 => "With Special Font B HRI",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "No HRI";
+                case 1:
+                case 49:
+                    return "With Font A HRI";
+                case 2:
+                case 50:
+                    return "With Font B HRI";
+                case 3:
+                case 51:
+                    return "With Font C HRI";
+                case 4:
+                case 52:
+                    return "With Font D HRI";
+                case 5:
+                case 53:
+                    return "With Font E HRI";
+                case 97:
+                    return "With Special Font A HRI";
+                case 98:
+                    return "With Special Font B HRI";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ( k 1D 28 6B 0006-093E 34 50 30 00-FF...
@@ -2152,14 +3125,22 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 04 00 35 42 00/01/30/31 00-20
         internal static string DecodeGsAztecCodeSetModeTypesAndDataLayer(EscPosCmd record, int index)
         {
-            string mode = record.cmddata[index] switch
+            string mode;
+            switch (record.cmddata[index])
             {
-                0 => "Full-Range",
-                48 => "Full-Range",
-                1 => "Compact",
-                49 => "Compact",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    mode = "Full-Range";
+                    break;
+                case 1:
+                case 49:
+                    mode = "Compact";
+                    break;
+                default:
+                    mode = "Undefined";
+                    break;
+            }
+
             byte n2 = record.cmddata[index + 1];
             string layers;
             if (n2 == 0)
@@ -2324,33 +3305,62 @@ namespace EscPosUtils
             {
                 byte n = record.cmddata[currindex];
                 byte m = record.cmddata[currindex + 1];
-                string detection = n switch
+                string detection;
+                switch (n)
                 {
-                    60 => "Multi feed detected : read check paper",
-                    64 => "Magnetic waveforms cannot detected : read check paper",
-                    65 => "Number of unrecognizable characters has exceeded specified number : Magnetic waveforms analysis",
-                    66 => "Abnormality detected : noise measurement",
-                    70 => "reading process check paper",
-                    _ => "Undefined",
-                };
-                string operation = m switch
+                    case 60:
+                        detection = "Multi feed detected : read check paper";
+                        break;
+                    case 64:
+                        detection = "Magnetic waveforms cannot detected : read check paper";
+                        break;
+                    case 65:
+                        detection =
+                            "Number of unrecognizable characters has exceeded specified number : Magnetic waveforms analysis";
+                        break;
+                    case 66:
+                        detection = "Abnormality detected : noise measurement";
+                        break;
+                    case 70:
+                        detection = "reading process check paper";
+                        break;
+                    default:
+                        detection = "Undefined";
+                        break;
+                }
+
+                string operation;
+                switch (m)
                 {
-                    0 => "Continues",
-                    48 => "Continues",
-                    1 => "Cancels",
-                    49 => "Cancels",
-                    _ => "Undefined",
-                };
+                    case 0:
+                    case 48:
+                        operation = "Continues";
+                        break;
+                    case 1:
+                    case 49:
+                        operation = "Cancels";
+                        break;
+                    default:
+                        operation = "Undefined";
+                        break;
+                }
+
                 if (n == 70)
                 {
-                    operation = m switch
+                    switch (m)
                     {
-                        0 => "Paperjam detection level : High",
-                        48 => "Paperjam detection level : High",
-                        1 => "Paperjam detection level : Low",
-                        49 => "Paperjam detection level : Low",
-                        _ => "Undefined",
-                    };
+                        case 0:
+                        case 48:
+                            operation = "Paperjam detection level : High";
+                            break;
+                        case 1:
+                        case 49:
+                            operation = "Paperjam detection level : Low";
+                            break;
+                        default:
+                            operation = "Undefined";
+                            break;
+                    }
                 }
                 ops.Add($"Type:{detection}, {operation}");
             }
@@ -2365,13 +3375,23 @@ namespace EscPosUtils
             byte d1 = record.cmddata[index + 5];
             long c = BitConverter.ToUInt32(record.cmddata, index + 6);
             string digits = ((k >= 1) && (k <= 9)) ? k.ToString("D", invariantculture) : "Digits out of range";
-            string layout = d1 switch
+            string layout;
+            switch (d1)
             {
-                32 => "Right align with leading spaces",
-                48 => "Right align with leading 0",
-                0 => "Left align with trailing spaces",
-                _ => "Undefined",
-            };
+                case 32:
+                    layout = "Right align with leading spaces";
+                    break;
+                case 48:
+                    layout = "Right align with leading 0";
+                    break;
+                case 0:
+                    layout = "Left align with trailing spaces";
+                    break;
+                default:
+                    layout = "Undefined";
+                    break;
+            }
+
             return $"Digits:{digits}, Layout:{layout}, Default Value:{n}, Inclemental Value:{c}";
         }
 
@@ -2402,43 +3422,74 @@ namespace EscPosUtils
         //  GS  /   1D 2F 00-03/30-33
         internal static string DecodeGsObsoletePrintDownloadedBitimage(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Normal",
-                48 => "Normal",
-                1 => "Double Width",
-                49 => "Double Width",
-                2 => "Double Hight",
-                50 => "Double Hight",
-                3 => "Quadruple",
-                51 => "Quadruple",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Normal";
+                case 1:
+                case 49:
+                    return "Double Width";
+                case 2:
+                case 50:
+                    return "Double Hight";
+                case 3:
+                case 51:
+                    return "Quadruple";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  C 0 1D 43 30 00-05 00-02/30-32
         internal static string DecodeGsObsoleteSelectCounterPrintMode(EscPosCmd record, int index)
         {
-            string digits = record.cmddata[index] switch
+            string digits;
+            switch (record.cmddata[index])
             {
-                0 => "actual digits",
-                1 => "1",
-                2 => "2",
-                3 => "3",
-                4 => "4",
-                5 => "5",
-                _ => "Out of range",
-            };
-            string layout = record.cmddata[index + 1] switch
+                case 0:
+                    digits = "actual digits";
+                    break;
+                case 1:
+                    digits = "1";
+                    break;
+                case 2:
+                    digits = "2";
+                    break;
+                case 3:
+                    digits = "3";
+                    break;
+                case 4:
+                    digits = "4";
+                    break;
+                case 5:
+                    digits = "5";
+                    break;
+                default:
+                    digits = "Out of range";
+                    break;
+            }
+
+            string layout;
+            switch (record.cmddata[index + 1])
             {
-                0 => "Right align with leading spaces",
-                48 => "Right align with leading spaces",
-                1 => "Right align with leading 0",
-                49 => "Right align with leading 0",
-                2 => "Left align with trailing spaces",
-                50 => "Left align with trailing spaces",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    layout = "Right align with leading spaces";
+                    break;
+                case 1:
+                case 49:
+                    layout = "Right align with leading 0";
+                    break;
+                case 2:
+                case 50:
+                    layout = "Left align with trailing spaces";
+                    break;
+                default:
+                    layout = "Undefined";
+                    break;
+            }
+
             return $"Digits:{digits}, Layout:{layout}";
         }
 
@@ -2475,40 +3526,64 @@ namespace EscPosUtils
         internal static string DecodeGsDefineWindowsBMPNVGraphicsData(EscPosCmd record, int index)
         {
             string keycode = ascii.GetString(record.cmddata, index, 2);
-            string b = record.cmddata[index + 2] switch
+            string b;
+            switch (record.cmddata[index + 2])
             {
-                48 => "Monochrome(digital)",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    b = "Monochrome(digital)";
+                    break;
+                case 52:
+                    b = "Multiple tone";
+                    break;
+                default:
+                    b = "Undefined";
+                    break;
+            }
+
             string c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
-            using Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false);
-            using System.Drawing.Image img = System.Drawing.Image.FromStream(stream);
-            record.somebinary = (System.Drawing.Bitmap)img.Clone();
-            int width = img.Width;
-            int height = img.Height;
-            long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
-            return $"Length:{record.cmdlength}, Tone:{b}, KeyCode:{keycode}, Width:{width}, Height:{height}, Color:{c}, BMPsize:{bmpsize}";
+            using (Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false))
+            {
+                using (System.Drawing.Image img = System.Drawing.Image.FromStream(stream))
+                {
+                    record.somebinary = (System.Drawing.Bitmap)img.Clone();
+                    int width = img.Width;
+                    int height = img.Height;
+                    long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
+                    return $"Length:{record.cmdlength}, Tone:{b}, KeyCode:{keycode}, Width:{width}, Height:{height}, Color:{c}, BMPsize:{bmpsize}";
+                }
+            }
         }
 
         //  GS  D   1D 44 30 53 30 20-7E 20-7E 30/34 31 42 4D 00000042-FFFFFFFF 00-FF...
         internal static string DecodeGsDefineWindowsBMPDownloadGraphicsData(EscPosCmd record, int index)
         {
             string keycode = ascii.GetString(record.cmddata, index, 2);
-            string b = record.cmddata[index + 2] switch
+            string b;
+            switch (record.cmddata[index + 2])
             {
-                48 => "Monochrome(digital)",
-                52 => "Multiple tone",
-                _ => "Undefined",
-            };
+                case 48:
+                    b = "Monochrome(digital)";
+                    break;
+                case 52:
+                    b = "Multiple tone";
+                    break;
+                default:
+                    b = "Undefined";
+                    break;
+            }
+
             string c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
-            using Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false);
-            using System.Drawing.Image img = System.Drawing.Image.FromStream(stream);
-            record.somebinary = (System.Drawing.Bitmap)img.Clone();
-            int width = img.Width;
-            int height = img.Height;
-            long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
-            return $"Length:{record.cmdlength}, Tone:{b}, KeyCode:{keycode}, Width:{width}, Height:{height}, Color:{c}, BMPsize:{bmpsize}";
+            using (Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false))
+            {
+                using (System.Drawing.Image img = System.Drawing.Image.FromStream(stream))
+                {
+                    record.somebinary = (System.Drawing.Bitmap)img.Clone();
+                    int width = img.Width;
+                    int height = img.Height;
+                    long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
+                    return $"Length:{record.cmdlength}, Tone:{b}, KeyCode:{keycode}, Width:{width}, Height:{height}, Color:{c}, BMPsize:{bmpsize}";
+                }
+            }
         }
 
         //c GS  E   1D 45 b000x0x0x
@@ -2524,45 +3599,66 @@ namespace EscPosUtils
         //  GS  H   1D 48 00-03/30-33
         internal static string DecodeGsSelectPrintPositionHRICharacters(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Not Printed",
-                48 => "Not Printed",
-                1 => "Above Barcode",
-                49 => "Above Barcode",
-                2 => "Below Barcode",
-                50 => "Below Barcode",
-                3 => "Both Above and Below Barcode",
-                51 => "Both Above and Below Barcode",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Not Printed";
+                case 1:
+                case 49:
+                    return "Above Barcode";
+                case 2:
+                case 50:
+                    return "Below Barcode";
+                case 3:
+                case 51:
+                    return "Both Above and Below Barcode";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  I   1D 49 01-03/31-33/21/23/24/41-45/60/6E-70
         internal static string DecodeGsTransmitPrinterID(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Printer Model ID",
-                49 => "Printer Model ID",
-                2 => "Type ID",
-                50 => "Type ID",
-                3 => "Version ID",
-                51 => "Version ID",
-                33 => "Type Information",
-                35 => "Model specific information 35",
-                36 => "Model specific information 36",
-                65 => "Firmware Version",
-                66 => "Maker name",
-                67 => "Model name",
-                68 => "Serial number",
-                69 => "Font language",
-                96 => "Model specific information 96",
-                110 => "Model specific information 110",
-                111 => "Model specific information 111",
-                112 => "Model specific information 112",
-                _ => "Undefined",
-            };
+                case 1:
+                case 49:
+                    return "Printer Model ID";
+                case 2:
+                case 50:
+                    return "Type ID";
+                case 3:
+                case 51:
+                    return "Version ID";
+                case 33:
+                    return "Type Information";
+                case 35:
+                    return "Model specific information 35";
+                case 36:
+                    return "Model specific information 36";
+                case 65:
+                    return "Firmware Version";
+                case 66:
+                    return "Maker name";
+                case 67:
+                    return "Model name";
+                case 68:
+                    return "Serial number";
+                case 69:
+                    return "Font language";
+                case 96:
+                    return "Model specific information 96";
+                case 110:
+                    return "Model specific information 110";
+                case 111:
+                    return "Model specific information 111";
+                case 112:
+                    return "Model specific information 112";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  P   1D 50 00-FF 00-FF
@@ -2576,18 +3672,30 @@ namespace EscPosUtils
         //  GS  Q 0 1D 51 30 00-03/30-33 0001-10A0 0001-0010 00-FF...
         internal static string DecodeGsObsoletePrintVariableVerticalSizeBitimage(EscPosCmd record, int index)
         {
-            string m = record.cmddata[index] switch
+            string m;
+            switch (record.cmddata[index])
             {
-                0 => "Normal",
-                48 => "Normal",
-                1 => "Double Width",
-                49 => "Double Width",
-                2 => "Double Hight",
-                50 => "Double Hight",
-                3 => "Quadruple",
-                51 => "Quadruple",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    m = "Normal";
+                    break;
+                case 1:
+                case 49:
+                    m = "Double Width";
+                    break;
+                case 2:
+                case 50:
+                    m = "Double Hight";
+                    break;
+                case 3:
+                case 51:
+                    m = "Quadruple";
+                    break;
+                default:
+                    m = "Undefined";
+                    break;
+            }
+
             int x = BitConverter.ToUInt16(record.cmddata, index + 1);
             string xvalue = ((x >= 1) && (x <= 4256)) ? x.ToString("D", invariantculture) : "Out of range";
             int y = BitConverter.ToUInt16(record.cmddata, index + 3);
@@ -2613,25 +3721,31 @@ namespace EscPosUtils
         //  GS  T   1D 54 00/01/30/31
         internal static string DecodeGsSetPrintPositionBeginningOfPrintLine(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Erases buffer data, then move print position to beginning of line",
-                48 => "Erases buffer data, then move print position to beginning of line",
-                1 => "Prints buffer data, then move print position to beginning of line",
-                49 => "Prints buffer data, then move print position to beginning of line",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "Erases buffer data, then move print position to beginning of line";
+                case 1:
+                case 49:
+                    return "Prints buffer data, then move print position to beginning of line";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  ^   1D 5E 01-FF 00-FF 00/01
         internal static string DecodeGsExecuteMacro(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Continuous execution",
-                1 => "Execution by button",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "Continuous execution";
+                case 1:
+                    return "Execution by button";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  a   1D 61 b0x00xxxx
@@ -2649,39 +3763,65 @@ namespace EscPosUtils
         //  GS  f   1D 66 00-04/30-34/61/62
         internal static string DecodeGsSelectFontHRICharacters(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "A",
-                48 => "A",
-                1 => "B",
-                49 => "B",
-                2 => "C",
-                50 => "C",
-                3 => "D",
-                51 => "D",
-                4 => "E",
-                52 => "E",
-                97 => "Special A",
-                98 => "Special B",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "A";
+                case 1:
+                case 49:
+                    return "B";
+                case 2:
+                case 50:
+                    return "C";
+                case 3:
+                case 51:
+                    return "D";
+                case 4:
+                case 52:
+                    return "E";
+                case 97:
+                    return "Special A";
+                case 98:
+                    return "Special B";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  g 0 1D 67 30 00 000A-004F
         internal static string DecodeGsInitializeMaintenanceCounter(EscPosCmd record, int index)
         {
             int n = BitConverter.ToUInt16(record.cmddata, index);
-            string category = (n / 10) switch
+            string category;
+            switch ((n / 10))
             {
-                1 => "Serial impact head",
-                2 => "Thermal head",
-                3 => "Ink jet head",
-                4 => "Shuttle head",
-                5 => "Standard devices",
-                6 => "Optional devices",
-                7 => "Time",
-                _ => "Undefined",
-            };
+                case 1:
+                    category = "Serial impact head";
+                    break;
+                case 2:
+                    category = "Thermal head";
+                    break;
+                case 3:
+                    category = "Ink jet head";
+                    break;
+                case 4:
+                    category = "Shuttle head";
+                    break;
+                case 5:
+                    category = "Standard devices";
+                    break;
+                case 6:
+                    category = "Optional devices";
+                    break;
+                case 7:
+                    category = "Time";
+                    break;
+                default:
+                    category = "Undefined";
+                    break;
+            }
+
             return $"Value:{n}, Category:{category}";
         }
 
@@ -2690,17 +3830,35 @@ namespace EscPosUtils
         {
             int n = BitConverter.ToUInt16(record.cmddata, index);
             string countertype = (n & 0x80) == 0x80 ? "Comulative" : "Resettable";
-            string category = ((n & 0x7F) / 10) switch
+            string category;
+            switch (((n & 0x7F) / 10))
             {
-                1 => "Serial impact head",
-                2 => "Thermal head",
-                3 => "Ink jet head",
-                4 => "Shuttle head",
-                5 => "Standard devices",
-                6 => "Optional devices",
-                7 => "Time",
-                _ => "Undefined",
-            };
+                case 1:
+                    category = "Serial impact head";
+                    break;
+                case 2:
+                    category = "Thermal head";
+                    break;
+                case 3:
+                    category = "Ink jet head";
+                    break;
+                case 4:
+                    category = "Shuttle head";
+                    break;
+                case 5:
+                    category = "Standard devices";
+                    break;
+                case 6:
+                    category = "Optional devices";
+                    break;
+                case 7:
+                    category = "Time";
+                    break;
+                default:
+                    category = "Undefined";
+                    break;
+            }
+
             return $"Value:{n}, Type:{countertype}, Category:{category}";
         }
 
@@ -2717,17 +3875,35 @@ namespace EscPosUtils
         internal static string DecodeGsPrintBarcodeAsciiz(EscPosCmd record, int index)
         {
             byte m = record.cmddata[index];
-            string symbol = m switch
+            string symbol;
+            switch (m)
             {
-                0 => "UPC-A",
-                1 => "UPC-E",
-                2 => "EAN13",
-                3 => "EAN8",
-                4 => "CODE39",
-                5 => "ITF",
-                6 => "CODABAR",
-                _ => "Undefined",
-            };
+                case 0:
+                    symbol = "UPC-A";
+                    break;
+                case 1:
+                    symbol = "UPC-E";
+                    break;
+                case 2:
+                    symbol = "EAN13";
+                    break;
+                case 3:
+                    symbol = "EAN8";
+                    break;
+                case 4:
+                    symbol = "CODE39";
+                    break;
+                case 5:
+                    symbol = "ITF";
+                    break;
+                case 6:
+                    symbol = "CODABAR";
+                    break;
+                default:
+                    symbol = "Undefined";
+                    break;
+            }
+
             string barcode = ascii.GetString(record.cmddata, (index + 1), (int)(record.cmdlength - 3));
             return $"Barcode Type:{symbol}, Data:{barcode}";
         }
@@ -2736,25 +3912,59 @@ namespace EscPosUtils
         internal static string DecodeGsPrintBarcodeSpecifiedLength(EscPosCmd record, int index)
         {
             byte m = record.cmddata[index];
-            string symbol = m switch
+            string symbol;
+            switch (m)
             {
-                65 => "UPC-A",
-                66 => "UPC-E",
-                67 => "EAN13",
-                68 => "EAN8",
-                69 => "CODE39",
-                70 => "ITF",
-                71 => "CODABAR",
-                72 => "CODE93",
-                73 => "CODE128",
-                74 => "GS1-128",
-                75 => "GS1 DataBar Omnidirectional",
-                76 => "GS1 DataBar Truncated",
-                77 => "GS1 DataBar Limited",
-                78 => "GS1 DataBar Expanded",
-                79 => "Code128 auto",
-                _ => "Undefined",
-            };
+                case 65:
+                    symbol = "UPC-A";
+                    break;
+                case 66:
+                    symbol = "UPC-E";
+                    break;
+                case 67:
+                    symbol = "EAN13";
+                    break;
+                case 68:
+                    symbol = "EAN8";
+                    break;
+                case 69:
+                    symbol = "CODE39";
+                    break;
+                case 70:
+                    symbol = "ITF";
+                    break;
+                case 71:
+                    symbol = "CODABAR";
+                    break;
+                case 72:
+                    symbol = "CODE93";
+                    break;
+                case 73:
+                    symbol = "CODE128";
+                    break;
+                case 74:
+                    symbol = "GS1-128";
+                    break;
+                case 75:
+                    symbol = "GS1 DataBar Omnidirectional";
+                    break;
+                case 76:
+                    symbol = "GS1 DataBar Truncated";
+                    break;
+                case 77:
+                    symbol = "GS1 DataBar Limited";
+                    break;
+                case 78:
+                    symbol = "GS1 DataBar Expanded";
+                    break;
+                case 79:
+                    symbol = "Code128 auto";
+                    break;
+                default:
+                    symbol = "Undefined";
+                    break;
+            }
+
             byte n = record.cmddata[index + 1];
             string barcode = ascii.GetString(record.cmddata, (index + 2), n);
             return $"Barcode Type:{symbol}, Data:{barcode}";
@@ -2763,33 +3973,49 @@ namespace EscPosUtils
         //  GS  r   1D 72 01/02/04/31/32/34
         internal static string DecodeGsTransmitStatus(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Paper sensor",
-                49 => "Paper sensor",
-                2 => "Drawer kick out connector",
-                50 => "Drawer kick out connector",
-                4 => "Ink",
-                52 => "Ink",
-                _ => "Undefined",
-            };
+                case 1:
+                case 49:
+                    return "Paper sensor";
+                case 2:
+                case 50:
+                    return "Drawer kick out connector";
+                case 4:
+                case 52:
+                    return "Ink";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  GS  v 0 1D 76 30 00-03/30-33 0001-FFFF 0001-11FF 00-FF...
         internal static string DecodeGsObsoletePrintRasterBitimage(EscPosCmd record, int index)
         {
-            string m = record.cmddata[index] switch
+            string m;
+            switch (record.cmddata[index])
             {
-                0 => "Normal",
-                48 => "Normal",
-                1 => "Double Width",
-                49 => "Double Width",
-                2 => "Double Hight",
-                50 => "Double Hight",
-                3 => "Quadruple",
-                51 => "Quadruple",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    m = "Normal";
+                    break;
+                case 1:
+                case 49:
+                    m = "Double Width";
+                    break;
+                case 2:
+                case 50:
+                    m = "Double Hight";
+                    break;
+                case 3:
+                case 51:
+                    m = "Quadruple";
+                    break;
+                default:
+                    m = "Undefined";
+                    break;
+            }
+
             int x = BitConverter.ToUInt16(record.cmddata, index + 1);
             string xvalue = (x >= 1) ? x.ToString("D", invariantculture) : "Out of range";
             int y = BitConverter.ToUInt16(record.cmddata, index + 3);

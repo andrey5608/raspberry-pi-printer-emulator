@@ -344,38 +344,78 @@ namespace EscPosUtils
             baData = data;
             ctlType = EscPosCmdType.None;
 
-            SbcsFontList = SbcsFontPattern switch
+            switch (SbcsFontPattern)
             {
-                1 => s_SbcsFontType01,
-                2 => s_SbcsFontType02,
-                3 => s_SbcsFontType03,
-                4 => s_SbcsFontType04,
-                5 => s_SbcsFontType05,
-                6 => s_SbcsFontType06,
-                7 => s_SbcsFontType07,
-                8 => s_SbcsFontType08,
-                9 => s_SbcsFontType09,
-                _ => s_SbcsFontType01,
-            };
+                case 1:
+                    SbcsFontList = s_SbcsFontType01;
+                    break;
+                case 2:
+                    SbcsFontList = s_SbcsFontType02;
+                    break;
+                case 3:
+                    SbcsFontList = s_SbcsFontType03;
+                    break;
+                case 4:
+                    SbcsFontList = s_SbcsFontType04;
+                    break;
+                case 5:
+                    SbcsFontList = s_SbcsFontType05;
+                    break;
+                case 6:
+                    SbcsFontList = s_SbcsFontType06;
+                    break;
+                case 7:
+                    SbcsFontList = s_SbcsFontType07;
+                    break;
+                case 8:
+                    SbcsFontList = s_SbcsFontType08;
+                    break;
+                case 9:
+                    SbcsFontList = s_SbcsFontType09;
+                    break;
+                default:
+                    SbcsFontList = s_SbcsFontType01;
+                    break;
+            }
+
             CurrentSbcsFontInfo = SbcsFontList[0];
 
-            KanjiFontList = KanjiFontPattern switch
+            switch (KanjiFontPattern)
             {
-                1 => s_KanjiFontType01,
-                2 => s_KanjiFontType02,
-                3 => s_KanjiFontType03,
-                4 => s_KanjiFontType04,
-                5 => s_KanjiFontType05,
-                _ => s_KanjiFontType01,
-            };
+                case 1:
+                    KanjiFontList = s_KanjiFontType01;
+                    break;
+                case 2:
+                    KanjiFontList = s_KanjiFontType02;
+                    break;
+                case 3:
+                    KanjiFontList = s_KanjiFontType03;
+                    break;
+                case 4:
+                    KanjiFontList = s_KanjiFontType04;
+                    break;
+                case 5:
+                    KanjiFontList = s_KanjiFontType05;
+                    break;
+                default:
+                    KanjiFontList = s_KanjiFontType01;
+                    break;
+            }
+
             CurrentKanjiFontInfo = KanjiFontList[0];
 
-            CurrentVfdFontInfo = LineDisplayFontPattern switch
+            switch (LineDisplayFontPattern)
             {
-                1 => s_VfdFontType01,
-                2 => s_VfdFontType02,
-                _ => s_VfdFontType01,
-            };
+                case 1:
+                    CurrentVfdFontInfo = s_VfdFontType01;
+                    break;
+                case 2:
+                    CurrentVfdFontInfo = s_VfdFontType02;
+                    break;
+                default:
+                    CurrentVfdFontInfo = s_VfdFontType01;
+                    break;
+            }
 
             for (curIndex = 0; curIndex < dataLength; curIndex += blockLength)
             {

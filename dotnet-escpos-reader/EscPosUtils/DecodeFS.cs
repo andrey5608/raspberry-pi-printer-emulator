@@ -46,73 +46,109 @@ namespace EscPosUtils
         //  ESC M   1B 4D 00-04/30-34/61/62
         internal static string DecodeFsSelectKanjiCharacterFont(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "A",
-                48 => "A",
-                1 => "B",
-                49 => "B",
-                2 => "C",
-                50 => "C",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "A";
+                case 1:
+                case 49:
+                    return "B";
+                case 2:
+                case 50:
+                    return "C";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( C 1C 28 43 02 00 30 01/02/31/32
         internal static string DecodeFsSelectCharacterEncodeSystem(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "1 byte character encoding",
-                49 => "1 byte character encoding",
-                2 => "UTF-8",
-                50 => "UTF-8",
-                _ => "Undefined",
-            };
+                case 1:
+                case 49:
+                    return "1 byte character encoding";
+                case 2:
+                case 50:
+                    return "UTF-8";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( C 1C 28 43 03 00 3C 00/01 00/0B/14/1E/29
         internal static string DecodeFsSetFontPriority(EscPosCmd record, int index)
         {
-            string mode = record.cmddata[index] switch
+            string mode;
+            switch (record.cmddata[index])
             {
-                0 => "1st",
-                1 => "2nd",
-                _ => "Undefined",
-            };
-            string font = record.cmddata[index + 1] switch
+                case 0:
+                    mode = "1st";
+                    break;
+                case 1:
+                    mode = "2nd";
+                    break;
+                default:
+                    mode = "Undefined";
+                    break;
+            }
+
+            string font;
+            switch (record.cmddata[index + 1])
             {
-                0 => "ANK",
-                11 => "Japanese",
-                20 => "Simplified Chinese",
-                30 => "Traditional Chinese",
-                41 => "Korean",
-                _ => "Undefined",
-            };
+                case 0:
+                    font = "ANK";
+                    break;
+                case 11:
+                    font = "Japanese";
+                    break;
+                case 20:
+                    font = "Simplified Chinese";
+                    break;
+                case 30:
+                    font = "Traditional Chinese";
+                    break;
+                case 41:
+                    font = "Korean";
+                    break;
+                default:
+                    font = "Undefined";
+                    break;
+            }
+
             return $"Priority:{mode}, Font:{font}";
         }
 
         //  FS  ( E 1C 28 45 06 00 3C 02 30/31 43 4C 52
         internal static string DecodeFsCancelSetValuesTopBottomLogo(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Top Logo",
-                49 => "Bottom Logo",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "Top Logo";
+                case 49:
+                    return "Bottom Logo";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( E 1C 28 45 03 00 3D 02 30-32
         internal static string DecodeFsTransmitSetValuesTopBottomLogo(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Top Logo",
-                49 => "Bottom Logo",
-                50 => "Both Top & Bottom Logo",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "Top Logo";
+                case 49:
+                    return "Bottom Logo";
+                case 50:
+                    return "Both Top & Bottom Logo";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( E 1C 28 45 06 00 3E 02 20-7E 20-7E 30-32 00-FF
@@ -120,13 +156,23 @@ namespace EscPosUtils
         {
             byte kc1 = record.cmddata[index];
             byte kc2 = record.cmddata[index + 1];
-            string align = record.cmddata[index + 2] switch
+            string align;
+            switch (record.cmddata[index + 2])
             {
-                48 => "Left",
-                49 => "Center",
-                50 => "Right",
-                _ => "Undefined",
-            };
+                case 48:
+                    align = "Left";
+                    break;
+                case 49:
+                    align = "Center";
+                    break;
+                case 50:
+                    align = "Right";
+                    break;
+                default:
+                    align = "Undefined";
+                    break;
+            }
+
             byte lines = record.cmddata[index + 3];
             return $"KeyCode1:{kc1:X}, KeyCode2:{kc2:X}, Align:{align}, Remove:{lines:D} Lines";
         }
@@ -136,13 +182,23 @@ namespace EscPosUtils
         {
             byte kc1 = record.cmddata[index];
             byte kc2 = record.cmddata[index + 1];
-            string align = record.cmddata[index + 2] switch
+            string align;
+            switch (record.cmddata[index + 2])
             {
-                48 => "Left",
-                49 => "Center",
-                50 => "Right",
-                _ => "Undefined",
-            };
+                case 48:
+                    align = "Left";
+                    break;
+                case 49:
+                    align = "Center";
+                    break;
+                case 50:
+                    align = "Right";
+                    break;
+                default:
+                    align = "Undefined";
+                    break;
+            }
+
             return $"KeyCode1:{kc1:X}, KeyCode2:{kc2:X}, Align:{align}";
         }
 
@@ -162,21 +218,42 @@ namespace EscPosUtils
             List<string> setting = new List<string>();
             for (int i = 0, currindex = 7; i < count; i++, currindex += 2)
             {
-                string currset = record.cmddata[currindex] switch
+                string currset;
+                switch (record.cmddata[currindex])
                 {
-                    48 => "While Paper feeding to Cutting position:",
-                    64 => "At Power-On:",
-                    65 => "When Roll paper cover is Closed:",
-                    66 => "While Clearing Buffer to Recover from Recoverble Error:",
-                    67 => "After Paper feeding with Paper feed button has Finished:",
-                    _ => "Undefined:",
-                };
-                currset += record.cmddata[currindex + 1] switch
+                    case 48:
+                        currset = "While Paper feeding to Cutting position:";
+                        break;
+                    case 64:
+                        currset = "At Power-On:";
+                        break;
+                    case 65:
+                        currset = "When Roll paper cover is Closed:";
+                        break;
+                    case 66:
+                        currset = "While Clearing Buffer to Recover from Recoverble Error:";
+                        break;
+                    case 67:
+                        currset = "After Paper feeding with Paper feed button has Finished:";
+                        break;
+                    default:
+                        currset = "Undefined:";
+                        break;
+                }
+
+                switch (record.cmddata[currindex + 1])
                 {
-                    48 => "Enable",
-                    49 => "Disable",
-                    _ => "Undefined",
-                };
+                    case 48:
+                        currset += "Enable";
+                        break;
+                    case 49:
+                        currset += "Disable";
+                        break;
+                    default:
+                        currset += "Undefined";
+                        break;
+                }
+
                 setting.Add(currset);
             }
             return string.Join<string>(", ", setting);
@@ -185,18 +262,34 @@ namespace EscPosUtils
         //  FS  ( E 1C 28 45 04 00 41 02 30/31 30/31
         internal static string DecodeFsEnableDisableTopBottomLogoPrinting(EscPosCmd record, int index)
         {
-            string loc = record.cmddata[index] switch
+            string loc;
+            switch (record.cmddata[index])
             {
-                48 => "Top Logo",
-                49 => "Bottom Logo",
-                _ => "Undefined",
-            };
-            string mode = record.cmddata[index + 1] switch
+                case 48:
+                    loc = "Top Logo";
+                    break;
+                case 49:
+                    loc = "Bottom Logo";
+                    break;
+                default:
+                    loc = "Undefined";
+                    break;
+            }
+
+            string mode;
+            switch (record.cmddata[index + 1])
             {
-                48 => "Enable",
-                49 => "Disable",
-                _ => "Undefined",
-            };
+                case 48:
+                    mode = "Enable";
+                    break;
+                case 49:
+                    mode = "Disable";
+                    break;
+                default:
+                    mode = "Undefined";
+                    break;
+            }
+
             return $"Location:{loc}, Mode:{mode}";
         }
 
@@ -208,14 +301,27 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string layoutrefs = record.cmddata[index + 3] switch
+            string layoutrefs;
+            switch (record.cmddata[index + 3])
             {
-                48 => "Receipt(no black mark): do not use layout",
-                49 => "Die cut label paper(no black mark): Print Label top edge, Eject Label bottom edge",
-                50 => "Die cut label paper(black mark): Print Black mark bottom edge, Eject Black mark top edge",
-                51 => "Receipt(black mark): Print Black mark top edge, Eject Black mark top edge",
-                _ => "Undefined",
-            };
+                case 48:
+                    layoutrefs = "Receipt(no black mark): do not use layout";
+                    break;
+                case 49:
+                    layoutrefs = "Die cut label paper(no black mark): Print Label top edge, Eject Label bottom edge";
+                    break;
+                case 50:
+                    layoutrefs =
+                        "Die cut label paper(black mark): Print Black mark bottom edge, Eject Black mark top edge";
+                    break;
+                case 51:
+                    layoutrefs = "Receipt(black mark): Print Black mark top edge, Eject Black mark top edge";
+                    break;
+                default:
+                    layoutrefs = "Undefined";
+                    break;
+            }
+
             string layoutvalues = ascii.GetString(record.cmddata, (index + 4), (length - 2));
             return $"Layout Reference:{layoutrefs}, Settings:{layoutvalues}";
         }
@@ -223,46 +329,64 @@ namespace EscPosUtils
         //  FS  ( L 1C 28 4C 02 00 22 40/50
         internal static string DecodeFsPaperLayoutInformationTransmission(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                64 => "Setting value",
-                80 => "Effective value",
-                _ => "Undefined",
-            };
+                case 64:
+                    return "Setting value";
+                case 80:
+                    return "Effective value";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( L 1C 28 4C 02 00 41 30/31
         internal static string DecodeFsFeedPaperLabelPeelingPosition(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "if the paper is in standby at the label peeling position, the printer does not feed.",
-                49 => "if the paper is in standby at the label peeling position, the printer feeds paper to the next label peeling position.",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "if the paper is in standby at the label peeling position, the printer does not feed.";
+                case 49:
+                    return
+                        "if the paper is in standby at the label peeling position, the printer feeds paper to the next label peeling position.";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( L 1C 28 4C 02 00 42 30/31
         internal static string DecodeFsFeedPaperCuttingPosition(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "if the paper is in standby at the label cutting position, the printer does not feed.",
-                49 => "if the paper is in standby at the label cutting position, the printer feeds paper to the next label cutting position.",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "if the paper is in standby at the label cutting position, the printer does not feed.";
+                case 49:
+                    return
+                        "if the paper is in standby at the label cutting position, the printer feeds paper to the next label cutting position.";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( L 1C 28 4C 02 00 43 30-32
         internal static string DecodeFsFeedPaperPrintStartingPosition(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Feeds to next label, if the paper is in standby at the print starting position, the printer does not feed.",
-                49 => "Feeds to next label, if the paper is in standby at the print starting position, the printer feeds paper to the next print starting position.",
-                50 => "Feeds to current label, if the paper is in standby at the print starting position, the printer does not feed.",
-                _ => "Undefined",
-            };
+                case 48:
+                    return
+                        "Feeds to next label, if the paper is in standby at the print starting position, the printer does not feed.";
+                case 49:
+                    return
+                        "Feeds to next label, if the paper is in standby at the print starting position, the printer feeds paper to the next print starting position.";
+                case 50:
+                    return
+                        "Feeds to current label, if the paper is in standby at the print starting position, the printer does not feed.";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  ( L 1C 28 4C 0002-0003 50 30-39 [30-39]
@@ -280,12 +404,15 @@ namespace EscPosUtils
         //  FS  ( e 1C 28 65 02 00 33 b0000x000
         internal static string DecodeFsEnableDisableAutomaticStatusBackOptional(EscPosCmd record, int index)
         {
-            return (record.cmddata[index] & 0x08) switch
+            switch ((record.cmddata[index] & 0x08))
             {
-                0 => "Disabled",
-                8 => "Enabled",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "Disabled";
+                case 8:
+                    return "Enabled";
+                default:
+                    return "Undefined";
+            }
         }
 
         //c FS  ( f 1C 28 66 0002-FFFF [00-03/30-33 00-FF|00/01/30/31]...
@@ -306,37 +433,81 @@ namespace EscPosUtils
                 byte m = record.cmddata[cfgindex + 1];
                 if ((n <= 3) || ((n >= 48) && (n <= 51)))
                 {
-                    entry = (n & 0x03) switch
+                    switch ((n & 0x03))
                     {
-                        0 => m switch
-                        {
-                            0 => "processing for unrecognized characters : Reading is stopped when a character that cannot be recognized is detected.",
-                            _ => $"processing for unrecognized characters : The character that cannot be recognized is replaced with the character \"?\" and reading is continued. When the number of characters that are replaced with \"?\" becomes({m} + 1), the reading is stopped.",
-                        },
-                        1 => m switch
-                        {
-                            0 => "detailed information for the reading result : Not to add detailed information for an abnormal end.",
-                            1 => "detailed information for the reading result : Add detailed information for an abnormal end.",
-                            _ => "detailed information for the reading result : Undefined",
-                        },
-                        2 => m switch
-                        {
-                            0 => "no addition of the reading result in an abnormal end : The MICR function ends after transmission the reading result.",
-                            48 => "no addition of the reading result in an abnormal end : The MICR function ends after transmission the reading result.",
-                            1 => "no addition of the reading result in an abnormal end : The MICR function is continued after transmission the reading result only for the following abnormal ends",
-                            49 => "no addition of the reading result in an abnormal end : The MICR function is continued after transmission the reading result only for the following abnormal ends",
-                            _ => "no addition of the reading result in an abnormal end : Undefined",
-                        },
-                        3 => m switch
-                        {
-                            0 => "header for transmission data : The MICR function ends after transmission the reading result.",
-                            48 => "header for transmission data : The MICR function ends after transmission the reading result.",
-                            1 => "header for transmission data : The MICR function is continued after transmission the reading result only for the following abnormal ends",
-                            49 => "header for transmission data : The MICR function is continued after transmission the reading result only for the following abnormal ends",
-                            _ => "header for transmission data : Undefined",
-                        },
-                        _ => "",
-                    };
+                        case 0:
+                            switch (m)
+                            {
+                                case 0:
+                                    entry =
+                                        "processing for unrecognized characters : Reading is stopped when a character that cannot be recognized is detected.";
+                                    break;
+                                default:
+                                    entry =
+                                        $"processing for unrecognized characters : The character that cannot be recognized is replaced with the character \"?\" and reading is continued. When the number of characters that are replaced with \"?\" becomes({m} + 1), the reading is stopped.";
+                                    break;
+                            }
+
+                            break;
+                        case 1:
+                            switch (m)
+                            {
+                                case 0:
+                                    entry =
+                                        "detailed information for the reading result : Not to add detailed information for an abnormal end.";
+                                    break;
+                                case 1:
+                                    entry =
+                                        "detailed information for the reading result : Add detailed information for an abnormal end.";
+                                    break;
+                                default:
+                                    entry = "detailed information for the reading result : Undefined";
+                                    break;
+                            }
+
+                            break;
+                        case 2:
+                            switch (m)
+                            {
+                                case 0:
+                                case 48:
+                                    entry =
+                                        "no addition of the reading result in an abnormal end : The MICR function ends after transmission the reading result.";
+                                    break;
+                                case 1:
+                                case 49:
+                                    entry =
+                                        "no addition of the reading result in an abnormal end : The MICR function is continued after transmission the reading result only for the following abnormal ends";
+                                    break;
+                                default:
+                                    entry = "no addition of the reading result in an abnormal end : Undefined";
+                                    break;
+                            }
+
+                            break;
+                        case 3:
+                            switch (m)
+                            {
+                                case 0:
+                                case 48:
+                                    entry =
+                                        "header for transmission data : The MICR function ends after transmission the reading result.";
+                                    break;
+                                case 1:
+                                case 49:
+                                    entry =
+                                        "header for transmission data : The MICR function is continued after transmission the reading result only for the following abnormal ends";
+                                    break;
+                                default:
+                                    entry = "header for transmission data : Undefined";
+                                    break;
+                            }
+
+                            break;
+                        default:
+                            entry = "";
+                            break;
+                    }
                 }
                 else
                 {
@@ -350,29 +521,48 @@ namespace EscPosUtils
         //c FS  ( g 1C 28 67 02 00 20 30/31
         internal static string DecodeFsSelectImageScannerCommandSettings(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Slip Image Scanner [Active Sheet = Check Paper]",
-                49 => "Card Image Scanner [Active Sheet = Card]",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "Slip Image Scanner [Active Sheet = Check Paper]";
+                case 49:
+                    return "Card Image Scanner [Active Sheet = Card]";
+                default:
+                    return "Undefined";
+            }
         }
 
         //c FS  ( g 1C 28 67 05 00 28 30 01/08 31/32 80-7F
         internal static string DecodeFsSetBasicOperationOfImageScanner(EscPosCmd record, int index)
         {
-            string color = record.cmddata[index] switch
+            string color;
+            switch (record.cmddata[index])
             {
-                1 => "Monochrome",
-                8 => "256 level gray scale",
-                _ => "Undefined",
-            };
-            string sharpness = record.cmddata[index + 1] switch
+                case 1:
+                    color = "Monochrome";
+                    break;
+                case 8:
+                    color = "256 level gray scale";
+                    break;
+                default:
+                    color = "Undefined";
+                    break;
+            }
+
+            string sharpness;
+            switch (record.cmddata[index + 1])
             {
-                49 => "No",
-                50 => "Yes",
-                _ => "Undefined",
-            };
+                case 49:
+                    sharpness = "No";
+                    break;
+                case 50:
+                    sharpness = "Yes";
+                    break;
+                default:
+                    sharpness = "Undefined";
+                    break;
+            }
+
             sbyte[] signed = Array.ConvertAll(record.cmddata, b => unchecked((sbyte)b));
             string threshold = signed[index + 2].ToString("D", invariantculture);
             return $"ColorType:{color}, Sharpness:{sharpness}, ThresholdLevel:{threshold}";
@@ -409,30 +599,43 @@ namespace EscPosUtils
         {
             byte m = record.cmddata[index];
             byte n = record.cmddata[index + 1];
-            return m switch
+            switch (m)
             {
-                48 => n switch
-                {
-                    48 => "RAW data does not compress",
-                    49 => "BMP does not compress",
-                    50 => "TIFF does not compress",
-                    _ => "Not compress Undefined",
-                },
-
-                49 => n switch
-                {
-                    48 => "TIFF Compression with CCITT(Grp4)",
-                    _ => "TIFF Undefined",
-                },
-                50 => n switch
-                {
-                    48 => "JPEG High compression rate",
-                    49 => "JPEG Standard compression rate",
-                    50 => "JPEG Low compression rate",
-                    _ => "JPEG Undefined",
-                },
-                _ => "Undefined",
-            };
+                case 48:
+                    switch (n)
+                    {
+                        case 48:
+                            return "RAW data does not compress";
+                        case 49:
+                            return "BMP does not compress";
+                        case 50:
+                            return "TIFF does not compress";
+                        default:
+                            return "Not compress Undefined";
+                    }
+                case 49:
+                    switch (n)
+                    {
+                        case 48:
+                            return "TIFF Compression with CCITT(Grp4)";
+                        default:
+                            return "TIFF Undefined";
+                    }
+                case 50:
+                    switch (n)
+                    {
+                        case 48:
+                            return "JPEG High compression rate";
+                        case 49:
+                            return "JPEG Standard compression rate";
+                        case 50:
+                            return "JPEG Low compression rate";
+                        default:
+                            return "JPEG Undefined";
+                    }
+                default:
+                    return "Undefined";
+            }
         }
 
         //c FS  ( g 1C 28 67 02 00 38 00-0A
@@ -480,28 +683,36 @@ namespace EscPosUtils
         //c FS  ( g 1C 28 67 02 00 3C 30-32
         internal static string DecodeFsSelectTransmissionFormatForImageScanningResult(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                48 => "Binary data format: max 65,535 bytes",
-                49 => "Hexadecimal character string format",
-                50 => "Binary data format: max 4,294,967,295 bytes",
-                _ => "Undefined",
-            };
+                case 48:
+                    return "Binary data format: max 65,535 bytes";
+                case 49:
+                    return "Hexadecimal character string format";
+                case 50:
+                    return "Binary data format: max 4,294,967,295 bytes";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  -   1C 2D 00-02/30-32
         internal static string DecodeFsTurnKanjiUnderlineMode(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "OFF",
-                48 => "OFF",
-                1 => "ON 1 dot",
-                49 => "ON 1 dot",
-                2 => "ON 2 dot",
-                50 => "ON 2 dot",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "OFF";
+                case 1:
+                case 49:
+                    return "ON 1 dot";
+                case 2:
+                case 50:
+                    return "ON 2 dot";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  2   1C 32 7721-777E/EC40-EC9E/FEA1-FEFE 00-FF x 72
@@ -552,16 +763,20 @@ namespace EscPosUtils
         //  FS  C   1C 43 00-02/30-32
         internal static string DecodeFsSelectKanjiCharacterCodeSystem(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "JIS",
-                48 => "JIS",
-                1 => "ShiftJIS",
-                49 => "ShiftJIS",
-                2 => "ShiftJIS2004",
-                50 => "ShiftJIS2004",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    return "JIS";
+                case 1:
+                case 49:
+                    return "ShiftJIS";
+                case 2:
+                case 50:
+                    return "ShiftJIS2004";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  FS  S   1C 53 00-FF/00-20 00-FF/00-20
@@ -573,12 +788,15 @@ namespace EscPosUtils
         //c FS  a 0 1C 61 30 b000000xx
         internal static string DecodeFsObsoleteReadCheckPaper(EscPosCmd record, int index)
         {
-            return (record.cmddata[index] & 0x03) switch
+            switch ((record.cmddata[index] & 0x03))
             {
-                0 => "E13B",
-                1 => "CMC7",
-                _ => "Reserved",
-            };
+                case 0:
+                    return "E13B";
+                case 1:
+                    return "CMC7";
+                default:
+                    return "Reserved";
+            }
         }
 
         //  FS  g 1 1C 67 31 00 00000000-000003FF 0001-0400 20-FF...
@@ -606,18 +824,30 @@ namespace EscPosUtils
         {
             byte imageno = record.cmddata[index];
             string imagenumber = imageno != 0 ? imageno.ToString("D", invariantculture) : "0=Unsupported";
-            string scalling = record.cmddata[index + 1] switch
+            string scalling;
+            switch (record.cmddata[index + 1])
             {
-                0 => "Normal",
-                48 => "Normal",
-                1 => "DoubleWidth",
-                49 => "DoubleWidth",
-                2 => "DoubleHeight",
-                50 => "DoubleHeight",
-                3 => "Quadruple",
-                51 => "Quadruple",
-                _ => "Undefined",
-            };
+                case 0:
+                case 48:
+                    scalling = "Normal";
+                    break;
+                case 1:
+                case 49:
+                    scalling = "DoubleWidth";
+                    break;
+                case 2:
+                case 50:
+                    scalling = "DoubleHeight";
+                    break;
+                case 3:
+                case 51:
+                    scalling = "Quadruple";
+                    break;
+                default:
+                    scalling = "Undefined";
+                    break;
+            }
+
             return $"NVImageNumber:{imagenumber}, Scalling:{scalling}";
         }
 

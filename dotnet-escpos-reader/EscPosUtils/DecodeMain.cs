@@ -64,14 +64,17 @@ namespace EscPosUtils
 
         internal static string DecodeValueOnOff(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0x00 => "OFF",
-                0x30 => "OFF",
-                0x01 => "ON",
-                0x31 => "ON",
-                _ => "Undefined",
-            };
+                case 0x00:
+                case 0x30:
+                    return "OFF";
+                case 0x01:
+                case 0x31:
+                    return "ON";
+                default:
+                    return "Undefined";
+            }
         }
 
         internal static string DecodeValueSInt08(EscPosCmd record, int index)
@@ -108,50 +111,77 @@ namespace EscPosUtils
         //  DLE EOT 10 04 01/02/03/04/07/08/12 [01/02/03]
         internal static string DecodeDleTransmitRealtimeStatus(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Printer",
-                2 => "Offline cause",
-                3 => "Error cause",
-                4 => "Roll paper sensor",
-                7 => record.cmddata[index + 1] switch
-                {
-                    1 => "Ink A",
-                    2 => "Ink B",
-                    _ => "Undefined",
-                },
-                8 => record.cmddata[index + 1] == 3 ? "Peeler" : "Undefined",
-                18 => record.cmddata[index + 1] switch
-                {
-                    1 => "Interface",
-                    2 => "DM-D",
-                    _ => "Undefined",
-                },
-                _ => "Undefined",
-            };
+                case 1:
+                    return "Printer";
+                case 2:
+                    return "Offline cause";
+                case 3:
+                    return "Error cause";
+                case 4:
+                    return "Roll paper sensor";
+                case 7:
+                    switch (record.cmddata[index + 1])
+                    {
+                        case 1:
+                            return "Ink A";
+                        case 2:
+                            return "Ink B";
+                        default:
+                            return "Undefined";
+                    }
+                case 8:
+                    return record.cmddata[index + 1] == 3 ? "Peeler" : "Undefined";
+                case 18:
+                    switch (record.cmddata[index + 1])
+                    {
+                        case 1:
+                            return "Interface";
+                        case 2:
+                            return "DM-D";
+                        default:
+                            return "Undefined";
+                    }
+                default:
+                    return "Undefined";
+            }
         }
 
         //  DLE ENQ 10 05 00/01/02
         internal static string DecodeDleSendRealtimeRequest(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                0 => "Equivalent to pressing the FEED button when waiting for online recovery.",
-                1 => "After returning from the error, printing resumes from the beginning of the line in which the error occurred.",
-                2 => "After clearing the receive buffer and print buffer, recover from the error.",
-                _ => "Undefined",
-            };
+                case 0:
+                    return "Equivalent to pressing the FEED button when waiting for online recovery.";
+                case 1:
+                    return
+                        "After returning from the error, printing resumes from the beginning of the line in which the error occurred.";
+                case 2:
+                    return "After clearing the receive buffer and print buffer, recover from the error.";
+                default:
+                    return "Undefined";
+            }
         }
 
         //  DLE DC4 10 14 01 00/01 01-08
         internal static string DecodeDleGeneratePulseRealtime(EscPosCmd record, int index)
         {
-            string result = record.cmddata[index] switch
+            string result;
+            switch (record.cmddata[index])
             {
-                0 => "Pin 2",
-                1 => "Pin 5",
-                _ => "Undefined Pin",
-            };
+                case 0:
+                    result = "Pin 2";
+                    break;
+                case 1:
+                    result = "Pin 5";
+                    break;
+                default:
+                    result = "Undefined Pin";
+                    break;
+            }
+
             byte duration = record.cmddata[index + 1];
             if (duration >= 1 && duration <= 8)
             {
@@ -196,14 +226,19 @@ namespace EscPosUtils
         //  DLE DC4 10 14 07 01/02/04/05
         internal static string DecodeDleTransmitSpcifiedStatusRealtime(EscPosCmd record, int index)
         {
-            return record.cmddata[index] switch
+            switch (record.cmddata[index])
             {
-                1 => "Basic ASB",
-                2 => "Extended ASB",
-                4 => "Offline response",
-                5 => "Battery",
-                _ => "Undefined",
-            };
+                case 1:
+                    return "Basic ASB";
+                case 2:
+                    return "Extended ASB";
+                case 4:
+                    return "Offline response";
+                case 5:
+                    return "Battery";
+                default:
+                    return "Undefined";
+            }
         }
 
         internal enum ImageDataType
@@ -218,14 +253,25 @@ namespace EscPosUtils
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(x, y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
             ColorPalette palette = bitmap.Palette;
             palette.Entries[0] = Color.White;
-            palette.Entries[1] = color switch
+            switch (color)
             {
-                "1" => Color.Black,
-                "2" => Color.Red,
-                "3" => Color.Green,
-                "4" => Color.Blue,
-                _ => Color.Yellow,
-            };
+                case "1":
+                    palette.Entries[1] = Color.Black;
+                    break;
+                case "2":
+                    palette.Entries[1] = Color.Red;
+                    break;
+                case "3":
+                    palette.Entries[1] = Color.Green;
+                    break;
+                case "4":
+                    palette.Entries[1] = Color.Blue;
+                    break;
+                default:
+                    palette.Entries[1] = Color.Yellow;
+                    break;
+            }
+
             bitmap.Palette = palette;
             System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
             int workBufferSize = bmpData.Stride * bmpData.Height;

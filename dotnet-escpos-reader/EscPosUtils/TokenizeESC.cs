@@ -166,24 +166,41 @@ namespace EscPosUtils
                         blockLength = 5 + ctlByte4 * 0x100 + ctlByte3;
                         if (ctlByte2 == 0x41) // ESC ( A
                         {
-                            ctlType = (((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF) switch
+                            switch ((((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF))
                             {
                                 // ESC ( A dL dH 0
-                                0x30 => EscPosCmdType.EscBeeperBuzzer,
+                                case 0x30:
+                                    ctlType = EscPosCmdType.EscBeeperBuzzer;
+                                    break;
                                 // ESC ( A dL dH a
-                                0x61 => blockLength switch
-                                {
-                                    8 => EscPosCmdType.EscBeeperBuzzerM1a,
-                                    10 => EscPosCmdType.EscBeeperBuzzerM1b,
-                                    _ => EscPosCmdType.EscUnknown,
-                                },
+                                case 0x61:
+                                    switch (blockLength)
+                                    {
+                                        case 8:
+                                            ctlType = EscPosCmdType.EscBeeperBuzzerM1a;
+                                            break;
+                                        case 10:
+                                            ctlType = EscPosCmdType.EscBeeperBuzzerM1b;
+                                            break;
+                                        default:
+                                            ctlType = EscPosCmdType.EscUnknown;
+                                            break;
+                                    }
+
+                                    break;
                                 // ESC ( A dL dH b
-                                0x62 => EscPosCmdType.EscBeeperBuzzerOffline,
+                                case 0x62:
+                                    ctlType = EscPosCmdType.EscBeeperBuzzerOffline;
+                                    break;
                                 // ESC ( A dL dH c
-                                0x63 => EscPosCmdType.EscBeeperBuzzerNearEnd,
-                                // ESC ( A dL dH ??
-                                _ => EscPosCmdType.EscUnknown,
-                            };
+                                case 0x63:
+                                    ctlType = EscPosCmdType.EscBeeperBuzzerNearEnd;
+                                    break;
+                                default:
+                                    // ESC ( A dL dH ??
+                                    ctlType = EscPosCmdType.EscUnknown;
+                                    break;
+                            }
                         }
                         else if (ctlByte2 == 0x59) // ESC ( Y
                         {               // 5 + 2
@@ -251,21 +268,34 @@ namespace EscPosUtils
 
                     case 0x63: // ESC c
                         blockLength = 4;
-                        ctlType = ctlByte2 switch
+                        switch (ctlByte2)
                         {
                             // ESC c 0
-                            0x30 => EscPosCmdType.EscSelectPaperTypesPrinting,
+                            case 0x30:
+                                ctlType = EscPosCmdType.EscSelectPaperTypesPrinting;
+                                break;
                             // ESC c 1
-                            0x31 => EscPosCmdType.EscSelectPaperTypesCommandSettings,
+                            case 0x31:
+                                ctlType = EscPosCmdType.EscSelectPaperTypesCommandSettings;
+                                break;
                             // ESC c 3
-                            0x33 => EscPosCmdType.EscSelectPaperSensorsPaperEndSignals,
+                            case 0x33:
+                                ctlType = EscPosCmdType.EscSelectPaperSensorsPaperEndSignals;
+                                break;
                             // ESC c 4
-                            0x34 => EscPosCmdType.EscSelectPaperSensorsStopPrinting,
+                            case 0x34:
+                                ctlType = EscPosCmdType.EscSelectPaperSensorsStopPrinting;
+                                break;
                             // ESC c 5
-                            0x35 => EscPosCmdType.EscEnableDisablePanelButton,
-                            // ESC c ??
-                            _ => EscPosCmdType.EscUnknown,
-                        };
+                            case 0x35:
+                                ctlType = EscPosCmdType.EscEnableDisablePanelButton;
+                                break;
+                            default:
+                                // ESC c ??
+                                ctlType = EscPosCmdType.EscUnknown;
+                                break;
+                        }
+
                         break;
 
                     default: // ESC ??

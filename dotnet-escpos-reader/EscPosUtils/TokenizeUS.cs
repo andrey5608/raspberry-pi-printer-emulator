@@ -76,28 +76,55 @@ namespace EscPosUtils
                 {
                     case 0x28: // US (
                         blockLength = 5 + ctlByte4 * 0x100 + ctlByte3;
-                        ctlType = ctlByte2 switch
+                        switch (ctlByte2)
                         {
                             // US ( A
-                            0x41 => EscPosCmdType.VfdUsSelectDisplays,
+                            case 0x41:
+                                ctlType = EscPosCmdType.VfdUsSelectDisplays;
+                                break;
                             // US ( E
-                            0x45 => ctlByte5 switch
-                            {
-                                0x01 => EscPosCmdType.VfdUsChangeIntoUserSettingMode,
-                                0x02 => EscPosCmdType.VfdUsEndUserSettingMode,
-                                0x03 => EscPosCmdType.VfdUsSetMemorySwitchValues,
-                                0x04 => EscPosCmdType.VfdUsSendingDisplayingMemorySwitchValues,
-                                _ => EscPosCmdType.VfdUsUnknown,
-                            },
+                            case 0x45:
+                                switch (ctlByte5)
+                                {
+                                    case 0x01:
+                                        ctlType = EscPosCmdType.VfdUsChangeIntoUserSettingMode;
+                                        break;
+                                    case 0x02:
+                                        ctlType = EscPosCmdType.VfdUsEndUserSettingMode;
+                                        break;
+                                    case 0x03:
+                                        ctlType = EscPosCmdType.VfdUsSetMemorySwitchValues;
+                                        break;
+                                    case 0x04:
+                                        ctlType = EscPosCmdType.VfdUsSendingDisplayingMemorySwitchValues;
+                                        break;
+                                    default:
+                                        ctlType = EscPosCmdType.VfdUsUnknown;
+                                        break;
+                                }
+
+                                break;
                             // US ( G
-                            0x47 => ctlByte5 switch
-                            {
-                                0x60 => EscPosCmdType.VfdUsKanjiCharacterModeOnOff,
-                                0x61 => EscPosCmdType.VfdUsSelectKanjiCharacterCodeSystem,
-                                _ => EscPosCmdType.VfdUsUnknown,
-                            },
-                            _ => EscPosCmdType.VfdUsUnknown,
-                        };
+                            case 0x47:
+                                switch (ctlByte5)
+                                {
+                                    case 0x60:
+                                        ctlType = EscPosCmdType.VfdUsKanjiCharacterModeOnOff;
+                                        break;
+                                    case 0x61:
+                                        ctlType = EscPosCmdType.VfdUsSelectKanjiCharacterCodeSystem;
+                                        break;
+                                    default:
+                                        ctlType = EscPosCmdType.VfdUsUnknown;
+                                        break;
+                                }
+
+                                break;
+                            default:
+                                ctlType = EscPosCmdType.VfdUsUnknown;
+                                break;
+                        }
+
                         break;
 
                     default:
