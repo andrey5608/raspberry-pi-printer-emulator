@@ -173,14 +173,16 @@ namespace EscPosDecode
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (IsItem(line)){
+                    if (IsItem(line))
+                    {
                         Console.WriteLine($"Found item: {line}");
                     }
                 }
             }
         }
 
-        private static bool IsItem(string itemToCheck){
+        private static bool IsItem(string itemToCheck)
+        {
             var regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}([\d\.,\d]{1,}).*$";
             return Regex.Match(itemToCheck, regExp).Success;
         }
@@ -398,14 +400,15 @@ namespace EscPosDecode
                         break;
 
                     case EscPosCmdType.VfdUsKanjiCharacterModeOnOff:
-                        
-                        switch(item.cmddata[6])
+
+                        switch (item.cmddata[6])
                         {
                             case 0: vfdkanjimode = false; break;
                             case 48: vfdkanjimode = false; break;
                             case 1: vfdkanjimode = true; break;
                             case 49: vfdkanjimode = true; break;
-                            default: vfdkanjimode = vfdkanjimode; break;
+                            default:
+                                break;
                         };
                         break;
 
@@ -547,9 +550,11 @@ namespace EscPosDecode
             byte[] buffer = Array.Empty<byte>();
             try
             {
-                using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
+                using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    buffer = new byte[fs.Length];
+                    fs.Read(buffer, 0, buffer.Length);
+                }
             }
             catch { }
             return buffer;
@@ -561,8 +566,10 @@ namespace EscPosDecode
             {
                 FileMode mode = File.Exists(filePath) ? FileMode.Truncate : FileMode.Create;
                 FileStream ostrm = new FileStream(filePath, mode, FileAccess.Write);
-                using var fs = new StreamWriter(ostrm);
-                fs.Write(data);
+                using (var fs = new StreamWriter(ostrm))
+                {
+                    fs.Write(data);
+                }
             }
             catch { }
             return;
@@ -797,12 +804,13 @@ namespace EscPosDecode
                             }
                             try
                             {
-                                switch(args[i].ToUpper())
+                                switch (args[i].ToUpper())
                                 {
                                     case "ON":
                                         initialkanjion = true; break;
-                                    case "OFF": initialkanjion = false;break;
-                                    default: initialkanjion = initialkanjion; break;
+                                    case "OFF": initialkanjion = false; break;
+                                    default:
+                                        break;
                                 };
                             }
                             catch
