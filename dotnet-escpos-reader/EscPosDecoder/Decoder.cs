@@ -181,7 +181,12 @@ namespace Decoder
             try
             {
                 var itemMatch = MatchPlace(line);
-                if (itemMatch.Success) return new Place(itemMatch.Groups[1].Value);
+                if (itemMatch.Success)
+                {
+                    var placeNumber = itemMatch.Groups[1].Value;
+                    Console.WriteLine($"Place: {placeNumber}");
+                    return new Place(placeNumber);
+                }
             }
             catch (Exception e)
             {
@@ -207,7 +212,6 @@ namespace Decoder
                     var itemMatchGroup = itemMatch.Groups[i];
                     var value = itemMatchGroup.Value.Trim();
 
-
                     switch (i)
                     {
                         case 1 when int.TryParse(value, out quantity):
@@ -221,7 +225,7 @@ namespace Decoder
                             break;
                     }
 
-                    Console.WriteLine("Value: " + value);
+                    //Console.WriteLine("Value: " + value);
                 }
 
                 Console.WriteLine($"Quantity: {quantity}; Item: {itemName}; Price: {price}");
