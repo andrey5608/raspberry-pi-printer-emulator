@@ -104,5 +104,11 @@ namespace Decoder
             const string regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}(\d{1,}[\.,]\d{1,}).*$";
             return Regex.Match(itemToCheck, regExp);
         }
+
+        private static Match MatchTopping(string itemToCheck)
+        {
+            const string regExp = @"^[.*\s]{0,}([\d]{1,2})[.*]{0,}\s{0,}([a-zA-Z]{1,}.*)\s{1,}(\d{1,}[\.,]\d{1,}).*$";// todo adjust regexp
+            return Regex.Match(itemToCheck, regExp);
+        }
     }
 }
