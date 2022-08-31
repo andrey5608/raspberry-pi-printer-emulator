@@ -1,4 +1,4 @@
-﻿namespace Decoder
+﻿namespace Decoder.Models
 {
     public class Place
     {

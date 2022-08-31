@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
-namespace Decoder
+namespace Decoder.Models
 {
     public class Item
     {
@@ -9,27 +10,37 @@ namespace Decoder
         public string Name;
         public double Price;
         public double TotalPrice;
-        List<Topping>  Toppings;
+        public List<Topping> Toppings;
 
         public Item(int quantity, string name, double price, List<Topping> toppingList = null)
         {
             var sumOfToppings = 0.0;
-            this.Name = name;
-            this.Quantity = quantity;
+            Name = Regex.Replace(name, @"\s+", " "); ;
+            Quantity = quantity;
 
             if (toppingList != null)
             {
                 sumOfToppings = toppingList.Sum(topping => topping.Quantity * topping.Price);
             }
 
-            this.Price = price + sumOfToppings;
-            this.Toppings = toppingList;
+            Price = price;
+            TotalPrice = price + sumOfToppings;
+            Toppings = toppingList;
         }
 
         public void AddTopping(Topping topping)
         {
-            this.Toppings.Add(topping);
-            this.TotalPrice = this.Price + topping.Price;
+            Toppings?.Add(topping);
+            TotalPrice = Price + topping.Price;
+        }
+
+        public override string ToString()
+        {
+            var toppingsToString = Toppings != null && Toppings.Count > 0
+                ? string.Join("; ", Toppings.Select(x => x.Name).ToArray())
+                : "[]";
+            return
+                $"'{Name}': Quantity: {Quantity}; Price: {Price}; Total price: {TotalPrice}; Toppings: {toppingsToString} ";
         }
     }
 }

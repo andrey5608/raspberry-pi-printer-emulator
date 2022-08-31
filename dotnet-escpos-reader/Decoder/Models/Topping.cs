@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace Decoder
+namespace Decoder.Models
 {
     public class Topping
     {
@@ -14,7 +10,7 @@ namespace Decoder
 
         public Topping(int quantity, string name, double price)
         {
-            this.Name = name;
+            this.Name = Regex.Replace(name, @"\s+", " ");
             this.Quantity = quantity;
             this.Price = price;
         }
