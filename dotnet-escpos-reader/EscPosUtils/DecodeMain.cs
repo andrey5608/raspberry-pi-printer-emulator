@@ -79,7 +79,7 @@ namespace EscPosUtils
 
         internal static string DecodeValueSInt08(EscPosCmd record, int index)
         {
-            sbyte[] signed = Array.ConvertAll(record.cmddata, b => unchecked((sbyte)b));
+            var signed = Array.ConvertAll(record.cmddata, b => unchecked((sbyte)b));
             return signed[index].ToString("D", invariantculture);
         }
 
@@ -182,7 +182,7 @@ namespace EscPosUtils
                     break;
             }
 
-            byte duration = record.cmddata[index + 1];
+            var duration = record.cmddata[index + 1];
             if (duration >= 1 && duration <= 8)
             {
                 result += ", Pulse " + duration.ToString("D", invariantculture) + " x 100ms";
@@ -198,11 +198,11 @@ namespace EscPosUtils
         internal static string DecodeDleSoundBuzzRealtime(EscPosCmd record, int index)
         {
             string result;
-            byte pattern = record.cmddata[index];
+            var pattern = record.cmddata[index];
             if (pattern <= 7)
             {
                 result = "Buzzer pattern No." + pattern.ToString("D", invariantculture);
-                byte cycles = record.cmddata[index + 2];
+                var cycles = record.cmddata[index + 2];
                 if (cycles == 0)
                 {
                     result += ", Repeat infinite.";
@@ -248,10 +248,10 @@ namespace EscPosUtils
         }
         internal static System.Drawing.Bitmap GetBitmap(int width, int height, ImageDataType imageDataType, byte[] imageData, int srcindex, string color)
         {
-            int x = imageDataType == ImageDataType.Raster ? width : height;
-            int y = imageDataType == ImageDataType.Raster ? height : width;
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(x, y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-            ColorPalette palette = bitmap.Palette;
+            var x = imageDataType == ImageDataType.Raster ? width : height;
+            var y = imageDataType == ImageDataType.Raster ? height : width;
+            var bitmap = new System.Drawing.Bitmap(x, y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var palette = bitmap.Palette;
             palette.Entries[0] = Color.White;
             switch (color)
             {
@@ -273,18 +273,18 @@ namespace EscPosUtils
             }
 
             bitmap.Palette = palette;
-            System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-            int workBufferSize = bmpData.Stride * bmpData.Height;
-            byte[] workBuffer = new byte[workBufferSize];
-            int xbytes = ((x + 7) / 8);
-            int dstindex = 0;
-            for (int yindex = 0; yindex < bmpData.Height; yindex++)
+            var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var workBufferSize = bmpData.Stride * bmpData.Height;
+            var workBuffer = new byte[workBufferSize];
+            var xbytes = ((x + 7) / 8);
+            var dstindex = 0;
+            for (var yindex = 0; yindex < bmpData.Height; yindex++)
             {
                 Buffer.BlockCopy(imageData, srcindex, workBuffer, dstindex, xbytes);
                 srcindex += xbytes;
                 dstindex += bmpData.Stride;
             }
-            IntPtr ptr = bmpData.Scan0;
+            var ptr = bmpData.Scan0;
             System.Runtime.InteropServices.Marshal.Copy(workBuffer, 0, ptr, workBufferSize);
             bitmap.UnlockBits(bmpData);
             if (imageDataType == ImageDataType.Column)
@@ -690,16 +690,16 @@ namespace EscPosUtils
             {
                 throw new ArgumentNullException(nameof(data));
             }
-            int count = data.Count;
-            for (int i = 0; i < count; i++)
+            var count = data.Count;
+            for (var i = 0; i < count; i++)
             {
-                DecInfo? currDec = s_DecodeType[data[i].cmdtype];
+                var currDec = s_DecodeType[data[i].cmdtype];
                 if (currDec == null)
                 {
                     data[i].paramdetail = "";
                     continue;
                 }
-                string detailed = currDec?.leader ?? "";
+                var detailed = currDec?.leader ?? "";
                 if (currDec?.decodedetail != null)
                 {
                     detailed += currDec?.decodedetail(data[i], (int)currDec?.index);

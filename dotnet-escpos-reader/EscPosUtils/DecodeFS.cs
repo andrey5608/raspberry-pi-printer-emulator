@@ -36,10 +36,10 @@ namespace EscPosUtils
         //  FS  !   1C 21 bx0xx0000
         internal static string DecodeFsSelectPrintModeKanji(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string underline = (mode & 0x80) == 0x80 ? "ON" : "OFF";
-            string doublewidth = (mode & 0x20) == 0x20 ? "ON" : "OFF";
-            string doubleheight = (mode & 0x10) == 0x10 ? "ON" : "OFF";
+            var mode = record.cmddata[index];
+            var underline = (mode & 0x80) == 0x80 ? "ON" : "OFF";
+            var doublewidth = (mode & 0x20) == 0x20 ? "ON" : "OFF";
+            var doubleheight = (mode & 0x10) == 0x10 ? "ON" : "OFF";
             return $"Underline:{underline}, DoubleWidth:{doublewidth}, DoubleHeight:{doubleheight}";
         }
 
@@ -154,8 +154,8 @@ namespace EscPosUtils
         //  FS  ( E 1C 28 45 06 00 3E 02 20-7E 20-7E 30-32 00-FF
         internal static string DecodeFsSetTopLogoPrinting(EscPosCmd record, int index)
         {
-            byte kc1 = record.cmddata[index];
-            byte kc2 = record.cmddata[index + 1];
+            var kc1 = record.cmddata[index];
+            var kc2 = record.cmddata[index + 1];
             string align;
             switch (record.cmddata[index + 2])
             {
@@ -173,15 +173,15 @@ namespace EscPosUtils
                     break;
             }
 
-            byte lines = record.cmddata[index + 3];
+            var lines = record.cmddata[index + 3];
             return $"KeyCode1:{kc1:X}, KeyCode2:{kc2:X}, Align:{align}, Remove:{lines:D} Lines";
         }
 
         //  FS  ( E 1C 28 45 05 00 3F 02 20-7E 20-7E 30-32
         internal static string DecodeFsSetBottomLogoPrinting(EscPosCmd record, int index)
         {
-            byte kc1 = record.cmddata[index];
-            byte kc2 = record.cmddata[index + 1];
+            var kc1 = record.cmddata[index];
+            var kc2 = record.cmddata[index + 1];
             string align;
             switch (record.cmddata[index + 2])
             {
@@ -214,8 +214,8 @@ namespace EscPosUtils
             {
                 return "Odd length";
             }
-            int count = (length / 2) - 1;
-            List<string> setting = new List<string>();
+            var count = (length / 2) - 1;
+            var setting = new List<string>();
             for (int i = 0, currindex = 7; i < count; i++, currindex += 2)
             {
                 string currset;
@@ -322,7 +322,7 @@ namespace EscPosUtils
                     break;
             }
 
-            string layoutvalues = ascii.GetString(record.cmddata, (index + 4), (length - 2));
+            var layoutvalues = ascii.GetString(record.cmddata, (index + 4), (length - 2));
             return $"Layout Reference:{layoutrefs}, Settings:{layoutvalues}";
         }
 
@@ -397,7 +397,7 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            string margin = ascii.GetString(record.cmddata, (index + 3), (length - 1));
+            var margin = ascii.GetString(record.cmddata, (index + 3), (length - 1));
             return $"Layout Error Special Margin:{margin} x 0.1mm";
         }
 
@@ -423,14 +423,14 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            List<string> config = new List<string> { };
-            int count = length / 2;
-            int cfgindex = index + 2;
-            for (int i = 0; i < count; i++, cfgindex += 2)
+            var config = new List<string> { };
+            var count = length / 2;
+            var cfgindex = index + 2;
+            for (var i = 0; i < count; i++, cfgindex += 2)
             {
                 string entry;
-                byte n = record.cmddata[cfgindex];
-                byte m = record.cmddata[cfgindex + 1];
+                var n = record.cmddata[cfgindex];
+                var m = record.cmddata[cfgindex + 1];
                 if ((n <= 3) || ((n >= 48) && (n <= 51)))
                 {
                     switch ((n & 0x03))
@@ -563,18 +563,18 @@ namespace EscPosUtils
                     break;
             }
 
-            sbyte[] signed = Array.ConvertAll(record.cmddata, b => unchecked((sbyte)b));
-            string threshold = signed[index + 2].ToString("D", invariantculture);
+            var signed = Array.ConvertAll(record.cmddata, b => unchecked((sbyte)b));
+            var threshold = signed[index + 2].ToString("D", invariantculture);
             return $"ColorType:{color}, Sharpness:{sharpness}, ThresholdLevel:{threshold}";
         }
 
         //c FS  ( g 1C 28 67 05 00 29 00-62 00-E4 00/02-64 00/02-E6
         internal static string DecodeFsSetScanningArea(EscPosCmd record, int index)
         {
-            byte x1 = record.cmddata[index];
-            byte y1 = record.cmddata[index + 1];
-            byte x2 = record.cmddata[index + 2];
-            byte y2 = record.cmddata[index + 3];
+            var x1 = record.cmddata[index];
+            var y1 = record.cmddata[index + 1];
+            var x2 = record.cmddata[index + 2];
+            var y2 = record.cmddata[index + 3];
             if (x1 > 98)
             {
                 return "x1 value out of range";
@@ -597,8 +597,8 @@ namespace EscPosUtils
         //c FS  ( g 1C 28 67 03 00 32 30-32 30-32
         internal static string DecodeFsSelectCompressionMethodForImageData(EscPosCmd record, int index)
         {
-            byte m = record.cmddata[index];
-            byte n = record.cmddata[index + 1];
+            var m = record.cmddata[index];
+            var n = record.cmddata[index + 1];
             switch (m)
             {
                 case 48:
@@ -641,7 +641,7 @@ namespace EscPosUtils
         //c FS  ( g 1C 28 67 02 00 38 00-0A
         internal static string DecodeFsDeleteCroppingArea(EscPosCmd record, int index)
         {
-            byte area = record.cmddata[index];
+            var area = record.cmddata[index];
             if (area > 10)
             {
                 return "Area number value out of range";
@@ -652,11 +652,11 @@ namespace EscPosUtils
         //c FS  ( g 1C 28 67 06 00 39 00-0A 00-64 00-E4 02-64 02-E6
         internal static string DecodeFsSetCroppingArea(EscPosCmd record, int index)
         {
-            byte area = record.cmddata[index];
-            byte x1 = record.cmddata[index + 1];
-            byte y1 = record.cmddata[index + 2];
-            byte x2 = record.cmddata[index + 3];
-            byte y2 = record.cmddata[index + 4];
+            var area = record.cmddata[index];
+            var x1 = record.cmddata[index + 1];
+            var y1 = record.cmddata[index + 2];
+            var x2 = record.cmddata[index + 3];
+            var y2 = record.cmddata[index + 4];
             if (area > 10)
             {
                 return "Area number value out of range";
@@ -718,11 +718,11 @@ namespace EscPosUtils
         //  FS  2   1C 32 7721-777E/EC40-EC9E/FEA1-FEFE 00-FF x 72
         internal static string DecodeFsDefineUserDefinedKanjiCharacters2424(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
-            int code = ((int)c1 << 8) + (int)c2;
-            int width = 24;
-            int height = 24;
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
+            var code = ((int)c1 << 8) + (int)c2;
+            var width = 24;
+            var height = 24;
             record.somebinary = GetBitmap(width, height, ImageDataType.Column, record.cmddata, (index + 2), "1");
             return $"CharacterCode:{code:X}";
         }
@@ -730,11 +730,11 @@ namespace EscPosUtils
         //  FS  2   1C 32 7721-777E/EC40-EC9E/FEA1-FEFE 00-FF x 60
         internal static string DecodeFsDefineUserDefinedKanjiCharacters2024(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
-            int code = ((int)c1 << 8) + (int)c2;
-            int width = 20;
-            int height = 24;
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
+            var code = ((int)c1 << 8) + (int)c2;
+            var width = 20;
+            var height = 24;
             record.somebinary = GetBitmap(width, height, ImageDataType.Column, record.cmddata, (index + 2), "1");
             return $"CharacterCode:{code:X}";
         }
@@ -742,11 +742,11 @@ namespace EscPosUtils
         //  FS  2   1C 32 7721-777E/EC40-EC9E/FEA1-FEFE 00-FF x 32
         internal static string DecodeFsDefineUserDefinedKanjiCharacters1616(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
-            int code = ((int)c1 << 8) + (int)c2;
-            int width = 16;
-            int height = 16;
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
+            var code = ((int)c1 << 8) + (int)c2;
+            var width = 16;
+            var height = 16;
             record.somebinary = GetBitmap(width, height, ImageDataType.Column, record.cmddata, (index + 2), "1");
             return $"CharacterCode:{code:X}";
         }
@@ -754,9 +754,9 @@ namespace EscPosUtils
         //  FS  ?   1C 3F 7721-777E/EC40-EC9E/FEA1-FEFE
         internal static string DecodeFsCancelUserDefinedKanjiCharacters(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
-            int code = ((int)c1 << 8) + (int)c2;
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
+            var code = ((int)c1 << 8) + (int)c2;
             return $"CharacterCode:{code:X}";
         }
 
@@ -802,28 +802,28 @@ namespace EscPosUtils
         //  FS  g 1 1C 67 31 00 00000000-000003FF 0001-0400 20-FF...
         internal static string DecodeFsObsoleteWriteNVUserMemory(EscPosCmd record, int index)
         {
-            uint start = BitConverter.ToUInt32(record.cmddata, index);
-            string startaddress = start < 0x400 ? "0x" + start.ToString("X8", invariantculture) : "Out of range";
+            var start = BitConverter.ToUInt32(record.cmddata, index);
+            var startaddress = start < 0x400 ? "0x" + start.ToString("X8", invariantculture) : "Out of range";
             int write = BitConverter.ToUInt16(record.cmddata, (index + 4));
-            string writesize = ((write != 0) && (write <= 0x400)) ? "0x" + write.ToString("X4", invariantculture) : "Out of range";
+            var writesize = ((write != 0) && (write <= 0x400)) ? "0x" + write.ToString("X4", invariantculture) : "Out of range";
             return $"StartAddress:{startaddress}, Size:{writesize}";
         }
 
         //  FS  g 2 1C 67 32 00 00000000-000003FF 0001-0400
         internal static string DecodeFsObsoleteReadNVUserMemory(EscPosCmd record, int index)
         {
-            uint start = BitConverter.ToUInt32(record.cmddata, index);
-            string startaddress = start < 0x400 ? "0x" + start.ToString("X8", invariantculture) : "Out of range";
+            var start = BitConverter.ToUInt32(record.cmddata, index);
+            var startaddress = start < 0x400 ? "0x" + start.ToString("X8", invariantculture) : "Out of range";
             int read = BitConverter.ToUInt16(record.cmddata, (index + 4));
-            string readsize = ((read != 0) && (read <= 0x400)) ? "0x" + read.ToString("X4", invariantculture) : "Out of range";
+            var readsize = ((read != 0) && (read <= 0x400)) ? "0x" + read.ToString("X4", invariantculture) : "Out of range";
             return $"StartAddress:{startaddress}, Size:{readsize}";
         }
 
         //  FS  p   1C 70 01-FF 00-03/30-33
         internal static string DecodeFsObsoletePrintNVBitimage(EscPosCmd record, int index)
         {
-            byte imageno = record.cmddata[index];
-            string imagenumber = imageno != 0 ? imageno.ToString("D", invariantculture) : "0=Unsupported";
+            var imageno = record.cmddata[index];
+            var imagenumber = imageno != 0 ? imageno.ToString("D", invariantculture) : "0=Unsupported";
             string scalling;
             switch (record.cmddata[index + 1])
             {
@@ -854,17 +854,17 @@ namespace EscPosUtils
         //  FS  q   1C 71 01-FF [0001-03FF 0001-0240 00-FF...]...
         internal static string DecodeFsObsoleteDefineNVBitimage(EscPosCmd record, int index)
         {
-            byte images = record.cmddata[index];
-            string imagecount = images != 0 ? images.ToString("D", invariantculture) : "0=Unsupported";
-            List<System.Drawing.Bitmap> imagelist = new List<System.Drawing.Bitmap>();
-            int i = index + 1;
-            for (int n = 0; n < images; n++)
+            var images = record.cmddata[index];
+            var imagecount = images != 0 ? images.ToString("D", invariantculture) : "0=Unsupported";
+            var imagelist = new List<System.Drawing.Bitmap>();
+            var i = index + 1;
+            for (var n = 0; n < images; n++)
             {
                 int width = BitConverter.ToUInt16(record.cmddata, i);
                 int heightbytes = BitConverter.ToUInt16(record.cmddata, i + 2);
-                int height = heightbytes * 8;
+                var height = heightbytes * 8;
                 i += 4;
-                int datalength = width * heightbytes;
+                var datalength = width * heightbytes;
                 if (((heightbytes > 0) && (heightbytes <= 0x240)) && ((width > 0) && (width <= 0x3FF)))
                 {
                     imagelist.Add(GetBitmap(width, height, ImageDataType.Column, record.cmddata, i, "1"));

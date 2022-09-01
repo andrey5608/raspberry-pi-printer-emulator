@@ -123,7 +123,7 @@ namespace EscPosUtils
                                 long codeCount = ctlByte4 - ctlByte3 + 1;
                                 long maxFontWidth = CurrentSbcsFontInfo.xbytes;
                                 long count;
-                                long workIndex = curIndex + 5;
+                                var workIndex = curIndex + 5;
                                 for (count = 0; (count < codeCount) && (workIndex < dataLength); count++)
                                 {
                                     long fontWidth = baData[workIndex];
@@ -243,10 +243,10 @@ namespace EscPosUtils
                             blockLength = 0;
                             ctlType = EscPosCmdType.EscHorizontalTabPosition;
                             byte prevPosition = 0;
-                            long workIndex = curIndex + 2;
+                            var workIndex = curIndex + 2;
                             for (long i = 0; (i < 32) && (workIndex < dataLength); i++, workIndex++)
                             {
-                                byte c = baData[workIndex];
+                                var c = baData[workIndex];
                                 if (c == 0x00)
                                 {
                                     blockLength = workIndex - curIndex + 1;
@@ -352,7 +352,7 @@ namespace EscPosUtils
                                 long codeCount = ctlByte4 - ctlByte3 + 1;
                                 long maxFontWidth = CurrentVfdFontInfo.xbytes;
                                 long count;
-                                long workIndex = curIndex + 5;
+                                var workIndex = curIndex + 5;
                                 for (count = 0; (count < codeCount) && (workIndex < dataLength); count++)
                                 {
                                     long fontWidth = baData[workIndex];

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -11,6 +12,8 @@ namespace Decoder.Models
         public double Price;
         public double TotalPrice;
         public List<Topping> Toppings;
+        private static readonly Random rnd = new Random();
+        private static readonly object syncLock = new object();
 
         public Item(int quantity, string name, double price, List<Topping> toppingList = null)
         {
@@ -41,6 +44,20 @@ namespace Decoder.Models
                 : "[]";
             return
                 $"'{Name}': Quantity: {Quantity}; Price: {Price}; Total price: {TotalPrice}; Toppings: {toppingsToString} ";
+        }
+
+        public string ToBodyString()
+        {
+            // TODO add toppings
+            return $"{{\"id\": \"{RandomNumber(1, 999)}\", \"posId\": {RandomNumber(1, 999)}, \"name\": \"{Name}\", \"price\": {Utils.ConvertToCents(Price)}, \"toppings\": []}}";
+        }
+
+        private static int RandomNumber(int min, int max)
+        {
+            lock (syncLock)
+            { // synchronize
+                return rnd.Next(min, max);
+            }
         }
     }
 }

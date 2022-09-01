@@ -131,7 +131,7 @@ namespace EscPosUtils
                         }
                         if (ctlType != EscPosCmdType.FsUnknown)
                         {
-                            byte ctlByte5 = (byte)(((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF);
+                            var ctlByte5 = (byte)(((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF);
                             // byte ctlByte6 = (byte)(((curIndex + 6) < dataLength) ? baData[curIndex + 6] : 0xFF);
                             blockLength = 5 + ctlByte4 * 0x100 + ctlByte3;
                             switch (ctlByte2)
@@ -141,7 +141,7 @@ namespace EscPosUtils
                                     {
                                         if (KanjiFontList.ContainsKey(baData[curIndex + 6]))
                                         {
-                                            KanjiFontSizeInfo info = KanjiFontList[(baData[curIndex + 6])];
+                                            var info = KanjiFontList[(baData[curIndex + 6])];
                                             ctlType = EscPosCmdType.FsSelectKanjiCharacterFont;
                                             CurrentKanjiFontInfo = info;
                                         }
@@ -293,7 +293,7 @@ namespace EscPosUtils
                             ctlType = EscPosCmdType.None;
                             long imageCount = ctlByte2;
                             long count;
-                            long workIndex = curIndex + 3;
+                            var workIndex = curIndex + 3;
                             for (count = 0; (count < imageCount) && (workIndex < dataLength); count++)
                             {
                                 long Xbytes = BitConverter.ToUInt16(baData, (int)workIndex);

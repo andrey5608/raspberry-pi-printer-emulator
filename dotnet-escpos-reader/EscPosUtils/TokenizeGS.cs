@@ -262,8 +262,8 @@ namespace EscPosUtils
                         }
                         if (ctlType != EscPosCmdType.GsUnknown)
                         {
-                            byte ctlByte5 = (byte)(((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF);
-                            byte ctlByte6 = (byte)(((curIndex + 6) < dataLength) ? baData[curIndex + 6] : 0xFF);
+                            var ctlByte5 = (byte)(((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF);
+                            var ctlByte6 = (byte)(((curIndex + 6) < dataLength) ? baData[curIndex + 6] : 0xFF);
                             blockLength = 5 + ctlByte4 * 0x100 + ctlByte3;
                             switch (ctlByte2)
                             {
@@ -464,8 +464,8 @@ namespace EscPosUtils
                                 case 0x6B: // GS ( k
                                     if ((ctlByte5 >= 0x30) && (ctlByte5 <= 0x36))
                                     {
-                                        byte[] bFunc = new byte[2] { ctlByte5, ctlByte6 };
-                                        string sFunc = Encoding.ASCII.GetString(bFunc);
+                                        var bFunc = new byte[2] { ctlByte5, ctlByte6 };
+                                        var sFunc = Encoding.ASCII.GetString(bFunc);
                                         if (s_PrtGSkType.ContainsKey(sFunc))
                                         {
                                             ctlType = s_PrtGSkType[sFunc];
@@ -597,7 +597,7 @@ namespace EscPosUtils
                                 {
                                     ctlType = EscPosCmdType.GsObsoleteSelectCounterModeB;
                                     blockLength = 0;
-                                    long workIndex = curIndex + 3;
+                                    var workIndex = curIndex + 3;
                                     for (long i = 0; (i < 5) && (workIndex < dataLength); workIndex++)
                                     {
                                         if (baData[workIndex] == 0x3B)
@@ -633,7 +633,7 @@ namespace EscPosUtils
                         {
                             using (Stream stream = new MemoryStream(baData, (int)(curIndex + 9), (int)(remainLength - 9), false))
                             {
-                                using (System.Drawing.Image img = System.Drawing.Image.FromStream(stream))
+                                using (var img = System.Drawing.Image.FromStream(stream))
                                 {
                                     if (img.RawFormat.Equals(ImageFormat.Bmp))
                                     {
@@ -763,7 +763,7 @@ namespace EscPosUtils
                         {
                             ctlType = EscPosCmdType.GsPrintBarcodeAsciiz;
                             long terminateIndex = 0;
-                            for (long i = curIndex + 3; i < dataLength; i++)
+                            for (var i = curIndex + 3; i < dataLength; i++)
                             {
                                 if (baData[i] == 0x00)
                                 {

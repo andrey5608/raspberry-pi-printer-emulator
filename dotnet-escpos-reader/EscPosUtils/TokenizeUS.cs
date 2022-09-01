@@ -70,7 +70,7 @@ namespace EscPosUtils
             }
             else
             {
-                byte ctlByte5 = (byte)(((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF);
+                var ctlByte5 = (byte)(((curIndex + 5) < dataLength) ? baData[curIndex + 5] : 0xFF);
                 blockLength = 2;
                 switch (ctlByte1)
                 {

@@ -36,12 +36,12 @@ namespace EscPosUtils
         //  ESC !   1B 21 bx0xxx00x
         internal static string DecodeEscSelectPrintMode(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string underline = (mode & 0x80) == 0x80 ? "ON" : "OFF";
-            string doublewidth = (mode & 0x20) == 0x20 ? "ON" : "OFF";
-            string doubleheight = (mode & 0x10) == 0x10 ? "ON" : "OFF";
-            string emphasize = (mode & 0x08) == 0x08 ? "ON" : "OFF";
-            string font = (mode & 0x01) == 0x01 ? "B" : "A";
+            var mode = record.cmddata[index];
+            var underline = (mode & 0x80) == 0x80 ? "ON" : "OFF";
+            var doublewidth = (mode & 0x20) == 0x20 ? "ON" : "OFF";
+            var doubleheight = (mode & 0x10) == 0x10 ? "ON" : "OFF";
+            var emphasize = (mode & 0x08) == 0x08 ? "ON" : "OFF";
+            var font = (mode & 0x01) == 0x01 ? "B" : "A";
             return $"Underline:{underline}, DoubleWidth:{doublewidth}, DoubleHeight:{doubleheight}, Emphasize:{emphasize}, Font:{font}";
         }
 
@@ -76,25 +76,25 @@ namespace EscPosUtils
         }
         internal static string DecodeEscDefineUserDefinedCharacters(EscPosCmd record, int index, int maxwidth, int height)
         {
-            byte ybytes = record.cmddata[index];
-            byte startcode = record.cmddata[index + 1];
-            byte endcode = record.cmddata[index + 2];
-            int count = startcode - endcode + 1;
-            int i = index + 3;
-            List<string> chars = new List<string>();
-            List<System.Drawing.Bitmap> glyphs = new List<System.Drawing.Bitmap>();
-            for (int n = 0; n < count; n++)
+            var ybytes = record.cmddata[index];
+            var startcode = record.cmddata[index + 1];
+            var endcode = record.cmddata[index + 2];
+            var count = startcode - endcode + 1;
+            var i = index + 3;
+            var chars = new List<string>();
+            var glyphs = new List<System.Drawing.Bitmap>();
+            for (var n = 0; n < count; n++)
             {
-                byte xbytes = record.cmddata[i];
-                int size = ybytes * xbytes;
+                var xbytes = record.cmddata[i];
+                var size = ybytes * xbytes;
                 if (size > 0)
                 {
                     glyphs.Add(GetBitmap(xbytes, height, ImageDataType.Column, record.cmddata, (i + 1), "1"));
                 }
                 else
                 {
-                    System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(maxwidth, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                    ColorPalette palette = bitmap.Palette;
+                    var bitmap = new System.Drawing.Bitmap(maxwidth, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                    var palette = bitmap.Palette;
                     palette.Entries[0] = Color.White;
                     palette.Entries[1] = Color.Black;
                     bitmap.Palette = palette;
@@ -105,17 +105,17 @@ namespace EscPosUtils
                 chars.Add($"X:{xbytes} bytes, Size:{size}");
             }
             record.somebinary = glyphs.ToArray();
-            string charslist = string.Join(", ", chars);
+            var charslist = string.Join(", ", chars);
             return $"VerticalBytes:{ybytes}, StartCode:{startcode}, EndCode:{endcode}, Characters:{charslist}";
         }
 
         //  ESC ( A 1B 28 41 04 00 30 30-3A 01-3F 0A-FF
         internal static string DecodeEscBeeperBuzzer(EscPosCmd record, int index)
         {
-            byte pattern = record.cmddata[index];
-            byte cycles = record.cmddata[index + 1];
-            byte duration = record.cmddata[index + 2];
-            string result = $"Cycles:{cycles}, Duration:{duration} x 100ms, Pattern:{pattern} is ";
+            var pattern = record.cmddata[index];
+            var cycles = record.cmddata[index + 1];
+            var duration = record.cmddata[index + 2];
+            var result = $"Cycles:{cycles}, Duration:{duration} x 100ms, Pattern:{pattern} is ";
             switch (pattern)
             {
                 case 48:
@@ -162,9 +162,9 @@ namespace EscPosUtils
         //  ESC ( A 1B 28 41 03 00 61 01-07 00-FF
         internal static string DecodeEscBeeperBuzzerM1a(EscPosCmd record, int index)
         {
-            byte pattern = record.cmddata[index];
-            byte cycles = record.cmddata[index + 1];
-            string result = $"Cycles:{cycles}, Pattern:{pattern} is ";
+            var pattern = record.cmddata[index];
+            var cycles = record.cmddata[index + 1];
+            var result = $"Cycles:{cycles}, Pattern:{pattern} is ";
             switch (pattern)
             {
                 case 1:
@@ -199,9 +199,9 @@ namespace EscPosUtils
         //  ESC ( A 1B 28 41 05 00 61 64 00-3F 00-FF 00-FF
         internal static string DecodeEscBeeperBuzzerM1b(EscPosCmd record, int index)
         {
-            byte cycles = record.cmddata[index];
-            byte onduration = record.cmddata[index + 1];
-            byte offduration = record.cmddata[index + 2];
+            var cycles = record.cmddata[index];
+            var onduration = record.cmddata[index + 1];
+            var offduration = record.cmddata[index + 2];
             return $"Cycles:{cycles}, On-Duration:{onduration} x 100ms, Off-Duration:{offduration} x 100ms";
         }
 
@@ -242,8 +242,8 @@ namespace EscPosUtils
                     break;
             }
 
-            byte onduration = record.cmddata[index + 4];
-            byte offduration = record.cmddata[index + 5];
+            var onduration = record.cmddata[index + 4];
+            var offduration = record.cmddata[index + 5];
             return $"Factor:{factor}, Type:{beeptype}, On-Duration:{onduration} x 100ms, Off-Duration:{offduration} x 100ms";
         }
 
@@ -264,7 +264,7 @@ namespace EscPosUtils
                     break;
             }
 
-            byte onduration = record.cmddata[index + 1];
+            var onduration = record.cmddata[index + 1];
             string t1;
             if (onduration == 255)
             {
@@ -278,7 +278,7 @@ namespace EscPosUtils
             {
                 t1 = $"On-Duration:{onduration} Out of range";
             }
-            byte offduration = record.cmddata[index + 2];
+            var offduration = record.cmddata[index + 2];
             string t2;
             if ((offduration >= 1) && (offduration <= 50))
             {
@@ -369,7 +369,7 @@ namespace EscPosUtils
             }
 
             int width = BitConverter.ToUInt16(record.cmddata, index + 1);
-            string widthstr = width.ToString("D", invariantculture);
+            var widthstr = width.ToString("D", invariantculture);
             if ((height > 0) && ((width > 0)&&(width <= 0x960)))
             {
                 record.somebinary = GetBitmap(width, height, ImageDataType.Column, record.cmddata, (index + 3), "1");
@@ -421,7 +421,7 @@ namespace EscPosUtils
         //  ESC D   1B 44 [01-FF]... 00
         internal static string DecodeEscHorizontalTabPosition(EscPosCmd record, int index)
         {
-            int length = (int)(record.cmddata[record.cmdlength - 1] == 0 ? record.cmdlength - 3 : record.cmdlength - 2);
+            var length = (int)(record.cmddata[record.cmdlength - 1] == 0 ? record.cmdlength - 3 : record.cmdlength - 2);
             string result;
             if (length > 0)
             {
@@ -604,9 +604,9 @@ namespace EscPosUtils
         //c ESC c 0 1B 63 30 b0000xxxx
         internal static string DecodeEscSelectPaperTypesPrinting(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string validation = (mode & 0x08) == 0x08 ? "Enable" : "Disable";
-            string slip = (mode & 0x04) == 0x04 ? "Enable" : "Disable";
+            var mode = record.cmddata[index];
+            var validation = (mode & 0x08) == 0x08 ? "Enable" : "Disable";
+            var slip = (mode & 0x04) == 0x04 ? "Enable" : "Disable";
             string roll;
             switch ((mode & 0x03))
             {
@@ -631,10 +631,10 @@ namespace EscPosUtils
         //c ESC c 1 1B 63 31 b0x00xxxx
         internal static string DecodeEscSelectPaperTypesCommandSettings(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string slipback = (mode & 0x20) == 0x20 ? "Enable" : "Disable";
-            string validation = (mode & 0x08) == 0x08 ? "Enable" : "Disable";
-            string slipface = (mode & 0x04) == 0x04 ? "Enable" : "Disable";
+            var mode = record.cmddata[index];
+            var slipback = (mode & 0x20) == 0x20 ? "Enable" : "Disable";
+            var validation = (mode & 0x08) == 0x08 ? "Enable" : "Disable";
+            var slipface = (mode & 0x04) == 0x04 ? "Enable" : "Disable";
             string roll;
             switch ((mode & 0x03))
             {
@@ -659,34 +659,34 @@ namespace EscPosUtils
         //  ESC c 3 1B 63 33 bccccxxxx
         internal static string DecodeEscSelectPaperSensorsPaperEndSignals(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string validation = (mode & 0xC0) == 0x00 ? "Disable" : "Enable";
-            string slipBOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
-            string slipTOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
-            string empty = (mode & 0x0C) == 0x00 ? "Disable" : "Enable";
-            string nearend = (mode & 0x03) == 0x00 ? "Disable" : "Enable";
+            var mode = record.cmddata[index];
+            var validation = (mode & 0xC0) == 0x00 ? "Disable" : "Enable";
+            var slipBOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
+            var slipTOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
+            var empty = (mode & 0x0C) == 0x00 ? "Disable" : "Enable";
+            var nearend = (mode & 0x03) == 0x00 ? "Disable" : "Enable";
             return $"Validation:{validation}, SlipBOF:{slipBOF}, SlipTOF:{slipTOF}, Empty:{empty}, Near End:{nearend}";
         }
 
         //  ESC c 4 1B 63 34 bccccxxxx
         internal static string DecodeEscSelectPaperSensorsStopPrinting(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string validation = (mode & 0xC0) == 0x00 ? "Disable" : "Enable";
-            string slipBOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
-            string slipTOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
-            string empty = (mode & 0x0C) == 0x00 ? "Disable" : "Enable";
-            string nearend = (mode & 0x03) == 0x00 ? "Disable" : "Enable";
+            var mode = record.cmddata[index];
+            var validation = (mode & 0xC0) == 0x00 ? "Disable" : "Enable";
+            var slipBOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
+            var slipTOF = (mode & 0x20) == 0x00 ? "Disable" : "Enable";
+            var empty = (mode & 0x0C) == 0x00 ? "Disable" : "Enable";
+            var nearend = (mode & 0x03) == 0x00 ? "Disable" : "Enable";
             return $"Validation:{validation}, SlipBOF:{slipBOF}, SlipTOF:{slipTOF}, Empty:{empty}, Near End:{nearend}";
         }
 
         //c ESC f   1B 66 00-0F 00-40
         internal static string DecodeEscCutSheetWaitTime(EscPosCmd record, int index)
         {
-            byte insert = record.cmddata[index];
-            string inswait = (insert <= 15) ? insert.ToString("D", invariantculture) + " minute" : "Out of range";
-            byte detect = record.cmddata[index + 1];
-            string detwait = (detect <= 64) ? detect.ToString("D", invariantculture) + " x 100ms" : "Out of range";
+            var insert = record.cmddata[index];
+            var inswait = (insert <= 15) ? insert.ToString("D", invariantculture) + " minute" : "Out of range";
+            var detect = record.cmddata[index + 1];
+            var detwait = (detect <= 64) ? detect.ToString("D", invariantculture) + " x 100ms" : "Out of range";
             return $"Insertion Wait:{inswait}, Detection Wait:{detwait}";
         }
 
@@ -709,8 +709,8 @@ namespace EscPosUtils
                     break;
             }
 
-            byte onduration = record.cmddata[index + 1];
-            byte offduration = record.cmddata[index + 2];
+            var onduration = record.cmddata[index + 1];
+            var offduration = record.cmddata[index + 2];
             return $"Pin:{pin}, On-Duration:{onduration} x 100ms, Off-Duration:{offduration} x 100ms";
         }
 
@@ -1075,7 +1075,7 @@ namespace EscPosUtils
         //  ESC W   1B 57 01-04 00/30
         internal static string DecodeVfdEscCancelWindowArea(EscPosCmd record, int index)
         {
-            byte win = record.cmddata[index];
+            var win = record.cmddata[index];
             string winno;
             if ((win >= 1) && (win <= 4))
             {
@@ -1103,8 +1103,8 @@ namespace EscPosUtils
         //  ESC W   1B 57 01-04 01/31 01-14 01-14 01/02 01/02
         internal static string DecodeVfdEscSelectWindowArea(EscPosCmd record, int index)
         {
-            byte win = record.cmddata[index];
-            string winno = ((win >= 1) && (win <= 4)) ? win.ToString("D", invariantculture) : "Out of range";
+            var win = record.cmddata[index];
+            var winno = ((win >= 1) && (win <= 4)) ? win.ToString("D", invariantculture) : "Out of range";
             string mode;
             switch (record.cmddata[index + 1])
             {
@@ -1117,14 +1117,14 @@ namespace EscPosUtils
                     break;
             }
 
-            byte x1 = record.cmddata[index + 2];
-            string left = ((x1 >= 1) && (x1 <= 20)) ? x1.ToString("D", invariantculture) : "Out of range";
-            byte y1 = record.cmddata[index + 3];
-            string top = ((y1 >= 1) && (y1 <= 2)) ? y1.ToString("D", invariantculture) : "Out of range";
-            byte x2 = record.cmddata[index + 4];
-            string right = ((x2 >= 1) && (x2 <= 20) && (x1 <= x2)) ? x2.ToString("D", invariantculture) : "Out of range";
-            byte y2 = record.cmddata[index + 5];
-            string bottom = ((y2 >= 1) && (y2 <= 2) && (y1 <= y2)) ? y2.ToString("D", invariantculture) : "Out of range";
+            var x1 = record.cmddata[index + 2];
+            var left = ((x1 >= 1) && (x1 <= 20)) ? x1.ToString("D", invariantculture) : "Out of range";
+            var y1 = record.cmddata[index + 3];
+            var top = ((y1 >= 1) && (y1 <= 2)) ? y1.ToString("D", invariantculture) : "Out of range";
+            var x2 = record.cmddata[index + 4];
+            var right = ((x2 >= 1) && (x2 <= 20) && (x1 <= x2)) ? x2.ToString("D", invariantculture) : "Out of range";
+            var y2 = record.cmddata[index + 5];
+            var bottom = ((y2 >= 1) && (y2 <= 2) && (y1 <= y2)) ? y2.ToString("D", invariantculture) : "Out of range";
             return $"Window number:{winno}, Action:{mode}, Left:{left}, Top:{top}, Right:{right}, Bottom:{bottom}";
         }
 

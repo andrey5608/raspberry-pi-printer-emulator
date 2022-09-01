@@ -7,14 +7,14 @@ namespace Decoder.Models
     {
         public List<Item> Items;
         public Place Place;
-        public string TotalAmount;
+        public double TotalAmount;
         public string MerchantId;
 
         public Order(List<Item> items, Place place, double? totalAmount, string merchantId)
         {
             Items = items;
             Place = place;
-            TotalAmount = totalAmount != null ? $"{totalAmount:N2}" : "0.00";
+            TotalAmount = totalAmount ?? 0;
             MerchantId = merchantId;
         }
 

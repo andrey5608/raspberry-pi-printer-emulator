@@ -4,50 +4,75 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Configuration;
 
 namespace EscPosReader
 {
     public class EcsPosReader
     {
-        static void Main()
+        private static void Main()
         {
+            var serialPortName = ConfigurationManager.AppSettings["serialPortName"];
+            var baudRate = int.Parse(ConfigurationManager.AppSettings["baudRate"]);
+            var encoding = ConfigurationManager.AppSettings["encoding"];
+            Console.WriteLine($"Configuration: port - {serialPortName}; baudRate - {baudRate}; encoding - {encoding}");
+
             Console.WriteLine("Incoming Data:");
-            using (SerialPort sp = new SerialPort("/dev/serial0", 115200, Parity.None, 8, StopBits.One))
+            try
             {
-                sp.Encoding = Encoding.GetEncoding("ibm850");
-                sp.Open();
-
-                Console.WriteLine("Type Ctrl-C to exit...");
-
-                var receivedSymbolsAsInt = new List<int>();
-                var cutPaperCommand = new List<int> { 27, 109 };
-
-                while (true)
+                using (var sp = new SerialPort(serialPortName, baudRate, Parity.None, 8, StopBits.One))
                 {
-                    var existingData = sp.ReadByte();
-                    Console.WriteLine(existingData);
-                    receivedSymbolsAsInt.Add(existingData);
-                    if (Enumerable.SequenceEqual(GetTwoLast(receivedSymbolsAsInt), cutPaperCommand))
+                    sp.Encoding = Encoding.GetEncoding(encoding);
+                    sp.Open();
+
+                    Console.WriteLine("Type Ctrl-C to exit...");
+
+                    var receivedSymbolsAsInt = new List<int>();
+                    var cutPaperCommand = new List<int> { 27, 109 };
+
+                    while (true)
                     {
-                        Console.WriteLine(String.Join(", ", receivedSymbolsAsInt.ToArray()));
-                        Console.WriteLine("Paper cut");
-                        // send to decode
-                        SaveBinaryFile(receivedSymbolsAsInt);
-                        receivedSymbolsAsInt = new List<int>();
-                        break;
+                        try
+                        {
+                            var existingData = sp.ReadByte();
+                            Console.WriteLine(existingData);
+                            receivedSymbolsAsInt.Add(existingData);
+
+                            if (!GetTwoLast(receivedSymbolsAsInt).SequenceEqual(cutPaperCommand)) continue;
+
+                            Console.WriteLine(string.Join(", ", receivedSymbolsAsInt.ToArray()));
+                            Console.WriteLine("Paper cut");
+                            // send to decode
+                            var receivedSymbols = receivedSymbolsAsInt.SelectMany(BitConverter.GetBytes).ToArray();
+                            SaveBinaryFile(receivedSymbols);
+                            Decoder.Decoder.DecodeByteArrayToText(receivedSymbols);
+
+                            receivedSymbolsAsInt.Clear();
+                            break;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message, e);
+                        }
+                        
                     }
                 }
-            };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message, e);
+            }
         }
+
         private static List<int> GetTwoLast(List<int> list)
         {
             return Enumerable.Reverse(list).Take(2).Reverse().ToList();
         }
 
-        private static void SaveBinaryFile(List<int> inputList){
+        private static void SaveBinaryFile(byte[] binaryOutput){
             var datetime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-            var filePath = $"./out/{datetime}.bin";
-            var binaryOutput = inputList.SelectMany(BitConverter.GetBytes).ToArray();
+            var outputDir = ConfigurationManager.AppSettings["outputDir"];
+            var filePath = $"./{outputDir}/{datetime}.bin";
             using (var writer = new BinaryWriter(File.OpenWrite(filePath))){
                 writer.Write(binaryOutput);
             }

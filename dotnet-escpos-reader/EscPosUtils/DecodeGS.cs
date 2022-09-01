@@ -37,13 +37,13 @@ namespace EscPosUtils
         //  GS  !   1D 21 b0xxx0yyy
         internal static string DecodeGsSelectCharacterSize(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
+            var mode = record.cmddata[index];
             if ((mode & 0x88) != 0)
             {
                 return "Undefined pattern value";
             }
-            int h = (mode >> 4) + 1;
-            int v = (mode & 7) + 1;
+            var h = (mode >> 4) + 1;
+            var v = (mode & 7) + 1;
             return $"Horizontal:{h}, Vertical:{v}";
         }
 
@@ -119,8 +119,8 @@ namespace EscPosUtils
                 return "Length out of range";
             }
             // 49,44 "1,", 51,45 "3-", 69,56 "E8", 70,55 "F7", xx,54 "?6"
-            int count = (length - 1) / 2;
-            List<string> status = new List<string>();
+            var count = (length - 1) / 2;
+            var status = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
                 string entry;
@@ -152,24 +152,24 @@ namespace EscPosUtils
         //  GS  ( C 1D 28 43 05 00 00 00/30 00 20-7E 20-7E
         internal static string DecodeGsDeleteSpecifiedRecord(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
             return $"Code1:{c1:X}, Code2:{c2:X}";
         }
 
         //  GS  ( C 1D 28 43 0006-FFFF 00 01/31 00 20-7E 20-7E 20-FF...
         internal static string DecodeGsStoreDataSpecifiedRecord(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
             return $"Code1:{c1:X}, Code2:{c2:X}";
         }
 
         //  GS  ( C 1D 28 43 05 00 00 02/32 00 20-7E 20-7E
         internal static string DecodeGsTransmitDataSpecifiedRecord(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
             return $"Code1:{c1:X}, Code2:{c2:X}";
         }
 
@@ -181,8 +181,8 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            int count = (length - 1) / 2;
-            List<string> cmds = new List<string>();
+            var count = (length - 1) / 2;
+            var cmds = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
                 string cmdtype;
@@ -232,8 +232,8 @@ namespace EscPosUtils
             {
                 return "Miss align length";
             }
-            int count = (length - 1) / 9;
-            List<string> memorys = new List<string>();
+            var count = (length - 1) / 9;
+            var memorys = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 9)
             {
                 string msw;
@@ -268,7 +268,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                string setting = ascii.GetString(record.cmddata, (currindex + 1), 8).Replace('2', '_');
+                var setting = ascii.GetString(record.cmddata, (currindex + 1), 8).Replace('2', '_');
                 memorys.Add($"MemorySwitch:{msw} Setting:{setting}");
             }
             return string.Join<string>(", ", memorys);
@@ -277,7 +277,7 @@ namespace EscPosUtils
         //  GS  ( E 1D 28 45 02 00 04 01-08
         internal static string DecodeGsTransmitSettingsMemorySwitch(EscPosCmd record, int index)
         {
-            byte m = record.cmddata[index];
+            var m = record.cmddata[index];
             if ((m >= 1) && (m <= 8))
             {
                 return "MemorySwitch:Msw" + m.ToString("D", invariantculture);
@@ -300,11 +300,11 @@ namespace EscPosUtils
             {
                 return "Miss align length";
             }
-            int count = (length - 1) / 3;
-            List<string> memorys = new List<string>();
+            var count = (length - 1) / 3;
+            var memorys = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 3)
             {
-                byte swno = record.cmddata[currindex];
+                var swno = record.cmddata[currindex];
                 string swnostr;
                 if (((swno >= 1) && (swno <= 14))
                     || ((swno >= 20) && (swno <= 22))
@@ -329,7 +329,7 @@ namespace EscPosUtils
         //  GS  ( E 1D 28 45 02 00 06 01-03/05-0D/14-16/46-48/61/62/64-69/6F-71/74-C1
         internal static string DecodeGsTransmitCustomizeSettingValues(EscPosCmd record, int index)
         {
-            byte swno = record.cmddata[index];
+            var swno = record.cmddata[index];
             if (((swno >= 1) && (swno <= 14))
                 || ((swno >= 20) && (swno <= 22))
                 || (swno == 70) || (swno == 71) || (swno == 73)
@@ -409,11 +409,11 @@ namespace EscPosUtils
                     break;
             }
 
-            byte c1 = record.cmddata[index + 4];
-            byte c2 = record.cmddata[index + 5];
-            int count = c2 - c1 + 1;
-            List<string> fonts = new List<string>();
-            List<System.Drawing.Bitmap> glyphs = new List<System.Drawing.Bitmap>();
+            var c1 = record.cmddata[index + 4];
+            var c2 = record.cmddata[index + 5];
+            var count = c2 - c1 + 1;
+            var fonts = new List<string>();
+            var glyphs = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = 9; (i < count) && (currindex < record.cmdlength); i++)
             {
                 int x = record.cmddata[currindex];
@@ -437,16 +437,16 @@ namespace EscPosUtils
                         break;
                 }
 
-                int fdsize = (x * y);
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var fdsize = (x * y);
+                var bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
                 if (fdsize > 0)
                 {
-                    System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                    IntPtr ptr = bmpData.Scan0;
+                    var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                    var ptr = bmpData.Scan0;
                     System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (i + 1), ptr, fdsize);
                     bitmap.UnlockBits(bmpData);
                 }
@@ -457,7 +457,7 @@ namespace EscPosUtils
                 currindex += fdsize + 1;
             }
             record.somebinary = glyphs.ToArray();
-            string fdlist = string.Join<string>(", ", fonts);
+            var fdlist = string.Join<string>(", ", fonts);
             return $"Length:{length}, Y size:{ysize} byte, 1st code:{c1:X}, Last code:{c2:X}, Each data: {fdlist}";
         }
 
@@ -484,11 +484,11 @@ namespace EscPosUtils
                     break;
             }
 
-            byte c1 = record.cmddata[index + 4];
-            byte c2 = record.cmddata[index + 5];
-            int count = c2 - c1 + 1;
-            List<string> fonts = new List<string>();
-            List<System.Drawing.Bitmap> glyphs = new List<System.Drawing.Bitmap>();
+            var c1 = record.cmddata[index + 4];
+            var c2 = record.cmddata[index + 5];
+            var count = c2 - c1 + 1;
+            var fonts = new List<string>();
+            var glyphs = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = 9; (i < count) && (currindex < record.cmdlength); i++)
             {
                 int y = record.cmddata[currindex];
@@ -509,14 +509,14 @@ namespace EscPosUtils
                         break;
                 }
 
-                int fdsize = (x * y);
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((x * 8), y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var fdsize = (x * y);
+                var bitmap = new System.Drawing.Bitmap((x * 8), y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (i + 1), ptr, fdsize);
                 bitmap.UnlockBits(bmpData);
                 glyphs.Add(bitmap);
@@ -525,15 +525,15 @@ namespace EscPosUtils
                 currindex += fdsize + 1;
             }
             record.somebinary = glyphs.ToArray();
-            string fdlist = string.Join<string>(", ", fonts);
+            var fdlist = string.Join<string>(", ", fonts);
             return $"Length:{length}, X size:{xsize} byte, 1st code:{c1:X}, Last code:{c2:X}, Each data: {fdlist}";
         }
 
         //  GS  ( E 1D 28 45 03 00 0A 80-FF 80-FF
         internal static string DecodeGsDeleteCharacterCodePage(EscPosCmd record, int index)
         {
-            byte c1 = record.cmddata[index];
-            byte c2 = record.cmddata[index + 1];
+            var c1 = record.cmddata[index];
+            var c2 = record.cmddata[index + 1];
             return $"1st code:{c1:X}, Last code:{c2:X}";
         }
 
@@ -667,7 +667,7 @@ namespace EscPosUtils
                     break;
             }
 
-            string value = ascii.GetString(record.cmddata, 4, (length - 2));
+            var value = ascii.GetString(record.cmddata, 4, (length - 2));
             return $"Setting:{config}, Value:{value}";
         }
 
@@ -757,7 +757,7 @@ namespace EscPosUtils
                     break;
             }
 
-            string value = ascii.GetString(record.cmddata, 8, (length - 3));
+            var value = ascii.GetString(record.cmddata, 8, (length - 3));
             return $"Setting:{mode}, Value:{value}";
         }
 
@@ -795,8 +795,8 @@ namespace EscPosUtils
             {
                 return "Length out of range or alignment";
             }
-            int count = (length - 1) / 13;
-            List<string> beeps = new List<string>();
+            var count = (length - 1) / 13;
+            var beeps = new List<string>();
             for (int i = 0, currindex = 6; (i < count) && (currindex < record.cmdlength); i++)
             {
                 string n;
@@ -822,9 +822,9 @@ namespace EscPosUtils
                         break;
                 }
 
-                List<string> onoff = new List<string>();
+                var onoff = new List<string>();
                 currindex++;
-                for (int j = 0; j < 6; j++, currindex += 2)
+                for (var j = 0; j < 6; j++, currindex += 2)
                 {
                     string sound;
                     switch (record.cmddata[currindex])
@@ -840,12 +840,12 @@ namespace EscPosUtils
                             break;
                     }
 
-                    string duration = record.cmddata[currindex + 1] <= 100 ? record.cmddata[currindex + 1].ToString("D", invariantculture) : "Out of range";
+                    var duration = record.cmddata[currindex + 1] <= 100 ? record.cmddata[currindex + 1].ToString("D", invariantculture) : "Out of range";
                     onoff.Add($"Sound:{sound}, Duration:{duration} x 100ms");
                 }
                 beeps.Add($"Pattern:{n} dot, this Length:{string.Join<string>(", ", onoff)}");
             }
-            string beeplist = string.Join<string>(", ", beeps);
+            var beeplist = string.Join<string>(", ", beeps);
             return $"Length:{length}, Each data: {beeplist}";
         }
 
@@ -1014,11 +1014,11 @@ namespace EscPosUtils
         //c GS  ( G 1D 28 47 02 00 50 b00xxxxxx
         internal static string DecodeGsSelectActiveSheet(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string check = (mode & 0x20) == 0x20 ? "Select" : "Do not Select";
-            string card = (mode & 0x10) == 0x10 ? "Select" : "Do not Select";
-            string validation = (mode & 0x08) == 0x08 ? "Select" : "Do not Select";
-            string slip = (mode & 0x04) == 0x04 ? "Select" : "Do not Select";
+            var mode = record.cmddata[index];
+            var check = (mode & 0x20) == 0x20 ? "Select" : "Do not Select";
+            var card = (mode & 0x10) == 0x10 ? "Select" : "Do not Select";
+            var validation = (mode & 0x08) == 0x08 ? "Select" : "Do not Select";
+            var slip = (mode & 0x04) == 0x04 ? "Select" : "Do not Select";
             string roll;
             switch ((mode & 0x03))
             {
@@ -1133,7 +1133,7 @@ namespace EscPosUtils
         //  GS  ( K 1D 28 4B 02 00 32 00-0D/30-39
         internal static string DecodeGsSelectPrintSpeed(EscPosCmd record, int index)
         {
-            string value = string.Empty;
+            var value = string.Empty;
             switch(record.cmddata[index])
             {
                 case 0: value = "Customized value"; break;
@@ -1213,13 +1213,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
-            int size = ((width + 7) / 8) * height;
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = ((width + 7) / 8) * height;
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1242,8 +1242,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1265,8 +1265,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 planes.Add(bitmap);
@@ -1275,7 +1275,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1301,13 +1301,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
-            int size = ((width + 7) / 8) * height;
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = ((width + 7) / 8) * height;
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1330,8 +1330,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1353,8 +1353,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 planes.Add(bitmap);
@@ -1363,7 +1363,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1389,13 +1389,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
-            int size = width * ((height + 7) / 8);
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = width * ((height + 7) / 8);
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1418,8 +1418,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1441,8 +1441,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
@@ -1452,7 +1452,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1478,13 +1478,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
-            int size = width * ((height + 7) / 8);
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = width * ((height + 7) / 8);
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1507,8 +1507,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1530,8 +1530,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
@@ -1541,7 +1541,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1567,13 +1567,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
-            int size = ((width + 7) / 8) * height;
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = ((width + 7) / 8) * height;
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1596,8 +1596,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1619,8 +1619,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 planes.Add(bitmap);
@@ -1629,7 +1629,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1655,13 +1655,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
-            int size = ((width + 7) / 8) * height;
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = ((width + 7) / 8) * height;
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1684,8 +1684,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1707,8 +1707,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 planes.Add(bitmap);
@@ -1717,7 +1717,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1743,13 +1743,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 5), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 5), 2);
             int plane = record.cmddata[index + 7];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
-            int size = width * ((height + 7) / 8);
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = width * ((height + 7) / 8);
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1772,8 +1772,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1795,8 +1795,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
@@ -1806,7 +1806,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1832,13 +1832,13 @@ namespace EscPosUtils
                     break;
             }
 
-            string keycode = ascii.GetString(record.cmddata, (index + 7), 2);
+            var keycode = ascii.GetString(record.cmddata, (index + 7), 2);
             int plane = record.cmddata[index + 9];
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
-            int size = width * ((height + 7) / 8);
-            List<string> buffers = new List<string>();
-            List<System.Drawing.Bitmap> planes = new List<System.Drawing.Bitmap>();
+            var size = width * ((height + 7) / 8);
+            var buffers = new List<string>();
+            var planes = new List<System.Drawing.Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1861,8 +1861,8 @@ namespace EscPosUtils
                         break;
                 }
 
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
                 {
@@ -1884,8 +1884,8 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
@@ -1895,7 +1895,7 @@ namespace EscPosUtils
                 buffers.Add($"Color:{c}, Size:{size}");
             }
             record.somebinary = planes.ToArray();
-            string bufferlist = string.Join<string>(", ", buffers);
+            var bufferlist = string.Join<string>(", ", buffers);
             return $"Length:{length}, Tone:{tone}, KeyCode:{keycode}, Width:{width}, Height:{height}, Plane:{plane}, BufferList:{bufferlist}";
         }
 
@@ -1971,7 +1971,7 @@ namespace EscPosUtils
 
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
-            int size = ((width + 7) / 8) * height;
+            var size = ((width + 7) / 8) * height;
             record.somebinary = GetBitmap(width, height, ImageDataType.Raster, record.cmddata, (index + 12), color);
             return $"Length:{length}, Tone:{tone}, X times:{bx}, Y times:{by}, Color:{color}, Width:{width}, Height:{height}, Size:{size}";
         }
@@ -2048,7 +2048,7 @@ namespace EscPosUtils
 
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
-            int size = ((width + 7) / 8) * height;
+            var size = ((width + 7) / 8) * height;
             record.somebinary = GetBitmap(width, height, ImageDataType.Raster, record.cmddata, (index + 14), color);
             return $"Length:{length}, Tone:{tone}, X times:{bx}, Y times:{by}, Color:{color}, Width:{width}, Height:{height}, Size:{size}";
         }
@@ -2125,7 +2125,7 @@ namespace EscPosUtils
 
             int width = BitConverter.ToUInt16(record.cmddata, (index + 8));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
-            int size = width * ((height + 7) / 8);
+            var size = width * ((height + 7) / 8);
             record.somebinary = GetBitmap(width, height, ImageDataType.Column, record.cmddata, (index + 12), color);
             return $"Length:{length}, Tone:{tone}, X times:{bx}, Y times:{by}, Color:{color}, Width:{width}, Height:{height}, Size:{size}";
         }
@@ -2202,7 +2202,7 @@ namespace EscPosUtils
 
             int width = BitConverter.ToUInt16(record.cmddata, (index + 10));
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
-            int size = width * ((height + 7) / 8);
+            var size = width * ((height + 7) / 8);
             record.somebinary = GetBitmap(width, height, ImageDataType.Column, record.cmddata, (index + 14), color);
             return $"Length:{length}, Tone:{tone}, X times:{bx}, Y times:{by}, Color:{color}, Width:{width}, Height:{height}, Size:{size}";
         }
@@ -2210,7 +2210,7 @@ namespace EscPosUtils
         //  GS  ( L 1D 28 4C 04 00 30 01/31 32/33 32/33
         internal static string DecodeGsSetReferenceDotDensityGraphics(EscPosCmd record, int index)
         {
-            string dpi = "Undefined";
+            var dpi = "Undefined";
             if ((record.cmddata[7]) == (record.cmddata[8]))
             {
                 switch (record.cmddata[7])
@@ -2238,7 +2238,7 @@ namespace EscPosUtils
         //  GS  ( L 1D 28 4C 06 00 30 45 20-7E 20-7E 01/02 01/02
         internal static string DecodeGsPrintSpecifiedNVGraphicsData(EscPosCmd record, int index)
         {
-            string keycode = ascii.GetString(record.cmddata, index, 2);
+            var keycode = ascii.GetString(record.cmddata, index, 2);
             string x;
             switch (record.cmddata[index + 2])
             {
@@ -2279,7 +2279,7 @@ namespace EscPosUtils
         //  GS  ( L 1D 28 4C 06 00 30 55 20-7E 20-7E 01/02 01/02
         internal static string DecodeGsPrintSpecifiedDownloadGraphicsData(EscPosCmd record, int index)
         {
-            string keycode = ascii.GetString(record.cmddata, index, 2);
+            var keycode = ascii.GetString(record.cmddata, index, 2);
             string x;
             switch (record.cmddata[index + 2])
             {
@@ -2590,7 +2590,7 @@ namespace EscPosUtils
         {
             int x1 = BitConverter.ToUInt16(record.cmddata, index);
             int x2 = BitConverter.ToUInt16(record.cmddata, index + 2);
-            byte n = record.cmddata[4];
+            var n = record.cmddata[4];
             string c;
             switch (record.cmddata[5])
             {
@@ -2720,7 +2720,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 30 42 00/3-5A
         internal static string DecodeGsPDF417SetNumberOfRows(EscPosCmd record, int index)
         {
-            byte rows = record.cmddata[index];
+            var rows = record.cmddata[index];
             if ((rows == 0) || ((rows >= 3) && (rows <= 90)))
             {
                 return rows.ToString("D", invariantculture);
@@ -2734,7 +2734,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 30 43 01-08
         internal static string DecodeGsPDF417SetWidthOfModule(EscPosCmd record, int index)
         {
-            byte modules = record.cmddata[index];
+            var modules = record.cmddata[index];
             if ((modules >= 1) && (modules <= 8))
             {
                 return modules.ToString("D", invariantculture);
@@ -2748,7 +2748,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 30 44 02-08
         internal static string DecodeGsPDF417SetRowHeight(EscPosCmd record, int index)
         {
-            byte height = record.cmddata[index];
+            var height = record.cmddata[index];
             if ((height >= 2) && (height <= 8))
             {
                 return height.ToString("D", invariantculture);
@@ -2762,10 +2762,10 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 04 00 30 45 30/31 30-38/00-28
         internal static string DecodeGsPDF417SetErrorCollectionLevel(EscPosCmd record, int index)
         {
-            byte m = record.cmddata[index];
-            byte n = record.cmddata[index + 1];
+            var m = record.cmddata[index];
+            var n = record.cmddata[index + 1];
             string collection;
-            string value = "";
+            var value = "";
             switch (m)
             {
                 case 48:
@@ -2829,7 +2829,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 31 43 01-10
         internal static string DecodeGsQRCodeSetSizeOfModule(EscPosCmd record, int index)
         {
-            byte modules = record.cmddata[index];
+            var modules = record.cmddata[index];
             if ((modules >= 1) && (modules <= 16))
             {
                 return modules.ToString("D", invariantculture);
@@ -2903,7 +2903,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 33 43 02-08
         internal static string DecodeGs2DGS1DBSetWidthOfModule(EscPosCmd record, int index)
         {
-            byte modules = record.cmddata[index];
+            var modules = record.cmddata[index];
             if ((modules >= 2) && (modules <= 8))
             {
                 return modules.ToString("D", invariantculture);
@@ -2953,7 +2953,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 34 43 02-08
         internal static string DecodeGsCompositeSetWidthOfModule(EscPosCmd record, int index)
         {
-            byte modules = record.cmddata[index];
+            var modules = record.cmddata[index];
             if ((modules >= 2) && (modules <= 8))
             {
                 return modules.ToString("D", invariantculture);
@@ -3011,13 +3011,13 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            byte a = record.cmddata[index + 5];
-            byte b = record.cmddata[index + 6];
+            var a = record.cmddata[index + 5];
+            var b = record.cmddata[index + 6];
             string element;
-            string symbol = "";
-            string data = "";
-            int k = length - 5;
-            int bcindex = 10;
+            var symbol = "";
+            var data = "";
+            var k = length - 5;
+            var bcindex = 10;
             switch (a)
             {
                 case 48:
@@ -3141,7 +3141,7 @@ namespace EscPosUtils
                     break;
             }
 
-            byte n2 = record.cmddata[index + 1];
+            var n2 = record.cmddata[index + 1];
             string layers;
             if (n2 == 0)
             {
@@ -3161,7 +3161,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 35 43 02-10
         internal static string DecodeGsAztecCodeSetSizeOfModule(EscPosCmd record, int index)
         {
-            byte modules = record.cmddata[index];
+            var modules = record.cmddata[index];
             if ((modules >= 2) && (modules <= 16))
             {
                 return modules.ToString("D", invariantculture);
@@ -3175,7 +3175,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 35 45 05-5F
         internal static string DecodeGsAztecCodeSetErrorCollectionLevel(EscPosCmd record, int index)
         {
-            byte level = record.cmddata[index];
+            var level = record.cmddata[index];
             if ((level >= 5) && (level <= 95))
             {
                 return level.ToString("D", invariantculture);
@@ -3194,7 +3194,7 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            int k = length - 3;
+            var k = length - 3;
             return $"Length:{length}, Data:{BitConverter.ToString(record.cmddata, 8, k)}";
         }
 
@@ -3224,9 +3224,9 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 05 00 36 42 00/01/30/31 00-90 00-90
         internal static string DecodeGsDataMatrixSetSymbolTypeColumnsRows(EscPosCmd record, int index)
         {
-            byte m = record.cmddata[index];
-            byte d1 = record.cmddata[index + 1];
-            byte d2 = record.cmddata[index + 2];
+            var m = record.cmddata[index];
+            var d1 = record.cmddata[index + 1];
+            var d2 = record.cmddata[index + 2];
             string symboltype;
             string columnsrows;
             switch (m)
@@ -3264,7 +3264,7 @@ namespace EscPosUtils
         //  GS  ( k 1D 28 6B 03 00 36 43 02-10
         internal static string DecodeGsDataMatrixSetSizeOfModule(EscPosCmd record, int index)
         {
-            byte modules = record.cmddata[index];
+            var modules = record.cmddata[index];
             if ((modules >= 2) && (modules <= 16))
             {
                 return modules.ToString("D", invariantculture);
@@ -3283,7 +3283,7 @@ namespace EscPosUtils
             {
                 return "Length out of range";
             }
-            int k = length - 3;
+            var k = length - 3;
             return $"Length:{length}, Data:{BitConverter.ToString(record.cmddata, 8, k)}";
         }
 
@@ -3299,12 +3299,12 @@ namespace EscPosUtils
             {
                 return "Invalid alignment";
             }
-            int count = (length - 1) / 2;
-            List<string> ops = new List<string>();
+            var count = (length - 1) / 2;
+            var ops = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
-                byte n = record.cmddata[currindex];
-                byte m = record.cmddata[currindex + 1];
+                var n = record.cmddata[currindex];
+                var m = record.cmddata[currindex + 1];
                 string detection;
                 switch (n)
                 {
@@ -3370,11 +3370,11 @@ namespace EscPosUtils
         //c GS  ( z 1D 28 7A 0C 00 3E 33 01-09 00000000-3B9ACAFF 00/20/30 00000000-3B9ACAFF
         internal static string DecodeGsSetCounterForReverseSidePrint(EscPosCmd record, int index)
         {
-            byte k = record.cmddata[index];
+            var k = record.cmddata[index];
             long n = BitConverter.ToUInt32(record.cmddata, index + 1);
-            byte d1 = record.cmddata[index + 5];
+            var d1 = record.cmddata[index + 5];
             long c = BitConverter.ToUInt32(record.cmddata, index + 6);
-            string digits = ((k >= 1) && (k <= 9)) ? k.ToString("D", invariantculture) : "Digits out of range";
+            var digits = ((k >= 1) && (k <= 9)) ? k.ToString("D", invariantculture) : "Digits out of range";
             string layout;
             switch (d1)
             {
@@ -3398,20 +3398,20 @@ namespace EscPosUtils
         //  GS  *   1D 2A 01-FF 01-FF 00-FF...
         internal static string DecodeGsObsoleteDefineDownloadedBitimage(EscPosCmd record, int index)
         {
-            byte x = record.cmddata[index];
-            byte y = record.cmddata[index + 1];
+            var x = record.cmddata[index];
+            var y = record.cmddata[index + 1];
             if ((x == 0) || (y == 0))
             {
                 return $"Invalid value Width:{x} dots, Height:{y} x 8 dots";
             }
-            int length = x * y * 8;
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-            ColorPalette palette = bitmap.Palette;
+            var length = x * y * 8;
+            var bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var palette = bitmap.Palette;
             palette.Entries[0] = Color.White;
             palette.Entries[1] = Color.Black;
             bitmap.Palette = palette;
-            System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-            IntPtr ptr = bmpData.Scan0;
+            var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var ptr = bmpData.Scan0;
             System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (index + 2), ptr, length);
             bitmap.UnlockBits(bmpData);
             bitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
@@ -3498,9 +3498,9 @@ namespace EscPosUtils
         {
             int a = BitConverter.ToUInt16(record.cmddata, index);
             int b = BitConverter.ToUInt16(record.cmddata, index + 2);
-            byte n = record.cmddata[4];
-            byte r = record.cmddata[5];
-            string mode = "";
+            var n = record.cmddata[4];
+            var r = record.cmddata[5];
+            var mode = "";
             if ((a < b) && (n != 0) && (r != 0))
             {
                 mode = "Count Up";
@@ -3525,7 +3525,7 @@ namespace EscPosUtils
         //  GS  D   1D 44 30 43 30 20-7E 20-7E 30/34 31 42 4D 00000042-FFFFFFFF 00-FF...
         internal static string DecodeGsDefineWindowsBMPNVGraphicsData(EscPosCmd record, int index)
         {
-            string keycode = ascii.GetString(record.cmddata, index, 2);
+            var keycode = ascii.GetString(record.cmddata, index, 2);
             string b;
             switch (record.cmddata[index + 2])
             {
@@ -3540,14 +3540,14 @@ namespace EscPosUtils
                     break;
             }
 
-            string c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
+            var c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
             using (Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false))
             {
-                using (System.Drawing.Image img = System.Drawing.Image.FromStream(stream))
+                using (var img = System.Drawing.Image.FromStream(stream))
                 {
                     record.somebinary = (System.Drawing.Bitmap)img.Clone();
-                    int width = img.Width;
-                    int height = img.Height;
+                    var width = img.Width;
+                    var height = img.Height;
                     long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
                     return $"Length:{record.cmdlength}, Tone:{b}, KeyCode:{keycode}, Width:{width}, Height:{height}, Color:{c}, BMPsize:{bmpsize}";
                 }
@@ -3557,7 +3557,7 @@ namespace EscPosUtils
         //  GS  D   1D 44 30 53 30 20-7E 20-7E 30/34 31 42 4D 00000042-FFFFFFFF 00-FF...
         internal static string DecodeGsDefineWindowsBMPDownloadGraphicsData(EscPosCmd record, int index)
         {
-            string keycode = ascii.GetString(record.cmddata, index, 2);
+            var keycode = ascii.GetString(record.cmddata, index, 2);
             string b;
             switch (record.cmddata[index + 2])
             {
@@ -3572,14 +3572,14 @@ namespace EscPosUtils
                     break;
             }
 
-            string c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
+            var c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
             using (Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false))
             {
-                using (System.Drawing.Image img = System.Drawing.Image.FromStream(stream))
+                using (var img = System.Drawing.Image.FromStream(stream))
                 {
                     record.somebinary = (System.Drawing.Bitmap)img.Clone();
-                    int width = img.Width;
-                    int height = img.Height;
+                    var width = img.Width;
+                    var height = img.Height;
                     long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
                     return $"Length:{record.cmdlength}, Tone:{b}, KeyCode:{keycode}, Width:{width}, Height:{height}, Color:{c}, BMPsize:{bmpsize}";
                 }
@@ -3589,10 +3589,10 @@ namespace EscPosUtils
         //c GS  E   1D 45 b000x0x0x
         internal static string DecodeGsObsoleteSelectHeadControlMethod(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string head = (mode & 1) == 1 ? "Normal" : "Copy";
-            string quality = (mode & 4) == 4 ? "Fine" : "Economy";
-            string speed = (mode & 0x10) == 0x10 ? "Low" : "High";
+            var mode = record.cmddata[index];
+            var head = (mode & 1) == 1 ? "Normal" : "Copy";
+            var quality = (mode & 4) == 4 ? "Fine" : "Economy";
+            var speed = (mode & 0x10) == 0x10 ? "Low" : "High";
             return $"Head energizing time:{head}, Print quality:{quality}, Printing speed:{speed}";
         }
 
@@ -3664,8 +3664,8 @@ namespace EscPosUtils
         //  GS  P   1D 50 00-FF 00-FF
         internal static string DecodeGsSetHorizontalVerticalMotionUnits(EscPosCmd record, int index)
         {
-            string x = record.cmddata[index] == 0 ? "Initial value" : record.cmddata[index].ToString("D", invariantculture);
-            string y = record.cmddata[index + 1] == 0 ? "Initial value" : record.cmddata[index + 1].ToString("D", invariantculture);
+            var x = record.cmddata[index] == 0 ? "Initial value" : record.cmddata[index].ToString("D", invariantculture);
+            var y = record.cmddata[index + 1] == 0 ? "Initial value" : record.cmddata[index + 1].ToString("D", invariantculture);
             return $"Basic motion units Horizontal:{x}, Vertical:{y}";
         }
 
@@ -3697,19 +3697,19 @@ namespace EscPosUtils
             }
 
             int x = BitConverter.ToUInt16(record.cmddata, index + 1);
-            string xvalue = ((x >= 1) && (x <= 4256)) ? x.ToString("D", invariantculture) : "Out of range";
+            var xvalue = ((x >= 1) && (x <= 4256)) ? x.ToString("D", invariantculture) : "Out of range";
             int y = BitConverter.ToUInt16(record.cmddata, index + 3);
-            string yvalue = ((y >= 1) && (y <= 16)) ? y.ToString("D", invariantculture) : "Out of range";
-            int k = x * y;
+            var yvalue = ((y >= 1) && (y <= 16)) ? y.ToString("D", invariantculture) : "Out of range";
+            var k = x * y;
             if (((y > 0) && (y <= 16)) && ((x > 0) && (x <= 4256)))
             {
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (index + 5), ptr, k);
                 bitmap.UnlockBits(bmpData);
                 bitmap.RotateFlip(RotateFlipType.Rotate90FlipX);
@@ -3751,12 +3751,12 @@ namespace EscPosUtils
         //  GS  a   1D 61 b0x00xxxx
         internal static string DecodeGsEnableDisableAutomaticStatusBack(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string panel = (mode & 0x40) == 0x40 ? "Enabled" : "Disabled";
-            string rollpaper = (mode & 0x08) == 0x08 ? "Enabled" : "Disabled";
-            string error = (mode & 0x04) == 0x04 ? "Enabled" : "Disabled";
-            string online = (mode & 0x02) == 0x02 ? "Enabled" : "Disabled";
-            string drawer = (mode & 0x01) == 0x01 ? "Enabled" : "Disabled";
+            var mode = record.cmddata[index];
+            var panel = (mode & 0x40) == 0x40 ? "Enabled" : "Disabled";
+            var rollpaper = (mode & 0x08) == 0x08 ? "Enabled" : "Disabled";
+            var error = (mode & 0x04) == 0x04 ? "Enabled" : "Disabled";
+            var online = (mode & 0x02) == 0x02 ? "Enabled" : "Disabled";
+            var drawer = (mode & 0x01) == 0x01 ? "Enabled" : "Disabled";
             return $"Panel switch:{panel}, Roll Paper Sensor:{rollpaper}, Error:{error}, Online/Offline:{online}, Drawer kick out connector:{drawer}";
         }
 
@@ -3829,7 +3829,7 @@ namespace EscPosUtils
         internal static string DecodeGsTransmitMaintenanceCounter(EscPosCmd record, int index)
         {
             int n = BitConverter.ToUInt16(record.cmddata, index);
-            string countertype = (n & 0x80) == 0x80 ? "Comulative" : "Resettable";
+            var countertype = (n & 0x80) == 0x80 ? "Comulative" : "Resettable";
             string category;
             switch (((n & 0x7F) / 10))
             {
@@ -3865,16 +3865,16 @@ namespace EscPosUtils
         //  GS  j   1D 6A b000000xx
         internal static string DecodeGsEnableDisableAutomaticStatusBackInk(EscPosCmd record, int index)
         {
-            byte mode = record.cmddata[index];
-            string online = (mode & 0x02) == 0x02 ? "Enabled" : "Disabled";
-            string ink = (mode & 0x01) == 0x01 ? "Enabled" : "Disabled";
+            var mode = record.cmddata[index];
+            var online = (mode & 0x02) == 0x02 ? "Enabled" : "Disabled";
+            var ink = (mode & 0x01) == 0x01 ? "Enabled" : "Disabled";
             return $"Online/Offline:{online}, Ink status:{ink}";
         }
 
         //  GS  k   1D 6B 00-06 20/24/25/2A/2B/2D-2F/30-39/41-5A/61-64... 00
         internal static string DecodeGsPrintBarcodeAsciiz(EscPosCmd record, int index)
         {
-            byte m = record.cmddata[index];
+            var m = record.cmddata[index];
             string symbol;
             switch (m)
             {
@@ -3904,14 +3904,14 @@ namespace EscPosUtils
                     break;
             }
 
-            string barcode = ascii.GetString(record.cmddata, (index + 1), (int)(record.cmdlength - 3));
+            var barcode = ascii.GetString(record.cmddata, (index + 1), (int)(record.cmdlength - 3));
             return $"Barcode Type:{symbol}, Data:{barcode}";
         }
 
         //  GS  k   1D 6B 41-4F 01-FF 00-FF...
         internal static string DecodeGsPrintBarcodeSpecifiedLength(EscPosCmd record, int index)
         {
-            byte m = record.cmddata[index];
+            var m = record.cmddata[index];
             string symbol;
             switch (m)
             {
@@ -3965,8 +3965,8 @@ namespace EscPosUtils
                     break;
             }
 
-            byte n = record.cmddata[index + 1];
-            string barcode = ascii.GetString(record.cmddata, (index + 2), n);
+            var n = record.cmddata[index + 1];
+            var barcode = ascii.GetString(record.cmddata, (index + 2), n);
             return $"Barcode Type:{symbol}, Data:{barcode}";
         }
 
@@ -4017,19 +4017,19 @@ namespace EscPosUtils
             }
 
             int x = BitConverter.ToUInt16(record.cmddata, index + 1);
-            string xvalue = (x >= 1) ? x.ToString("D", invariantculture) : "Out of range";
+            var xvalue = (x >= 1) ? x.ToString("D", invariantculture) : "Out of range";
             int y = BitConverter.ToUInt16(record.cmddata, index + 3);
-            string yvalue = ((y >= 1) && (y <= 4607)) ? y.ToString("D", invariantculture) : "Out of range";
-            int k = x * y;
+            var yvalue = ((y >= 1) && (y <= 4607)) ? y.ToString("D", invariantculture) : "Out of range";
+            var k = x * y;
             if (((y > 0) && (y <= 4607)) && (x > 0))
             {
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap((x * 8), y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                ColorPalette palette = bitmap.Palette;
+                var bitmap = new System.Drawing.Bitmap((x * 8), y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
-                System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
-                IntPtr ptr = bmpData.Scan0;
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (index + 5), ptr, k);
                 bitmap.UnlockBits(bmpData);
                 record.somebinary = bitmap.Clone();
@@ -4040,15 +4040,15 @@ namespace EscPosUtils
         //  GS  w   1D 77 02-06/44-4C
         internal static string DecodeGsSetBarcodeWidth(EscPosCmd record, int index)
         {
-            byte modules = record.cmddata[index];
+            var modules = record.cmddata[index];
             if ((modules >= 2) && (modules <= 6))
             {
                 return modules.ToString("D", invariantculture);
             }
             else if ((modules >= 68) && (modules <= 76))
             {
-                int i = (modules - 64) / 2;
-                string f = ((modules & 1) == 1) ? ".5" : ".0";
+                var i = (modules - 64) / 2;
+                var f = ((modules & 1) == 1) ? ".5" : ".0";
                 return i.ToString("D", invariantculture) + f;
             }
             else

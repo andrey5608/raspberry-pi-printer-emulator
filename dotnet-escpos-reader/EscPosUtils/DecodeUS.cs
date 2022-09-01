@@ -50,16 +50,16 @@ namespace EscPosUtils
                     break;
             }
 
-            byte number = record.cmddata[index + 1];
-            string announciator = number <= 20 ? number.ToString("D", invariantculture) : "Out of range";
+            var number = record.cmddata[index + 1];
+            var announciator = number <= 20 ? number.ToString("D", invariantculture) : "Out of range";
             return $"Mode:{mode}, Number:{announciator}";
         }
 
         //  US  $   1F 24 01-14 01/02
         internal static string DecodeVfdUsMoveCursorSpecifiedPosition(EscPosCmd record, int index)
         {
-            byte x = record.cmddata[index];
-            string column = ((x >= 1) && (x <= 20)) ? x.ToString("D", invariantculture) : "Out of range";
+            var x = record.cmddata[index];
+            var column = ((x >= 1) && (x <= 20)) ? x.ToString("D", invariantculture) : "Out of range";
             string row;
             switch (record.cmddata[index + 1])
             {
@@ -89,8 +89,8 @@ namespace EscPosUtils
             {
                 return "Even length";
             }
-            int count = (length - 1) / 2;
-            List<string> displays = new List<string>();
+            var count = (length - 1) / 2;
+            var displays = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
                 string enable;
@@ -124,8 +124,8 @@ namespace EscPosUtils
             {
                 return "Miss align length";
             }
-            int count = (length - 1) / 9;
-            List<string> memorys = new List<string>();
+            var count = (length - 1) / 9;
+            var memorys = new List<string>();
             for (int i = 0, currindex = 6; i < count; i++, currindex += 2)
             {
                 string msw;
@@ -157,7 +157,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                string setting = ascii.GetString(record.cmddata, (currindex + 1), 8).Replace('2', '_');
+                var setting = ascii.GetString(record.cmddata, (currindex + 1), 8).Replace('2', '_');
                 memorys.Add($"MemorySwitch:{msw} Setting:{setting}");
             }
             return string.Join<string>(", ", memorys);
@@ -166,7 +166,7 @@ namespace EscPosUtils
         //  US  ( E 1F 28 45 02 00 04 09-0F/6D-70/72/73
         internal static string DecodeVfdUsSendingDisplayingMemorySwitchValues(EscPosCmd record, int index)
         {
-            byte m = record.cmddata[index];
+            var m = record.cmddata[index];
             if (((m >= 9) && (m <= 15)) || ((m >= 109) && (m <= 112)) || (m == 114) || (m == 115))
             {
                 return m.ToString("D", invariantculture);
@@ -196,8 +196,8 @@ namespace EscPosUtils
         //  US  T   1F 54 00-17 00-3B
         internal static string DecodeVfdUsSetAndDisplayCountTime(EscPosCmd record, int index)
         {
-            string h = record.cmddata[index] <= 23 ? record.cmddata[index].ToString("D", invariantculture) : "Out of range";
-            string m = record.cmddata[index + 1] <= 59 ? record.cmddata[index + 1].ToString("D", invariantculture) : "Out of range";
+            var h = record.cmddata[index] <= 23 ? record.cmddata[index].ToString("D", invariantculture) : "Out of range";
+            var m = record.cmddata[index + 1] <= 59 ? record.cmddata[index + 1].ToString("D", invariantculture) : "Out of range";
             return $"Hour:{h}, Minute:{m}";
         }
 

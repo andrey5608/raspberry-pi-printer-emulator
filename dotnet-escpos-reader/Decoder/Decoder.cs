@@ -53,7 +53,7 @@ namespace Decoder
 
         private static int Main(string[] args)
         {
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             // Test if input arguments were supplied.
             var options = Options(args);
             switch (options)
@@ -64,18 +64,24 @@ namespace Decoder
                 default: break;
             }
 
-            var escposdata = ReadFile(_inputpath);
+            var escPosData = ReadFile(_inputpath);
 
-            if ((escposdata is null) || (escposdata.Length == 0))
+            if ((escPosData is null) || (escPosData.Length == 0))
             {
                 Console.Error.WriteLine("No input data.");
                 return 11;
             }
 
-            var epToken = new EscPosTokenizer();
-            var escposlist = epToken.Scan(escposdata, _deviceType, _sbcsfontpattern, _mbcsfontpattern, _vfdfontpattern);
+            return DecodeByteArrayToText(escPosData);
+        }
 
-            if ((escposlist is null) || (escposlist.Count == 0))
+        public static int DecodeByteArrayToText(byte[] escPosData)
+        {
+
+            var epToken = new EscPosTokenizer();
+            var escPosList = epToken.Scan(escPosData, _deviceType, _sbcsfontpattern, _mbcsfontpattern, _vfdfontpattern);
+
+            if ((escPosList is null) || (escPosList.Count == 0))
             {
                 Console.Error.WriteLine("No tokenized data.");
                 return 12;
@@ -83,18 +89,18 @@ namespace Decoder
 
             if (_decode)
             {
-                escposlist = EscPosDecoder.Convert(escposlist);
-                escposlist = Convertstrings(escposlist);
+                escPosList = EscPosDecoder.Convert(escPosList);
+                escPosList = Convertstrings(escPosList);
             }
 
             var result = string.Empty;
             var graphicExists = false;
 
-            for (var i = 0; i < escposlist.Count; i++)
+            for (var i = 0; i < escPosList.Count; i++)
             {
-                var item = escposlist[i];
-                var itemMin1 = i >= 2 ? escposlist[i - 1] : null;
-                var itemMin2 = i >= 2 ? escposlist[i - 2] : null;
+                var item = escPosList[i];
+                var itemMin1 = i >= 2 ? escPosList[i - 1] : null;
+                var itemMin2 = i >= 2 ? escPosList[i - 2] : null;
 
                 if (itemMin2?.cmdtype == EscPosCmdType.EscUnknown
                 && itemMin1?.cmdtype == EscPosCmdType.Controls
@@ -145,7 +151,7 @@ namespace Decoder
                 {
                     Directory.CreateDirectory(_graphicspath);
                 }
-                Outputgraphics(escposlist);
+                Outputgraphics(escPosList);
             }
             catch
             {

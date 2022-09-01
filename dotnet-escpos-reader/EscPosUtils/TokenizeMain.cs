@@ -336,8 +336,8 @@ namespace EscPosUtils
             {
                 throw new ArgumentNullException(nameof(data));
             }
-            List<EscPosCmd> result = new List<EscPosCmd> { };
-            long targetDevice = initialDevice;
+            var result = new List<EscPosCmd> { };
+            var targetDevice = initialDevice;
             long prtHead = -1;
             long ctlHead = -1;
             dataLength = data.Length;
