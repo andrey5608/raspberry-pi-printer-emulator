@@ -4,7 +4,9 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
-using System.Configuration;
+using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace EscPosReader
 {
@@ -12,17 +14,21 @@ namespace EscPosReader
     {
         private static void Main()
         {
-            var serialPortName = ConfigurationManager.AppSettings["serialPortName"];
-            var baudRate = int.Parse(ConfigurationManager.AppSettings["baudRate"]);
-            var encoding = ConfigurationManager.AppSettings["encoding"];
-            Console.WriteLine($"Configuration: port - {serialPortName}; baudRate - {baudRate}; encoding - {encoding}");
-
-            Console.WriteLine("Incoming Data:");
             try
             {
-                using (var sp = new SerialPort(serialPortName, baudRate, Parity.None, 8, StopBits.One))
+                var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText("settings.json"));
+
+                if (settings == null)
                 {
-                    sp.Encoding = Encoding.GetEncoding(encoding);
+                    throw new InvalidDataException("settings file is invalid");
+                }
+
+                Console.WriteLine($"Configuration: port - {settings.SerialPortName}; baudRate - {settings.BaudRate}; encoding - {settings.Encoding}");
+
+                Console.WriteLine("Incoming Data:");
+                using (var sp = new SerialPort(settings.SerialPortName, settings.BaudRate, Parity.None, 8, StopBits.One))
+                {
+                    sp.Encoding = Encoding.GetEncoding(settings.Encoding);
                     sp.Open();
 
                     Console.WriteLine("Type Ctrl-C to exit...");
@@ -44,8 +50,8 @@ namespace EscPosReader
                             Console.WriteLine("Paper cut");
                             // send to decode
                             var receivedSymbols = receivedSymbolsAsInt.SelectMany(BitConverter.GetBytes).ToArray();
-                            SaveBinaryFile(receivedSymbols);
-                            Decoder.Decoder.DecodeByteArrayToText(receivedSymbols);
+                            SaveBinaryFile(receivedSymbols, settings.OutputDir);
+                            SendToDecode(receivedSymbols, settings);
 
                             receivedSymbolsAsInt.Clear();
                             break;
@@ -64,14 +70,36 @@ namespace EscPosReader
             }
         }
 
+        private static void SendToDecode(byte[] receiptData, Settings settings)
+        {
+            using (var client = new HttpClient())
+            {
+                var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(settings.ApiUrl),
+                    Headers = {
+                        { HttpRequestHeader.Authorization.ToString(), settings.ApiToken },
+                        { HttpRequestHeader.Accept.ToString(), "application/json" },
+                        { "merchantId", settings.MerchantId }
+                    },
+                    Content = new ByteArrayContent(receiptData)
+            };
+
+
+                var result = client.SendAsync(message).Result;
+                var resultContent = result.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(resultContent);
+            }
+        }
+
         private static List<int> GetTwoLast(List<int> list)
         {
             return Enumerable.Reverse(list).Take(2).Reverse().ToList();
         }
 
-        private static void SaveBinaryFile(byte[] binaryOutput){
+        private static void SaveBinaryFile(byte[] binaryOutput, string outputDir){
             var datetime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-            var outputDir = ConfigurationManager.AppSettings["outputDir"];
             var filePath = $"./{outputDir}/{datetime}.bin";
             using (var writer = new BinaryWriter(File.OpenWrite(filePath))){
                 writer.Write(binaryOutput);
