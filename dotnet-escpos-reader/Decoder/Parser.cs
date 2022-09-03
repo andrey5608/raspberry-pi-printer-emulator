@@ -56,8 +56,7 @@ namespace Decoder
 
         private static void SendToDiditApi(Order order)
         {
-            const string bearerToken =
-                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NThjODJlMi0yMjNlLTRiY2QtYjQ3Zi01YjMyODlhMzZjNjAiLCJqdGkiOiJkZTIwNDZmNmJiYzMxYmNmNTVlMTdlM2E5ZTU1M2E1YTNkZjY4OGExZTlkN2FmODQ3ZDFjNTQ5MDA4NTkyZDNjOGQ3NTNiMjZmNzdlMGQxNCIsImlhdCI6MTY0NDMwNzcwOS4zNTEzNiwibmJmIjoxNjQ0MzA3NzA5LjM1MTM2MywiZXhwIjoxNjc1ODQzNzA5LjM0NTA3OCwic3ViIjoiIiwic2NvcGVzIjpbImpkNDZhYzc2ODJlMWQwMWViM2Q2MTAwNTJmMDYwNDcyZCJdfQ.O76wa3cN-valiIn2zlygPHed0NC6jFVJKKmi0m5B9bI5K9BTpMy7lFCpetUeJf1NzGoZ30gaLk8p6g-n2rozWP3cLaPpGN-lbSY5OJY4MhwWuKRIpqRYZcmz2y1rixY7yaiKM89su5UZ8UNVOKZNzvszuBzZ8pGT29oGKqH6kZIuhVqs7Xp-DmNUSy8Mb8XMEnGK-n-YevIc15jktlzl1y2DIPmDdL245Ix9-vJrjHoDenBAkhYXAfEl_o3ul3f63NpSA_fTWGNbJXFWQW5dfpeHqPZ81d7YGiW2QQvI7j34QDtlMpCeeNuDlkXRtCGpxmNYP75ktPS5-lMrP0XcwSoppZvr06Bq1Db8y_4qQtjt-mmQ9NqMqPFbmbX9dpt_2KlegcmB5erfrMKmrcUpHr-rExfDeQYxrhdTvhiOUCxeEgzfYE9THpmUQa12Mq7_LKff1W5A783JqUY1z8dGA5p4UIt8-MWkZPsn1SA89swndnF6fqviCxni6__zuZW0ZM0HNXHy3vilw0nYYVUcYn10N4co_zzzFV29bq8f1buczK0ThObXMCJ_pQ2Z4hBtzL9hiWI20FkxEIxtKfkN3It9qpFE6VErlmanl8hoVP2ObHPYuwCHED5X8K1-Dufmi2uEEHpfg-t0AE2VOvDokVBI1tiPJiCQUNd-LmFJRuw";
+            var bearerToken = string.Empty;
             try
             {
                 var billAmount = Utils.ConvertToCents(order.TotalAmount);
