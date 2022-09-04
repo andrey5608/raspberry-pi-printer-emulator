@@ -5,5 +5,5 @@
   "outputDir": "out",
   "merchantId": "61",
   "apiToken": "",
-  "apiUrl": "http://3.xxx.232.152/pos/receipt/create"
+  "apiUrl": "http://3.121.232.152/pos/receipt/create"
 }

@@ -129,7 +129,7 @@ The Pi might receive the report and:
   `modprobe g_printer idVendor=0x1234 idProduct=0x1234 pnp_string="MFG:;CMD:;CLS:PRINTER;"`
 
   For Epson TM-T88:
-    `modprobe g_printer idVendor=0x04b8 idProduct=0x0202 pnp_string="MFG:;CMD:;CLS:PRINTER;"`
+    `modprobe g_printer idVendor=0x04b8 idProduct=0x0202 pnp_string="MFG:Epson;CMD:Epson;MDL:TMT88;CLS:PRINTER;"`
    MFG:;CMD:;CLS:PRINTER; can be modified
   where idVendor, idProduct and pnp_string have your values. You can find all parameters
   including a great explanation [here](https://www.kernel.org/doc/Documentation/usb/gadget_printer.rst).
@@ -144,7 +144,7 @@ The Pi might receive the report and:
   the vendorID and productID. As before load the g_printer module and confirm that 
   your PC recognizes  the Pi correctly as the printer you selected.  
 
-  Now simply call `emulatedprinter -read_data` to capture all print jobs and
+  Now simply call `./emulatedprinter -read_data` to capture all print jobs and
   save them to the folder you specified earlier. 
       
 ---

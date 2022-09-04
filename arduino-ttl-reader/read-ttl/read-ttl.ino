@@ -24,8 +24,9 @@ boolean newData = false;
 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   mySerial.begin(115200);
+  Serial.println("Start");
 }
 
 void loop() {

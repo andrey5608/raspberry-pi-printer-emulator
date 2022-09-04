@@ -12,46 +12,52 @@ namespace Decoder
 {
     public static class Parser
     {
-        public static void ParseEntities(string result)
+        public static void ParseEntities(string result, string merchantId)
         {
-            var items = new List<Item>();
-            Place place = null;
-            double? total = null;
-            var itemsSectionStart = false;
-            var itemsSectionEnd = false;
-
-            using (var reader = new StringReader(result))
+            try
             {
-                string line;
+                var items = new List<Item>();
+                Place place = null;
+                double? total = null;
+                var itemsSectionStart = false;
+                var itemsSectionEnd = false;
 
-                while ((line = reader.ReadLine()) != null)
+                using (var reader = new StringReader(result))
                 {
-                    place = place ?? HandleIfItIsAPlace(line);
-                    // items parsing
-                    var matchedItemSection = MatchItemsSection(line).Success;
-                    switch (itemsSectionStart)
+                    string line;
+
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        case true when matchedItemSection:
-                            itemsSectionEnd = true;
-                            continue;
-                        case false:
-                            itemsSectionStart = matchedItemSection;
-                            break;
-                        case true when !itemsSectionEnd:
-                            items = AddIfItIsAnItem(line, items);
-                            break;
+                        place = place ?? HandleIfItIsAPlace(line);
+                        // items parsing
+                        var matchedItemSection = MatchItemsSection(line).Success;
+                        switch (itemsSectionStart)
+                        {
+                            case true when matchedItemSection:
+                                itemsSectionEnd = true;
+                                continue;
+                            case false:
+                                itemsSectionStart = matchedItemSection;
+                                break;
+                            case true when !itemsSectionEnd:
+                                items = AddIfItIsAnItem(line, items);
+                                break;
+                        }
+
+                        total = total ?? HandleIfItIsATotal(line);
                     }
-
-                    total = total ?? HandleIfItIsATotal(line);
+                    // here we can send the request
                 }
-                // here we can send the request
-            }
 
-            var merchantId = System.Configuration.ConfigurationManager.AppSettings["merchantId"];
-            var order = new Order(items, place, total, merchantId);
-            SendToDiditApi(order);
-            // TODO send the order to DIDIT SQS
-            Console.WriteLine(order.ToString());
+                var order = new Order(items, place, total, merchantId);
+                SendToDiditApi(order);
+                // TODO send the order to DIDIT SQS
+                Console.WriteLine(order.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         private static void SendToDiditApi(Order order)

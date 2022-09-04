@@ -75,9 +75,9 @@ namespace Decoder
             return DecodeByteArrayToText(escPosData);
         }
 
-        public static int DecodeByteArrayToText(byte[] escPosData)
+        public static int DecodeByteArrayToText(byte[] escPosData, string merchantId = "61")
         {
-
+            // TODO remove default merchantId
             var epToken = new EscPosTokenizer();
             var escPosList = epToken.Scan(escPosData, _deviceType, _sbcsfontpattern, _mbcsfontpattern, _vfdfontpattern);
 
@@ -133,7 +133,7 @@ namespace Decoder
                 }
             }
 
-            Parser.ParseEntities(result); // custom items handling code
+            Parser.ParseEntities(result, merchantId); // custom items handling code
 
             if (_stdout)
             {
