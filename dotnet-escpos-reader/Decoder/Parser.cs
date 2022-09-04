@@ -56,7 +56,7 @@ namespace Decoder
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message, e);
             }
         }
 
@@ -123,7 +123,7 @@ namespace Decoder
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message, e);
             }
 
             return null;
@@ -144,7 +144,7 @@ namespace Decoder
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message, e);
             }
 
             return null;
@@ -173,7 +173,7 @@ namespace Decoder
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message, e);
             }
 
             return existingItems;
@@ -215,7 +215,7 @@ namespace Decoder
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message, e);
             }
 
             return existingItems;
@@ -259,7 +259,7 @@ namespace Decoder
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message, e);
             }
 
             return existingItems;
