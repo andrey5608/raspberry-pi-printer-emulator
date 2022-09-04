@@ -1,5 +1,5 @@
 {
-  "serialPortName": "/dev/serial/0",
+  "serialPortName": "/dev/serial0",
   "baudRate": 115200,
   "encoding": "ibm850",
   "outputDir": "out",
