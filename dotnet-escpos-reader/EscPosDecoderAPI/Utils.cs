@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EscPosDecoderApi
+﻿namespace EscPosDecoderApi
 {
     public class Utils
     {

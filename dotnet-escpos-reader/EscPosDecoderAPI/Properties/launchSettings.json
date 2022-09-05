@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "esc-pos-decoder-api": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:1120;http://localhost:1121"
+    }
+  }
+}

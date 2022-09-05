@@ -77,11 +77,10 @@ namespace EscPosReader
                 var message = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(settings.ApiUrl),
+                    RequestUri = new Uri($"{settings.ApiUrl}/{settings.MerchantId}"),
                     Headers = {
                         { HttpRequestHeader.Authorization.ToString(), settings.ApiToken },
-                        { HttpRequestHeader.Accept.ToString(), "application/json" },
-                        { "merchantId", settings.MerchantId }
+                        { HttpRequestHeader.Accept.ToString(), "application/json" }
                     },
                     Content = new ByteArrayContent(receiptData)
             };

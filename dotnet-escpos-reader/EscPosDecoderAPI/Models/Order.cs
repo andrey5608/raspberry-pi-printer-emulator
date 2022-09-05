@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace EscPosDecoderApi.Models
+﻿namespace EscPosDecoderApi.Models
 {
     public class Order
     {

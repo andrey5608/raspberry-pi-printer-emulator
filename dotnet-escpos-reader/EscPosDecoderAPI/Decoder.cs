@@ -25,11 +25,7 @@
  */
 
 using EscPosUtils;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -51,16 +47,16 @@ namespace EscPosDecoderApi
         private static int _mbcsfontpattern = 1;
         private static int _vfdfontpattern = 1;
 
-        private static int Main(string[] args)
+        private static string Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             // Test if input arguments were supplied.
             var options = Options(args);
             switch (options)
             {
-                case 1: HelpGeneral(); return options;
-                case 2: HelpFontPattern(); return options;
-                case 3: HelpCodePage(); return options;
+                case 1: HelpGeneral(); return options.ToString();
+                case 2: HelpFontPattern(); return options.ToString();
+                case 3: HelpCodePage(); return options.ToString();
                 default: break;
             }
 
@@ -69,28 +65,28 @@ namespace EscPosDecoderApi
             if ((escPosData is null) || (escPosData.Length == 0))
             {
                 Console.Error.WriteLine("No input data.");
-                return 11;
+                return 11.ToString();
             }
 
             return DecodeByteArrayToText(escPosData);
         }
 
-        public static int DecodeByteArrayToText(byte[] escPosData, string merchantId = "61")
+        public static string DecodeByteArrayToText(byte[] escPosData, string merchantId = "")
         {
-            // TODO remove default merchantId
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var epToken = new EscPosTokenizer();
             var escPosList = epToken.Scan(escPosData, _deviceType, _sbcsfontpattern, _mbcsfontpattern, _vfdfontpattern);
 
             if ((escPosList is null) || (escPosList.Count == 0))
             {
                 Console.Error.WriteLine("No tokenized data.");
-                return 12;
+                return 12.ToString();
             }
 
             if (_decode)
             {
                 escPosList = EscPosDecoder.Convert(escPosList);
-                escPosList = Convertstrings(escPosList);
+                escPosList = ConvertStrings(escPosList);
             }
 
             var result = string.Empty;
@@ -144,24 +140,10 @@ namespace EscPosDecoderApi
                 WritedFile(_outputpath, result);
             }
 
-            if (!_graphicsoutput || !graphicExists) return 0;
-            try
-            {
-                if (!Directory.Exists(_graphicspath))
-                {
-                    Directory.CreateDirectory(_graphicspath);
-                }
-                Outputgraphics(escPosList);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            return 0;
+            return result;
         }
 
-        private static List<EscPosCmd> Convertstrings(List<EscPosCmd> escposlist)
+        private static List<EscPosCmd> ConvertStrings(List<EscPosCmd> escPosCmds)
         {
             var prtutf8 = false;
             var prtencoding = Encoding.Default;
@@ -182,7 +164,7 @@ namespace EscPosDecoderApi
             }
             catch
             {
-                return escposlist;
+                return escPosCmds;
             }
             var prtcodepage = _initialcodepage;
             int prtIcs = _initialIcs;
@@ -224,10 +206,10 @@ namespace EscPosDecoderApi
             }
             catch
             {
-                return escposlist;
+                return escPosCmds;
             }
 
-            foreach (var item in escposlist)
+            foreach (var item in escPosCmds)
             {
                 switch (item.cmdtype)
                 {
@@ -404,7 +386,7 @@ namespace EscPosDecoderApi
                         break;
                 };
             }
-            return escposlist;
+            return escPosCmds;
         }
         private static void Outputgraphics(List<EscPosCmd> escposlist)
         {
