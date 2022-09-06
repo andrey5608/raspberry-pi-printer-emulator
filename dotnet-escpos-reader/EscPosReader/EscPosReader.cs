@@ -85,7 +85,6 @@ namespace EscPosReader
                     Content = new ByteArrayContent(receiptData)
             };
 
-
                 var result = client.SendAsync(message).Result;
                 var resultContent = result.Content.ReadAsStringAsync().Result;
                 Console.WriteLine(resultContent);
