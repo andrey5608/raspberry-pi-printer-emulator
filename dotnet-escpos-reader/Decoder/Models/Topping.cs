@@ -10,9 +10,9 @@ namespace EscPosDecoderApi.Models
 
         public Topping(int quantity, string name, double price)
         {
-            this.Name = Regex.Replace(name, @"\s+", " ");
-            this.Quantity = quantity;
-            this.Price = price;
+            Name = Regex.Replace(name, @"\s+", " ");
+            Quantity = quantity;
+            Price = price;
         }
     }
 }

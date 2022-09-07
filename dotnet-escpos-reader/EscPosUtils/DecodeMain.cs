@@ -246,11 +246,11 @@ namespace EscPosUtils
             Raster,
             Column
         }
-        internal static System.Drawing.Bitmap GetBitmap(int width, int height, ImageDataType imageDataType, byte[] imageData, int srcindex, string color)
+        internal static Bitmap GetBitmap(int width, int height, ImageDataType imageDataType, byte[] imageData, int srcindex, string color)
         {
             var x = imageDataType == ImageDataType.Raster ? width : height;
             var y = imageDataType == ImageDataType.Raster ? height : width;
-            var bitmap = new System.Drawing.Bitmap(x, y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var bitmap = new Bitmap(x, y, PixelFormat.Format1bppIndexed);
             var palette = bitmap.Palette;
             palette.Entries[0] = Color.White;
             switch (color)
@@ -273,7 +273,7 @@ namespace EscPosUtils
             }
 
             bitmap.Palette = palette;
-            var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
             var workBufferSize = bmpData.Stride * bmpData.Height;
             var workBuffer = new byte[workBufferSize];
             var xbytes = ((x + 7) / 8);

@@ -413,7 +413,7 @@ namespace EscPosUtils
             var c2 = record.cmddata[index + 5];
             var count = c2 - c1 + 1;
             var fonts = new List<string>();
-            var glyphs = new List<System.Drawing.Bitmap>();
+            var glyphs = new List<Bitmap>();
             for (int i = 0, currindex = 9; (i < count) && (currindex < record.cmdlength); i++)
             {
                 int x = record.cmddata[currindex];
@@ -438,14 +438,14 @@ namespace EscPosUtils
                 }
 
                 var fdsize = (x * y);
-                var bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap((y * 8), x, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
                 if (fdsize > 0)
                 {
-                    var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                    var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                     var ptr = bmpData.Scan0;
                     System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (i + 1), ptr, fdsize);
                     bitmap.UnlockBits(bmpData);
@@ -488,7 +488,7 @@ namespace EscPosUtils
             var c2 = record.cmddata[index + 5];
             var count = c2 - c1 + 1;
             var fonts = new List<string>();
-            var glyphs = new List<System.Drawing.Bitmap>();
+            var glyphs = new List<Bitmap>();
             for (int i = 0, currindex = 9; (i < count) && (currindex < record.cmdlength); i++)
             {
                 int y = record.cmddata[currindex];
@@ -510,12 +510,12 @@ namespace EscPosUtils
                 }
 
                 var fdsize = (x * y);
-                var bitmap = new System.Drawing.Bitmap((x * 8), y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap((x * 8), y, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (i + 1), ptr, fdsize);
                 bitmap.UnlockBits(bmpData);
@@ -1219,7 +1219,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
             var size = ((width + 7) / 8) * height;
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1242,7 +1242,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(width, height, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1265,7 +1265,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -1307,7 +1307,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
             var size = ((width + 7) / 8) * height;
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1330,7 +1330,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(width, height, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1353,7 +1353,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -1395,7 +1395,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
             var size = width * ((height + 7) / 8);
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1418,7 +1418,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(height, width, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1441,7 +1441,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -1484,7 +1484,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
             var size = width * ((height + 7) / 8);
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1507,7 +1507,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(height, width, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1530,7 +1530,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -1573,7 +1573,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
             var size = ((width + 7) / 8) * height;
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1596,7 +1596,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(width, height, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1619,7 +1619,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -1661,7 +1661,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
             var size = ((width + 7) / 8) * height;
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1684,7 +1684,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(width, height, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1707,7 +1707,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -1749,7 +1749,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 10));
             var size = width * ((height + 7) / 8);
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 12); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1772,7 +1772,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(height, width, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1795,7 +1795,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -1838,7 +1838,7 @@ namespace EscPosUtils
             int height = BitConverter.ToUInt16(record.cmddata, (index + 12));
             var size = width * ((height + 7) / 8);
             var buffers = new List<string>();
-            var planes = new List<System.Drawing.Bitmap>();
+            var planes = new List<Bitmap>();
             for (int i = 0, currindex = (index + 14); (i < plane) && (currindex < record.cmdlength); i++)
             {
                 string c;
@@ -1861,7 +1861,7 @@ namespace EscPosUtils
                         break;
                 }
 
-                var bitmap = new System.Drawing.Bitmap(height, width, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap(height, width, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 switch (c)
@@ -1884,7 +1884,7 @@ namespace EscPosUtils
                 }
 
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (currindex + 1), ptr, size);
                 bitmap.UnlockBits(bmpData);
@@ -3405,12 +3405,12 @@ namespace EscPosUtils
                 return $"Invalid value Width:{x} dots, Height:{y} x 8 dots";
             }
             var length = x * y * 8;
-            var bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var bitmap = new Bitmap((y * 8), x, PixelFormat.Format1bppIndexed);
             var palette = bitmap.Palette;
             palette.Entries[0] = Color.White;
             palette.Entries[1] = Color.Black;
             bitmap.Palette = palette;
-            var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+            var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
             var ptr = bmpData.Scan0;
             System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (index + 2), ptr, length);
             bitmap.UnlockBits(bmpData);
@@ -3543,9 +3543,9 @@ namespace EscPosUtils
             var c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
             using (Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false))
             {
-                using (var img = System.Drawing.Image.FromStream(stream))
+                using (var img = Image.FromStream(stream))
                 {
-                    record.somebinary = (System.Drawing.Bitmap)img.Clone();
+                    record.somebinary = (Bitmap)img.Clone();
                     var width = img.Width;
                     var height = img.Height;
                     long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
@@ -3575,9 +3575,9 @@ namespace EscPosUtils
             var c = (record.cmddata[index + 3] == 49) ? "Color 1" : "Undefined";
             using (Stream stream = new MemoryStream(record.cmddata, (index + 4), (int)(record.cmdlength - 9), false))
             {
-                using (var img = System.Drawing.Image.FromStream(stream))
+                using (var img = Image.FromStream(stream))
                 {
-                    record.somebinary = (System.Drawing.Bitmap)img.Clone();
+                    record.somebinary = (Bitmap)img.Clone();
                     var width = img.Width;
                     var height = img.Height;
                     long bmpsize = BitConverter.ToUInt32(record.cmddata, (index + 6));
@@ -3703,12 +3703,12 @@ namespace EscPosUtils
             var k = x * y;
             if (((y > 0) && (y <= 16)) && ((x > 0) && (x <= 4256)))
             {
-                var bitmap = new System.Drawing.Bitmap((y * 8), x, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap((y * 8), x, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (index + 5), ptr, k);
                 bitmap.UnlockBits(bmpData);
@@ -4023,12 +4023,12 @@ namespace EscPosUtils
             var k = x * y;
             if (((y > 0) && (y <= 4607)) && (x > 0))
             {
-                var bitmap = new System.Drawing.Bitmap((x * 8), y, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bitmap = new Bitmap((x * 8), y, PixelFormat.Format1bppIndexed);
                 var palette = bitmap.Palette;
                 palette.Entries[0] = Color.White;
                 palette.Entries[1] = Color.Black;
                 bitmap.Palette = palette;
-                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                var bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
                 var ptr = bmpData.Scan0;
                 System.Runtime.InteropServices.Marshal.Copy(record.cmddata, (index + 5), ptr, k);
                 bitmap.UnlockBits(bmpData);

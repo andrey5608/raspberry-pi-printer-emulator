@@ -81,7 +81,7 @@ namespace EscPosUtils
             var count = startcode - endcode + 1;
             var i = index + 3;
             var chars = new List<string>();
-            var glyphs = new List<System.Drawing.Bitmap>();
+            var glyphs = new List<Bitmap>();
             for (var n = 0; n < count; n++)
             {
                 var xbytes = record.cmddata[i];
@@ -92,7 +92,7 @@ namespace EscPosUtils
                 }
                 else
                 {
-                    var bitmap = new System.Drawing.Bitmap(maxwidth, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
+                    var bitmap = new Bitmap(maxwidth, height, System.Drawing.Imaging.PixelFormat.Format1bppIndexed);
                     var palette = bitmap.Palette;
                     palette.Entries[0] = Color.White;
                     palette.Entries[1] = Color.Black;
