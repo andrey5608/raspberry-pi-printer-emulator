@@ -39,7 +39,7 @@ app.MapPost("/receipt/create/{merchantId}", async (string merchantId, HttpReques
         }
 
 
-        return Results.Ok(decodingResult);
+        return Results.Text(decodingResult);
     }).Accepts<IFormFile>("application/octet-stream")
 .WithName("Create a receipt");
 
