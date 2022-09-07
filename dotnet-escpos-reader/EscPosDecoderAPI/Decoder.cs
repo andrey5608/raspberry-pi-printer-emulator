@@ -29,6 +29,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using EscPosDecoderApi.Models;
 using EscPosUtils;
 
 namespace EscPosDecoderApi;
@@ -74,10 +75,10 @@ public class Decoder
             return 11.ToString();
         }
 
-        return DecodeByteArrayToText(escPosData);
+        return DecodeByteArrayToText(escPosData, string.Empty, null);
     }
 
-    public static string DecodeByteArrayToText(byte[] escPosData, string merchantId = "")
+    public static string DecodeByteArrayToText(byte[] escPosData, string merchantId, Settings? settings)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var epToken = new EscPosTokenizer();
@@ -122,7 +123,10 @@ public class Decoder
             // if (item.somebinary != null) graphicExists = true;
         }
 
-        Parser.ParseEntities(result, merchantId); // custom items handling code
+        if (!string.IsNullOrEmpty(merchantId) && settings != null)
+        {
+            Parser.ParseReceiptData(result, merchantId, settings); // custom items handling code
+        }
 
         if (_stdout)
             Console.Write(result);

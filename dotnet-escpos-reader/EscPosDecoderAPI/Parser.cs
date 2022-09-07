@@ -7,10 +7,12 @@ namespace EscPosDecoderApi
 {
     public static class Parser
     {
-        public static void ParseEntities(string result, string merchantId)
+        private static Settings _settings = new ();
+        public static void ParseReceiptData(string result, string merchantId, Settings settings)
         {
             try
             {
+                _settings = settings;
                 var items = new List<Item>();
                 Place? place = null;
                 double? total = null;
@@ -19,9 +21,7 @@ namespace EscPosDecoderApi
 
                 using (var reader = new StringReader(result))
                 {
-                    string? line;
-
-                    while ((line = reader.ReadLine()) != null)
+                    while (reader.ReadLine() is { } line)
                     {
                         place ??= HandleIfItIsAPlace(line);
                         // items parsing
@@ -57,15 +57,13 @@ namespace EscPosDecoderApi
 
         private static void SendToDiditApi(Order order)
         {
-            var bearerToken =
-                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NThjODJlMi0yMjNlLTRiY2QtYjQ3Zi01YjMyODlhMzZjNjAiLCJqdGkiOiJkZTIwNDZmNmJiYzMxYmNmNTVlMTdlM2E5ZTU1M2E1YTNkZjY4OGExZTlkN2FmODQ3ZDFjNTQ5MDA4NTkyZDNjOGQ3NTNiMjZmNzdlMGQxNCIsImlhdCI6MTY0NDMwNzcwOS4zNTEzNiwibmJmIjoxNjQ0MzA3NzA5LjM1MTM2MywiZXhwIjoxNjc1ODQzNzA5LjM0NTA3OCwic3ViIjoiIiwic2NvcGVzIjpbImpkNDZhYzc2ODJlMWQwMWViM2Q2MTAwNTJmMDYwNDcyZCJdfQ.O76wa3cN-valiIn2zlygPHed0NC6jFVJKKmi0m5B9bI5K9BTpMy7lFCpetUeJf1NzGoZ30gaLk8p6g-n2rozWP3cLaPpGN-lbSY5OJY4MhwWuKRIpqRYZcmz2y1rixY7yaiKM89su5UZ8UNVOKZNzvszuBzZ8pGT29oGKqH6kZIuhVqs7Xp-DmNUSy8Mb8XMEnGK-n-YevIc15jktlzl1y2DIPmDdL245Ix9-vJrjHoDenBAkhYXAfEl_o3ul3f63NpSA_fTWGNbJXFWQW5dfpeHqPZ81d7YGiW2QQvI7j34QDtlMpCeeNuDlkXRtCGpxmNYP75ktPS5-lMrP0XcwSoppZvr06Bq1Db8y_4qQtjt-mmQ9NqMqPFbmbX9dpt_2KlegcmB5erfrMKmrcUpHr-rExfDeQYxrhdTvhiOUCxeEgzfYE9THpmUQa12Mq7_LKff1W5A783JqUY1z8dGA5p4UIt8-MWkZPsn1SA89swndnF6fqviCxni6__zuZW0ZM0HNXHy3vilw0nYYVUcYn10N4co_zzzFV29bq8f1buczK0ThObXMCJ_pQ2Z4hBtzL9hiWI20FkxEIxtKfkN3It9qpFE6VErlmanl8hoVP2ObHPYuwCHED5X8K1-Dufmi2uEEHpfg-t0AE2VOvDokVBI1tiPJiCQUNd-LmFJRuw";
             try
             {
                 var billAmount = Utils.ConvertToCents(order.TotalAmount);
                 var parameters = new List<KeyValuePair<string, string>>()
                 {
                     new KeyValuePair<string, string>("merchantId", order.MerchantId),
-                    new KeyValuePair<string, string>("placeUuid", "1ed2a417-31e0-6c08-a1f2-0242ac1e0002"),
+                    new KeyValuePair<string, string>("placeUuid", _settings.PlaceUuid),
                     new KeyValuePair<string, string>("orderTime", DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")),
                     new KeyValuePair<string, string>("billAmount", billAmount.ToString())
                 };
@@ -82,9 +80,9 @@ namespace EscPosDecoderApi
                 var message = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri("https://staging.api.didit.ws/order/test"),
+                    RequestUri = new Uri($"{_settings.ApiHost}/order/test"),
                     Headers = {
-                        { HttpRequestHeader.Authorization.ToString(), bearerToken },
+                        { HttpRequestHeader.Authorization.ToString(), _settings.AuthToken },
                         { HttpRequestHeader.Accept.ToString(), "application/json" },
                         { HttpRequestHeader.ContentType.ToString(), "application/x-www-form-urlencoded"}
                     },

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using EscPosDecoderApi;
 using EscPosDecoderApi.Models;
 
@@ -11,7 +10,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-//var settings = app.Configuration.GetSection("Settings").Get<Settings>();
+var settings = app.Configuration.GetSection("Settings").Get<Settings>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -23,16 +22,16 @@ if (app.Environment.IsDevelopment())
 app.MapPost("/receipt/create/{merchantId}", async (string merchantId, HttpRequest request) =>
     {
         //Task.Run(() => { });
-        //return "File was processed successfully!";
+        //return "File was processed successfully!"; // TODO run async
 
-        var decodingResult = string.Empty;
+        string decodingResult;
         try
         {
             using var ms = new MemoryStream();
             await request.Body.CopyToAsync(ms);
             var fileBytes = ms.ToArray();
 
-            decodingResult = Decoder.DecodeByteArrayToText(fileBytes, merchantId);
+            decodingResult = Decoder.DecodeByteArrayToText(fileBytes, merchantId, settings);
         }
         catch (Exception e)
         {
@@ -40,8 +39,7 @@ app.MapPost("/receipt/create/{merchantId}", async (string merchantId, HttpReques
         }
 
 
-        return Results.Json(new { Text = decodingResult, SentToDidit = true}, new JsonSerializerOptions(),
-            "application/json", 200);
+        return Results.Ok(decodingResult);
     }).Accepts<IFormFile>("application/octet-stream")
 .WithName("Create a receipt");
 
