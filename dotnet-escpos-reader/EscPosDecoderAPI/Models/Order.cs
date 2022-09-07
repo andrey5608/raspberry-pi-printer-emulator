@@ -3,11 +3,11 @@
     public class Order
     {
         public List<Item> Items;
-        public Place Place;
+        public Place? Place;
         public double TotalAmount;
         public string MerchantId;
 
-        public Order(List<Item> items, Place place, double? totalAmount, string merchantId)
+        public Order(List<Item> items, Place? place, double? totalAmount, string merchantId)
         {
             Items = items;
             Place = place;

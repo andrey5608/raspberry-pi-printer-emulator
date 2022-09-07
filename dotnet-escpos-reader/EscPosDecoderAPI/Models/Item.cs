@@ -8,35 +8,29 @@ namespace EscPosDecoderApi.Models
         public string Name;
         public double Price;
         public double TotalPrice;
-        public List<Topping> Toppings;
+        public List<Topping>? Toppings;
         private static readonly Random rnd = new Random();
         private static readonly object syncLock = new object();
 
-        public Item(int quantity, string name, double price, List<Topping> toppingList = null)
+        public Item(int quantity, string name, double price)
         {
-            var sumOfToppings = 0.0;
             Name = Regex.Replace(name, @"\s+", " "); ;
             Quantity = quantity;
 
-            if (toppingList != null)
-            {
-                sumOfToppings = toppingList.Sum(topping => topping.Quantity * topping.Price);
-            }
-
             Price = price;
-            TotalPrice = price + sumOfToppings;
-            Toppings = toppingList;
+            TotalPrice = price;
+            Toppings = new List<Topping>();
         }
 
         public void AddTopping(Topping topping)
         {
             Toppings?.Add(topping);
-            TotalPrice = Price + topping.Price;
+            TotalPrice = Price + topping.Quantity * topping.Price;
         }
 
         public override string ToString()
         {
-            var toppingsToString = Toppings != null && Toppings.Count > 0
+            var toppingsToString = Toppings is { Count: > 0 }
                 ? string.Join("; ", Toppings.Select(x => x.Name).ToArray())
                 : "[]";
             return
