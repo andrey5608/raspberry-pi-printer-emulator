@@ -12,23 +12,23 @@ namespace EscPosDecoderApi
             try
             {
                 var items = new List<Item>();
-                Place place = null;
+                Place? place = null;
                 double? total = null;
                 var itemsSectionStart = false;
                 var itemsSectionEnd = false;
 
                 using (var reader = new StringReader(result))
                 {
-                    string line;
+                    string? line;
 
                     while ((line = reader.ReadLine()) != null)
                     {
-                        place = place ?? HandleIfItIsAPlace(line);
+                        place ??= HandleIfItIsAPlace(line);
                         // items parsing
                         var matchedItemSection = MatchItemsSection(line).Success;
                         switch (itemsSectionStart)
                         {
-                            case true when matchedItemSection:
+                            case true when matchedItemSection && items.Count > 0:
                                 itemsSectionEnd = true;
                                 continue;
                             case false:
@@ -78,25 +78,23 @@ namespace EscPosDecoderApi
                     i++;
                 });
 
-                using (var client = new HttpClient())
+                using var client = new HttpClient();
+                var message = new HttpRequestMessage
                 {
-                    var message = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Post,
-                        RequestUri = new Uri("https://staging.api.didit.ws/order/test"),
-                        Headers = {
-                            { HttpRequestHeader.Authorization.ToString(), bearerToken },
-                            { HttpRequestHeader.Accept.ToString(), "application/json" },
-                            { HttpRequestHeader.ContentType.ToString(), "application/x-www-form-urlencoded"}
-                        },
-                        Content = new FormUrlEncodedContent(parameters)
-                    };
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://staging.api.didit.ws/order/test"),
+                    Headers = {
+                        { HttpRequestHeader.Authorization.ToString(), bearerToken },
+                        { HttpRequestHeader.Accept.ToString(), "application/json" },
+                        { HttpRequestHeader.ContentType.ToString(), "application/x-www-form-urlencoded"}
+                    },
+                    Content = new FormUrlEncodedContent(parameters)
+                };
 
 
-                    var result = client.SendAsync(message).Result;
-                    var resultContent = result.Content.ReadAsStringAsync().Result;
-                    Console.WriteLine(resultContent);
-                }
+                var result = client.SendAsync(message).Result;
+                var resultContent = result.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(resultContent);
             }
             catch (Exception e)
             {
@@ -105,7 +103,7 @@ namespace EscPosDecoderApi
 
         }
 
-        private static Place HandleIfItIsAPlace(string line)
+        private static Place? HandleIfItIsAPlace(string line)
         {
             try
             {
@@ -133,8 +131,9 @@ namespace EscPosDecoderApi
                 if (itemMatch.Success)
                 {
                     var value = itemMatch.Groups[1].Value;
+                    value = value.Contains(',') ? value.Replace(",", ".") : value;
+                    double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var total);// TODO move out
                     Console.WriteLine($"Total: {value}");
-                    double.TryParse(value, out var total);
                     return total;
                 }
             }
@@ -197,8 +196,16 @@ namespace EscPosDecoderApi
                         case 2 when value.StartsWith("x", true, CultureInfo.InvariantCulture):
                             value = itemName = value.Substring(1).Trim(); // remove x from the item name - TODO fix regexp
                             break;
-                        case 3 when double.TryParse(value, out price):
-                            value = price.ToString(CultureInfo.InvariantCulture); // price
+                        case 3:
+                            if (value.Contains(','))
+                            {
+                                value = value.Replace(",", ".");
+                            }
+
+                            if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out price))
+                            {
+                                value = price.ToString(CultureInfo.InvariantCulture);
+                            }
                             break;
                     }
 
@@ -242,7 +249,10 @@ namespace EscPosDecoderApi
                             break;
                         default:
                         case 2 when value.StartsWith("x", true, CultureInfo.InvariantCulture):
-                            value = toppingName = value.Length > 1 ? value.Substring(1).Trim() : value; // remove x from the item name - TODO fix regexp
+                            value = toppingName =
+                                value.Length > 1
+                                    ? value[1..].Trim()
+                                    : value; // remove x from the item name - TODO fix regexp
                             break;
                     }
 
@@ -251,7 +261,7 @@ namespace EscPosDecoderApi
 
                 Console.WriteLine($"Quantity: {quantity}; Item: {toppingName}; Price: {price}");
                 // here we can add to the list
-                existingItems?.LastOrDefault()?.AddTopping(new Topping(quantity, toppingName, price));
+                existingItems.LastOrDefault()?.AddTopping(new Topping(quantity, toppingName, price));
             }
             catch (Exception e)
             {
