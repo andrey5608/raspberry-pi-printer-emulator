@@ -44,3 +44,5 @@ startSonyUPDR80MD:
 	modprobe g_printer idVendor=0x054C idProduct=0x3C3 bcdDevice=0x0108 iManufacturer="SONY" iProduct="UP-DR80MD" iSerialNumber="00000000" iPNPstring="MFG:SONY;MDL:UP-DR80MD;DES:Sony UP-DR80MD;CMD:SPJL-DS,SPDL-DS;CLS:PRINTER;  "
 startEpsonStylusPhotoRX610:
 	modprobe g_printer idVendor=0x04B8 idProduct=0x083C bcdDevice=0x0100 iManufacturer="" iProduct="" iSerialNumber="" iPNPstring="MFG:EPSON;CMD:ESCPL2,BDC,D4,D4PX,ESCPR2;MDL:Stylus Photo RX610;CLS:PRINTER;DES:Epson Stylus Photo RX610;VSTATUS:$HB0$FC0,ff,DN,IDLE,CUT;"
+startEpsonTMT88:
+	modprobe g_printer idVendor=0x04b8 idProduct=0x0202 iManufacturer="Epson" iProduct="(TM-T88)" iSerialNumber="" iPNPstring="MFG:Epson;CMD:Epson;MDL:TMT88;CLS:PRINTER;"

@@ -50,7 +50,7 @@
   #define PRINTER_FILE			"/dev/g_printer0"
   #define BUF_SIZE			512
   #define PRINTJOB_FILE_EXTENSION	"pcl"
-  #define GPDL_BIN_FILE			"/home/pi/Downloads/ghostpdl-9.53.3/bin/gpdl"
+  #define GPDL_BIN_FILE			"/home/pi/Downloads/ghostpdl-9.56.1/bin/gpdl"
   #define GPDL_SDEVICE_METHOD		"pdfwrite"
   #define GPDL_FILE_EXTENSION		"pdf"
 

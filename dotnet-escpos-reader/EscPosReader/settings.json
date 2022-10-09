@@ -1,0 +1,9 @@
+{
+  "serialPortName": "/dev/serial0",
+  "baudRate": 115200,
+  "encoding": "ibm850",
+  "outputDir": "out",
+  "merchantId": "61",
+  "apiToken": "",
+  "apiUrl": "http://3.121.232.152/pos/receipt/create"
+}
